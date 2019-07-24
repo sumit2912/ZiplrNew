@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Ziplr</string>
+    <string name="no_internet">No internet available.</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mage.ziplrdelivery.uc.CustomTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tvInternet"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_35sdp"
+    android:gravity="center"
+    android:text="@string/no_internet"
+    android:visibility="gone"
+    android:background="@color/design_default_color_error"
+    android:textColor="@color/white"
+    app:custom_font="semibold" />
