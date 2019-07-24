@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mage.ziplrdelivery.utils.Const;
+import com.mage.ziplrdelivery.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class AppManager {
 
     private static AppManager appManager;
-    private static Context context;
+    private Context context;
     private HashMap<String, AppCompatActivity> activityList;
     private HashMap<String, DataMessageListener> dataMessageListenerList;
     private SharedPreferences sharedPreferences;
@@ -24,13 +25,13 @@ public class AppManager {
 
     public static AppManager getInstance(Context mContext) {
         if (appManager == null) {
-            context = mContext;
-            appManager = new AppManager();
+            appManager = new AppManager(mContext);
         }
         return appManager;
     }
 
-    public AppManager(){
+    public AppManager(Context mContext){
+        this.context = mContext;
         activityList = new HashMap<>();
         dataMessageListenerList = new HashMap<>();
         sharedPreferences = context.getSharedPreferences(Const.PREF_FILE,Context.MODE_PRIVATE);
@@ -101,6 +102,7 @@ public class AppManager {
 
     public boolean sendDataMessage(String from, String to, String msg, Data data) {
         if (dataMessageListenerList.containsKey(to)) {
+            Utils.print("from = "+from+"    to = "+to+" msg = "+msg+" data = "+(data != null));
             dataMessageListenerList.get(to).onNewDataMessage(from, msg, data);
         }
         return dataMessageListenerList.containsKey(to);
