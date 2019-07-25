@@ -82,13 +82,9 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
     @Override
     public void onInternetChange(boolean isInternet) {
         if (isInternet) {
-            if (tvInternet != null) {
                 tvInternet.setVisibility(View.GONE);
-            }
         } else {
-            if (tvInternet != null) {
                 tvInternet.setVisibility(View.VISIBLE);
-            }
         }
     }
 

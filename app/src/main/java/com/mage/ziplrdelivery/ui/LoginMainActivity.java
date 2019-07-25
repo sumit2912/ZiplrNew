@@ -65,13 +65,9 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     @Override
     public void onInternetChange(boolean isInternet) {
         if (isInternet) {
-            if (tvInternet != null) {
                 tvInternet.setVisibility(View.GONE);
-            }
         } else {
-            if (tvInternet != null) {
                 tvInternet.setVisibility(View.VISIBLE);
-            }
         }
     }
 
