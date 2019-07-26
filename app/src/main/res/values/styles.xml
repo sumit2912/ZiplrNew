@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MaterialButton_Regular_White" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">@dimen/_18sdp</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

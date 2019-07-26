@@ -5,27 +5,29 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
-import androidx.appcompat.widget.AppCompatTextView;
+import androidx.annotation.Nullable;
 
+import com.google.android.material.button.MaterialButton;
 import com.mage.ziplrdelivery.R;
 
-public class CustomTextView extends AppCompatTextView {
+public class CustomMaterialButton extends MaterialButton {
+
     private static final int BOLD = 1;
     private static final int SEMI_BOLD = 2;
     private static final int REGULAR = 3;
     private int fontTag = 0;
 
-    public CustomTextView(Context context) {
+    public CustomMaterialButton(Context context) {
         super(context);
         init(context, null);
     }
 
-    public CustomTextView(Context context, AttributeSet attrs) {
+    public CustomMaterialButton(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public CustomTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomMaterialButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
