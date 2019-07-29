@@ -2,4 +2,6 @@
     <string name="app_name">Ziplr</string>
     <string name="no_internet">No internet available.</string>
     <string name="use_your_mobile_number_to_continue">Use your mobile number to continue</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="registration">Registration</string>
 </resources>
