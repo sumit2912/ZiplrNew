@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="white">#ffffff</color>
     <color name="text_black">#202020</color>
+    <color name="text_grey">#858585</color>
+    <color name="hint_color">#cccbcb</color>
 </resources>

@@ -51,10 +51,120 @@
                 android:layout_height="match_parent"
                 android:overScrollMode="ifContentScrolls"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:paddingRight="@dimen/_15sdp">
 
+                    <com.mage.ziplrdelivery.uc.CustomTextView
+                        android:id="@+id/tvSubTitle"
+                        style="@style/Form_SubTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/register_your_account_and_enjoy_our_app"
+                        app:layout_constraintBottom_toTopOf="@+id/tilName"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilName"
+                        style="@style/Custom_TextInputLayout_Style"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:hint="@string/hint_enter_your_name"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvSubTitle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edName"
+                            style="@style/Custom_TextInputEditText_Style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            app:custom_font="regular" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilEmail"
+                        style="@style/Custom_TextInputLayout_Style"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:hint="@string/hint_enter_your_email"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tilName">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edEmail"
+                            style="@style/Custom_TextInputEditText_Style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            app:custom_font="regular" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilPassword"
+                        style="@style/Custom_TextInputLayout_Style"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:hint="@string/hint_enter_password"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tilEmail">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edPassword"
+                            style="@style/Custom_TextInputEditText_Style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            app:custom_font="regular" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilCPassword"
+                        style="@style/Custom_TextInputLayout_Style"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:hint="@string/hint_enter_confirm_password"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tilPassword">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edCPassword"
+                            style="@style/Custom_TextInputEditText_Style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            app:custom_font="regular" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btSubmit"
+                        style="@style/MaterialButton_SemiBold_Orange"
+                        android:layout_width="@dimen/_150sdp"
+                        android:layout_height="@dimen/def_bt_height"
+                        android:layout_marginTop="@dimen/_25sdp"
+                        android:text="@string/submit"
+                        app:cornerRadius="@dimen/def_bt_height"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tilCPassword" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
