@@ -10,4 +10,7 @@
     <string name="hint_enter_password">Enter password</string>
     <string name="hint_enter_confirm_password">Enter confirm password</string>
     <string name="submit">Submit</string>
+    <string name="hint_phone_number">Phone number</string>
+    <string name="hint_search_country">Search country</string>
+    <string name="lbl_select_country_code">Select country code</string>
 </resources>

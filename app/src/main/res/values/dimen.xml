@@ -3,4 +3,6 @@
     <dimen name="def_bt_height">@dimen/_54sdp</dimen>
     <dimen name="def_app_bar_height">@dimen/_65sdp</dimen>
     <dimen name="def_toolbar_height">@dimen/_40sdp</dimen>
+    <dimen name="cp_dialog_width">@dimen/_250sdp</dimen>
+    <dimen name="cp_dialog_height">@dimen/_400sdp</dimen>
 </resources>

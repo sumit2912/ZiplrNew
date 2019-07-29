@@ -59,6 +59,7 @@
     <style name="Custom_TextInputLayout_Style" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="hintTextColor">@color/colorPrimary</item>
         <item name="android:textColorHint">@color/hint_color</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
     </style>
 
     <style name="Custom_TextInputEditText_Style">

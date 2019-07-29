@@ -74,7 +74,6 @@
                         android:id="@+id/tilName"
                         style="@style/Custom_TextInputLayout_Style"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="@string/hint_enter_your_name"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -85,7 +84,7 @@
                             android:id="@+id/edName"
                             style="@style/Custom_TextInputEditText_Style"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:inputType="textPersonName"
                             app:custom_font="regular" />
 
@@ -95,7 +94,6 @@
                         android:id="@+id/tilEmail"
                         style="@style/Custom_TextInputLayout_Style"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="@string/hint_enter_your_email"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -106,7 +104,7 @@
                             android:id="@+id/edEmail"
                             style="@style/Custom_TextInputEditText_Style"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:inputType="textEmailAddress"
                             app:custom_font="regular" />
 
@@ -116,7 +114,6 @@
                         android:id="@+id/tilPassword"
                         style="@style/Custom_TextInputLayout_Style"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="@string/hint_enter_password"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -127,7 +124,7 @@
                             android:id="@+id/edPassword"
                             style="@style/Custom_TextInputEditText_Style"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:inputType="textPassword"
                             app:custom_font="regular" />
 
@@ -137,7 +134,6 @@
                         android:id="@+id/tilCPassword"
                         style="@style/Custom_TextInputLayout_Style"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="@string/hint_enter_confirm_password"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -154,6 +150,68 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <LinearLayout
+                        android:id="@+id/llCountryCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/tilPhoneNo"
+                        app:layout_constraintTop_toBottomOf="@id/tilCPassword">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivFlag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            app:srcCompat="@drawable/icn_down_arrow" />
+
+                        <com.mage.ziplrdelivery.uc.CustomTextView
+                            android:id="@+id/tvCode"
+                            style="@style/Form_SubTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:textColor="@color/text_black" />
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilPhoneNo"
+                        style="@style/Custom_TextInputLayout_Style"
+                        android:layout_width="0dp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:hint="@string/hint_phone_number"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintLeft_toRightOf="@id/llCountryCode"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tilCPassword">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edPhoneNo"
+                            style="@style/Custom_TextInputEditText_Style"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="number"
+                            app:custom_font="regular" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btSubmit"
                         style="@style/MaterialButton_SemiBold_Orange"
@@ -164,7 +222,7 @@
                         app:cornerRadius="@dimen/def_bt_height"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tilCPassword" />
+                        app:layout_constraintTop_toBottomOf="@+id/tilPhoneNo" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
