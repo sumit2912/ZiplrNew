@@ -13,4 +13,11 @@
     <string name="hint_phone_number">Phone number</string>
     <string name="hint_search_country">Search country</string>
     <string name="lbl_select_country_code">Select country code</string>
+    <string name="validation_name">Please enter name</string>
+    <string name="validation_email">Please enter valid email</string>
+    <string name="validation_password">Please enter password</string>
+    <string name="validation_c_password">Please enter confirm password</string>
+    <string name="validation_password_match">The password and confirm password must be same</string>
+    <string name="validation_country_code">Please choose country code</string>
+    <string name="validation_phone_no">Please enter phone number</string>
 </resources>

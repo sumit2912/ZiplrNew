@@ -1,6 +1,5 @@
 package com.mage.ziplrdelivery.ui;
 
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -9,30 +8,38 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.mage.ziplrdelivery.CountryPicker.Country;
 import com.mage.ziplrdelivery.CountryPicker.CountryPicker;
-import com.mage.ziplrdelivery.CountryPicker.CountryPickerListener;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.databinding.ActivityRegistrationBinding;
+import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
 import com.mage.ziplrdelivery.utils.Const;
+import com.mage.ziplrdelivery.utils.Utils;
+import com.mage.ziplrdelivery.viewmodel.RegistrationViewModel;
 
 import java.util.Collections;
 import java.util.List;
 
-public class RegistrationActivity extends BaseActivity implements AppManager.DataMessageListener {
+public class RegistrationActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<RegistrationParamBean> {
 
     private ActivityRegistrationBinding binding;
     private AppCompatImageView ivBack;
     private CountryPicker mCountryPicker;
-    private String countryCode = "";
+    private RegistrationViewModel registrationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(RegistrationActivity.this, R.layout.activity_registration);
+        registrationViewModel = ViewModelProviders.of(this).get(RegistrationViewModel.class);
+        binding.setLifecycleOwner(this);
+        binding.setRegistrationViewModel(registrationViewModel);
+        registrationViewModel.getRegistrationParamBean().observe(this, this);
         initUi();
     }
 
@@ -90,10 +97,42 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
                 onBackPressed();
                 break;
             case R.id.llCountryCode:
-                if(!mCountryPicker.isAdded())
-                mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
+                if (!mCountryPicker.isAdded())
+                    mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
                 break;
         }
+    }
+
+    @Override
+    public void onChanged(RegistrationParamBean registrationParamBean) {
+        int error = registrationParamBean.isValidData();
+        switch (error) {
+            case 0:
+                binding.edName.setError(getResources().getString(R.string.validation_name));
+                break;
+            case 1:
+                binding.edEmail.setError(getResources().getString(R.string.validation_email));
+                break;
+            case 2:
+                binding.edPassword.setError(getResources().getString(R.string.validation_password));
+                break;
+            case 3:
+                binding.edCPassword.setError(getResources().getString(R.string.validation_c_password));
+                break;
+            case 4:
+                binding.edCPassword.setError(getResources().getString(R.string.validation_password_match));
+                break;
+            case 5:
+                binding.tvCode.setError(getResources().getString(R.string.validation_country_code));
+                break;
+            case 6:
+                binding.edPhoneNo.setError(getResources().getString(R.string.validation_phone_no));
+                break;
+            default:
+                Utils.toast(this,"You can submit",false);
+                break;
+        }
+
     }
 
     @Override
@@ -104,7 +143,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     private void setListener() {
         mCountryPicker.setListener((name, code, dialCode, flagDrawableResID) -> {
             binding.tvCode.setText(dialCode);
-            countryCode = dialCode;
+            registrationViewModel.CountryCode.setValue(dialCode);
             binding.ivFlag.setImageResource(flagDrawableResID);
             mCountryPicker.dismiss();
         });
@@ -117,13 +156,12 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
         if (country != null) {
             binding.ivFlag.setImageResource(country.getFlag());
             binding.tvCode.setText(country.getDialCode());
-            countryCode = country.getDialCode();
+            registrationViewModel.CountryCode.setValue(country.getDialCode());
         } else {
-            Country us = new Country("IN", "India", "+91", R.drawable.flag_in);
-            binding.ivFlag.setImageResource(us.getFlag());
-            binding.tvCode.setText(us.getDialCode());
-            countryCode = us.getDialCode();
+            Country india = new Country("IN", "India", "+91", R.drawable.flag_in);
+            binding.ivFlag.setImageResource(india.getFlag());
+            binding.tvCode.setText(india.getDialCode());
+            registrationViewModel.CountryCode.setValue(india.getDialCode());
         }
     }
-
 }

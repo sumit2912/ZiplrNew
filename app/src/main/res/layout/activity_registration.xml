@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.RegistrationActivity">
 
+    <data>
+        <variable
+            name="RegistrationViewModel"
+            type="com.mage.ziplrdelivery.viewmodel.RegistrationViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -86,7 +92,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="textPersonName"
-                            app:custom_font="regular" />
+                            app:custom_font="regular"
+                            android:text="@={RegistrationViewModel.Name}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +113,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="textEmailAddress"
-                            app:custom_font="regular" />
+                            app:custom_font="regular"
+                            android:text="@={RegistrationViewModel.Email}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +134,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="textPassword"
-                            app:custom_font="regular" />
+                            app:custom_font="regular"
+                            android:text="@={RegistrationViewModel.Password}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +155,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPassword"
-                            app:custom_font="regular" />
+                            app:custom_font="regular"
+                            android:text="@={RegistrationViewModel.ConfirmPassword}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -188,7 +198,8 @@
                             android:clickable="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:textColor="@color/text_black" />
+                            android:textColor="@color/text_black"
+                            android:text="@={RegistrationViewModel.CountryCode}"/>
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -208,7 +219,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="number"
-                            app:custom_font="regular" />
+                            app:custom_font="regular"
+                            android:text="@={RegistrationViewModel.PhoneNumber}"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -222,7 +234,8 @@
                         app:cornerRadius="@dimen/def_bt_height"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tilPhoneNo" />
+                        app:layout_constraintTop_toBottomOf="@+id/tilPhoneNo"
+                        android:onClick="@{(v) -> RegistrationViewModel.onClick(v)}"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
