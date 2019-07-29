@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="def_bt_height">@dimen/_54sdp</dimen>
+    <dimen name="def_app_bar_height">@dimen/_65sdp</dimen>
+    <dimen name="def_toolbar_height">@dimen/_40sdp</dimen>
 </resources>

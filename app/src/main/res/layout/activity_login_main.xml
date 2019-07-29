@@ -1,106 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".ui.LoginMainActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivMainBg"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/bg_spa" />
+        android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nsv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/rlInternet"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivMainBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/_15sdp"
-            android:paddingTop="@dimen/_15sdp"
-            android:paddingRight="@dimen/_15sdp">
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/bg_spa" />
 
-            <com.mage.ziplrdelivery.uc.CustomTextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="@dimen/_70sdp"
-                android:text="Welcome to Ziplr"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_30sdp"
-                app:custom_font="bold"
-                app:layout_constraintBottom_toTopOf="@id/ivDelivery"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toTopOf="@id/rlInternet"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivDelivery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_marginTop="@dimen/_45sdp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:srcCompat="@drawable/img_delivery_boy" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/_15sdp"
+                android:paddingTop="@dimen/_15sdp"
+                android:paddingRight="@dimen/_15sdp">
 
-            <com.mage.ziplrdelivery.uc.CustomMaterialButton
-                android:id="@+id/btMobileNo"
-                style="@style/MaterialButton_Regular_White"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/def_bt_height"
-                android:layout_marginTop="@dimen/_45sdp"
-                android:text="@string/use_your_mobile_number_to_continue"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivDelivery" />
+                <com.mage.ziplrdelivery.uc.CustomTextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/_70sdp"
+                    android:text="Welcome to Ziplr"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_30sdp"
+                    app:custom_font="bold"
+                    app:layout_constraintBottom_toTopOf="@id/ivDelivery"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.mage.ziplrdelivery.uc.CustomTextView
-                android:id="@+id/tvDontAcc"
-                style="@style/TextView_Regular_White"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:text="@string/don_t_have_an_account"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/tvRegistration"
-                app:layout_constraintTop_toBottomOf="@id/btMobileNo" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivDelivery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/title"
+                    android:layout_marginTop="@dimen/_45sdp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title"
+                    app:srcCompat="@drawable/img_delivery_boy" />
 
-            <com.mage.ziplrdelivery.uc.CustomTextView
-                android:id="@+id/tvRegistration"
-                style="@style/TextView_Bold_White"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:text="@string/registration"
-                app:layout_constraintLeft_toRightOf="@id/tvDontAcc"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btMobileNo" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+                <com.mage.ziplrdelivery.uc.CustomMaterialButton
+                    android:id="@+id/btMobileNo"
+                    style="@style/MaterialButton_Regular_White"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/def_bt_height"
+                    android:layout_marginTop="@dimen/_45sdp"
+                    android:text="@string/use_your_mobile_number_to_continue"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivDelivery" />
 
-    <RelativeLayout
-        android:id="@+id/rlInternet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nsv">
+                <com.mage.ziplrdelivery.uc.CustomTextView
+                    android:id="@+id/tvDontAcc"
+                    style="@style/TextView_Regular_White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:text="@string/don_t_have_an_account"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/tvRegistration"
+                    app:layout_constraintTop_toBottomOf="@id/btMobileNo" />
 
-        <include layout="@layout/layout_no_internet_available" />
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <com.mage.ziplrdelivery.uc.CustomTextView
+                    android:id="@+id/tvRegistration"
+                    style="@style/TextView_Bold_White"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/registration"
+                    app:layout_constraintLeft_toRightOf="@id/tvDontAcc"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btMobileNo" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <RelativeLayout
+            android:id="@+id/rlInternet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nsv">
+
+            <include layout="@layout/layout_no_internet_available" />
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

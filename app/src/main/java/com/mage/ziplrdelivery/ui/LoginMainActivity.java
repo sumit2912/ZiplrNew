@@ -2,29 +2,33 @@ package com.mage.ziplrdelivery.ui;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.databinding.DataBindingUtil;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.uc.CustomTextView;
 
+import com.mage.ziplrdelivery.databinding.ActivityLoginMainBinding;
 import com.mage.ziplrdelivery.utils.Const;
 import com.mage.ziplrdelivery.utils.Utils;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 
 public class LoginMainActivity extends BaseActivity implements AppManager.DataMessageListener {
 
-    @BindView(R.id.tvInternet)
-    CustomTextView tvInternet;
+    private ActivityLoginMainBinding binding;
+    private Intent registrationIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Utils.makeFullScreenActivity(LoginMainActivity.this);
         super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(LoginMainActivity.this, R.layout.activity_login_main);
+        binding.btMobileNo.setOnClickListener(this);
+        binding.tvRegistration.setOnClickListener(this);
     }
 
     @Override
@@ -32,10 +36,6 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
         return LoginMainActivity.this;
     }
 
-    @Override
-    protected int bindLayout() {
-        return R.layout.activity_login_main;
-    }
 
     @Override
     protected AppManager.DataMessageListener addDataMessageListener() {
@@ -52,9 +52,21 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
 
     }
 
-    @OnClick({})
+    @Override
     public void onClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.btMobileNo:
+                break;
+            case R.id.tvRegistration:
+                if(!disableClick){
+                    disableClick = true;
+                    if(registrationIntent == null){
+                        registrationIntent = new Intent(LoginMainActivity.this,RegistrationActivity.class);
+                    }
+                    startActivity(registrationIntent);
+                }
+                break;
+        }
     }
 
     @Override
@@ -65,9 +77,9 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     @Override
     public void onInternetChange(boolean isInternet) {
         if (isInternet) {
-                tvInternet.setVisibility(View.GONE);
+            binding.rlInternet.setVisibility(View.GONE);
         } else {
-                tvInternet.setVisibility(View.VISIBLE);
+            binding.rlInternet.setVisibility(View.VISIBLE);
         }
     }
 

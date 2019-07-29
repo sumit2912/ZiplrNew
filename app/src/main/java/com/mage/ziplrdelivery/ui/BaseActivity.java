@@ -11,11 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.listener.ActivityLayout;
 import com.mage.ziplrdelivery.listener.ResponseListener;
 import com.mage.ziplrdelivery.utils.Utils;
 
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, Utils.InternetCheck.NetListener, ActivityLayout {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, Utils.InternetCheck.NetListener {
 
     protected boolean isInternet = false;
     protected AppManager appManager;
@@ -55,8 +54,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected abstract Context getContext();
 
-    protected abstract int bindLayout();
-
     protected abstract AppManager.DataMessageListener addDataMessageListener();
 
     protected abstract void initUi();
@@ -74,10 +71,5 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void onNetChange(boolean isInternet) {
         this.isInternet = isInternet;
         onInternetChange(isInternet);
-    }
-
-    @Override
-    public int getLayoutId() {
-        return bindLayout();
     }
 }

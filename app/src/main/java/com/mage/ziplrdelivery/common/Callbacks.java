@@ -10,15 +10,8 @@ import androidx.annotation.Nullable;
 import com.mage.ziplrdelivery.listener.ActivityLayout;
 import com.mage.ziplrdelivery.utils.Utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 public class Callbacks implements Application.ActivityLifecycleCallbacks {
 
-    private final Map<Activity, Unbinder> unbinders = new HashMap<>();
     private AppManager appManager;
 
     @Override
@@ -27,7 +20,6 @@ public class Callbacks implements Application.ActivityLifecycleCallbacks {
         if (activity instanceof ActivityLayout) {
             activity.setContentView(layoutId(activity));
         }
-        unbinders.put(activity, ButterKnife.bind(activity));
         appManager = AppManager.getInstance(activity);
     }
 
@@ -63,7 +55,6 @@ public class Callbacks implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
         Utils.print("Callbacks",activity.getClass().getSimpleName()+" Destroyed");
-        unbinders.remove(activity).unbind();
         appManager.removeActivity(activity);
         appManager.removeDataMessageListener(activity.getClass().getSimpleName());
     }

@@ -6,31 +6,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatImageView;
+import androidx.databinding.DataBindingUtil;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.uc.CustomTextView;
+import com.mage.ziplrdelivery.databinding.ActivitySplashBinding;
 import com.mage.ziplrdelivery.utils.Const;
 import com.mage.ziplrdelivery.utils.Utils;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 public class SplashActivity extends BaseActivity implements AppManager.DataMessageListener {
 
     final Handler handler = new Handler();
-    @BindView(R.id.ivSplash)
-    AppCompatImageView ivSplash;
-    @BindView(R.id.tvInternet)
-    CustomTextView tvInternet;
     Runnable runnable;
+    private ActivitySplashBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Utils.makeFullScreenActivity(SplashActivity.this);
         super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(SplashActivity.this, R.layout.activity_splash);
         runnable = () -> {
             startActivity(new Intent(SplashActivity.this, LoginMainActivity.class));
             finish();
@@ -42,11 +37,6 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
     @Override
     protected Context getContext() {
         return SplashActivity.this;
-    }
-
-    @Override
-    protected int bindLayout() {
-        return R.layout.activity_splash;
     }
 
     @Override
@@ -63,7 +53,7 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
 
     }
 
-    @OnClick({})
+    @Override
     public void onClick(View view) {
 
     }
@@ -82,9 +72,9 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
     @Override
     public void onInternetChange(boolean isInternet) {
         if (isInternet) {
-                tvInternet.setVisibility(View.GONE);
+            binding.rlInternet.setVisibility(View.GONE);
         } else {
-                tvInternet.setVisibility(View.VISIBLE);
+            binding.rlInternet.setVisibility(View.VISIBLE);
         }
     }
 
