@@ -28,4 +28,7 @@
     <string name="please_enter_your_password_and_quickly_to_manage_your_account">Please enter your password and quickly to manage your account</string>
     <string name="enter_your_password">Enter Your Password</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="enter_verification_code_received_on_your_phone_number">Enter verification code received on your phone number</string>
+    <string name="resend_code">Resend Code</string>
+    <string name="verification">Verification</string>
 </resources>

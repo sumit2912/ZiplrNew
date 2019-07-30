@@ -18,6 +18,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.VerificationActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.PasswordActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize"
             android:screenOrientation="portrait" />
