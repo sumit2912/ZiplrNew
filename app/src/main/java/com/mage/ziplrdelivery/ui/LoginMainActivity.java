@@ -20,7 +20,7 @@ import com.mage.ziplrdelivery.utils.Utils;
 public class LoginMainActivity extends BaseActivity implements AppManager.DataMessageListener {
 
     private ActivityLoginMainBinding binding;
-    private Intent registrationIntent;
+    private Intent registrationIntent,mobileNoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,13 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btMobileNo:
+                if(!disableClick){
+                    disableClick = true;
+                    if(mobileNoIntent == null){
+                        mobileNoIntent = new Intent(LoginMainActivity.this,MobileNoActivity.class);
+                    }
+                    startActivity(mobileNoIntent);
+                }
                 break;
             case R.id.tvRegistration:
                 if(!disableClick){

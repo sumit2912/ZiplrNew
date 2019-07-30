@@ -2,9 +2,22 @@
 <resources>
     <declare-styleable name="CustomView">
         <attr name="custom_font" format="enum">
-            <enum name="bold" value="1"/>
-            <enum name="semibold" value="2"/>
-            <enum name="regular" value="3"/>
+            <enum name="bold" value="1" />
+            <enum name="semibold" value="2" />
+            <enum name="regular" value="3" />
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CustomMaterialButton">
+        <attr name="bt_text" format="string|reference" />
+        <attr name="bt_text_color" format="color|reference" />
+        <attr name="bt_text_size" format="dimension|reference" />
+        <attr name="bt_background_color" format="color|reference" />
+        <attr name="pb_color" format="color|reference" />
+        <attr name="bt_corner_radius" format="dimension|reference" />
+        <attr name="bt_elevation" format="dimension|reference" />
+        <attr name="bt_font_path" format="string|reference" />
+        <attr name="bt_anim_duration" format="integer|reference" />
+        <attr name="bt_text_all_caps" format="boolean" />
     </declare-styleable>
 </resources>

@@ -101,7 +101,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nsv">
+            app:layout_constraintTop_toBottomOf="@id/nsv"
+            android:visibility="gone">
 
             <include layout="@layout/layout_no_internet_available" />
         </RelativeLayout>

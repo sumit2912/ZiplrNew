@@ -2,13 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.RegistrationActivity">
-
-    <data>
-        <variable
-            name="RegistrationViewModel"
-            type="com.mage.ziplrdelivery.viewmodel.RegistrationViewModel" />
-    </data>
+    tools:context=".ui.MobileNoActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -70,95 +64,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/register_your_account_and_enjoy_our_app"
-                        app:layout_constraintBottom_toTopOf="@+id/tilName"
+                        android:text="@string/please_enter_your_mobile_number_and_verify_your_number"
+                        app:layout_constraintBottom_toTopOf="@+id/llCountryCode"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilName"
-                        style="@style/Custom_TextInputLayout_Style"
-                        android:layout_width="0dp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:hint="@string/hint_enter_your_name"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvSubTitle">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edName"
-                            style="@style/Custom_TextInputEditText_Style"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:inputType="textPersonName"
-                            app:custom_font="regular"
-                            android:text="@={RegistrationViewModel.Name}"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilEmail"
-                        style="@style/Custom_TextInputLayout_Style"
-                        android:layout_width="0dp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:hint="@string/hint_enter_your_email"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tilName">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edEmail"
-                            style="@style/Custom_TextInputEditText_Style"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:inputType="textEmailAddress"
-                            app:custom_font="regular"
-                            android:text="@={RegistrationViewModel.Email}"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilPassword"
-                        style="@style/Custom_TextInputLayout_Style"
-                        android:layout_width="0dp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:hint="@string/hint_enter_password"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tilEmail">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edPassword"
-                            style="@style/Custom_TextInputEditText_Style"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:inputType="textPassword"
-                            app:custom_font="regular"
-                            android:text="@={RegistrationViewModel.Password}"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilCPassword"
-                        style="@style/Custom_TextInputLayout_Style"
-                        android:layout_width="0dp"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:hint="@string/hint_enter_confirm_password"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tilPassword">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edCPassword"
-                            style="@style/Custom_TextInputEditText_Style"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPassword"
-                            app:custom_font="regular"
-                            android:text="@={RegistrationViewModel.ConfirmPassword}"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:id="@+id/llCountryCode"
@@ -168,8 +78,7 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toLeftOf="@id/tilPhoneNo"
-                        app:layout_constraintTop_toBottomOf="@id/tilCPassword">
+                        app:layout_constraintTop_toBottomOf="@id/tvSubTitle">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivFlag"
@@ -187,54 +96,52 @@
                             android:clickable="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            app:srcCompat="@drawable/icn_down_arrow"
-                            android:visibility="gone"/>
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/icn_down_arrow" />
 
                         <com.mage.ziplrdelivery.uc.CustomTextView
                             android:id="@+id/tvCode"
-                            style="@style/Form_SubTitle"
+                            style="@style/TextView_Bold_Black_Big"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/_5sdp"
                             android:clickable="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:textColor="@color/text_black"
-                            android:text="@={RegistrationViewModel.CountryCode}"/>
+                            android:textColor="@color/text_black" />
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilPhoneNo"
+                        android:id="@+id/tilMobilNo"
                         style="@style/Custom_TextInputLayout_Style"
                         android:layout_width="0dp"
                         android:layout_marginTop="@dimen/_20sdp"
-                        android:hint="@string/hint_phone_number"
-                        app:layout_constraintHorizontal_weight="1"
-                        app:layout_constraintLeft_toRightOf="@id/llCountryCode"
+                        android:hint="@string/mobile_number"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tilCPassword">
+                        app:layout_constraintTop_toBottomOf="@+id/llCountryCode">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edPhoneNo"
+                            android:id="@+id/edMobileNo"
                             style="@style/Custom_TextInputEditText_Style"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="number"
-                            app:custom_font="regular"
-                            android:text="@={RegistrationViewModel.PhoneNumber}"/>
+                            app:custom_font="regular" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.mage.ziplrdelivery.uc.ProgressMaterialButton
-                        android:id="@+id/btSubmit"
-                        style="@style/ProgressMaterialButton_SemiBold_Orange"
+                    <com.mage.ziplrdelivery.uc.CustomMaterialButton
+                        android:id="@+id/btNext"
+                        style="@style/MaterialButton_SemiBold_Orange"
                         android:layout_width="@dimen/_150sdp"
                         android:layout_height="@dimen/def_bt_height"
-                        android:layout_marginTop="@dimen/_25sdp"
-                        app:bt_text="@string/submit"
+                        android:layout_marginTop="@dimen/_45sdp"
+                        android:text="@string/next"
+                        app:custom_font="semibold"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tilPhoneNo" />
+                        app:layout_constraintTop_toBottomOf="@+id/tilMobilNo" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -243,10 +150,10 @@
             android:id="@+id/rlInternet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:visibility="gone">
+            app:layout_constraintRight_toRightOf="parent">
 
             <include layout="@layout/layout_no_internet_available" />
         </RelativeLayout>

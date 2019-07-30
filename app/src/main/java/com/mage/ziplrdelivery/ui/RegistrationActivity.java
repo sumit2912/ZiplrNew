@@ -11,25 +11,19 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.mage.ziplrdelivery.CountryPicker.Country;
-import com.mage.ziplrdelivery.CountryPicker.CountryPicker;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.databinding.ActivityRegistrationBinding;
 import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
 import com.mage.ziplrdelivery.utils.Const;
-import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodel.RegistrationViewModel;
 
-import java.util.Collections;
-import java.util.List;
 
 public class RegistrationActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<RegistrationParamBean> {
 
     private ActivityRegistrationBinding binding;
     private AppCompatImageView ivBack;
-    private CountryPicker mCountryPicker;
     private RegistrationViewModel registrationViewModel;
 
     @Override
@@ -66,18 +60,20 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
         binding.collapsingTl.setCollapsedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         binding.collapsingTl.setExpandedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         ivBack.setOnClickListener(this);
-        binding.llCountryCode.setOnClickListener(this);
-        mCountryPicker = CountryPicker.newInstance(getResources().getString(R.string.lbl_select_country_code));
-        // You can limit the displayed countries
-        List<Country> countryList = Country.getAllCountries();
-        Collections.sort(countryList, (s1, s2) -> s1.getName().compareToIgnoreCase(s2.getName()));
-        mCountryPicker.setCountriesList(countryList);
-        setListener();
+        binding.ivFlag.setImageResource(R.drawable.img_flag);
+        binding.tvCode.setText(mContext.getResources().getString(R.string.uk_country_code));
+        registrationViewModel.CountryCode.setValue("+44");
+        binding.btSubmit.setOnClickListener(this);
+        binding.btSubmit.setButtonClickListener(this);
     }
 
     @Override
     protected void onInternetChange(boolean isInternet) {
-
+        if (isInternet) {
+            binding.rlInternet.setVisibility(View.GONE);
+        } else {
+            binding.rlInternet.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -96,9 +92,8 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
             case R.id.ivBack:
                 onBackPressed();
                 break;
-            case R.id.llCountryCode:
-                if (!mCountryPicker.isAdded())
-                    mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
+            case R.id.btSubmit:
+                registrationViewModel.onClick(view);
                 break;
         }
     }
@@ -128,8 +123,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
             case 6:
                 binding.edPhoneNo.setError(getResources().getString(R.string.validation_phone_no));
                 break;
-            default:
-                Utils.toast(this,"You can submit",false);
+            case -1:
                 break;
         }
 
@@ -138,30 +132,5 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     @Override
     public void onNewDataMessage(String from, String msg, Data data) {
 
-    }
-
-    private void setListener() {
-        mCountryPicker.setListener((name, code, dialCode, flagDrawableResID) -> {
-            binding.tvCode.setText(dialCode);
-            registrationViewModel.CountryCode.setValue(dialCode);
-            binding.ivFlag.setImageResource(flagDrawableResID);
-            mCountryPicker.dismiss();
-        });
-
-        getUserCountryInfo();
-    }
-
-    private void getUserCountryInfo() {
-        Country country = Country.getCountryFromSIM(RegistrationActivity.this);
-        if (country != null) {
-            binding.ivFlag.setImageResource(country.getFlag());
-            binding.tvCode.setText(country.getDialCode());
-            registrationViewModel.CountryCode.setValue(country.getDialCode());
-        } else {
-            Country india = new Country("IN", "India", "+91", R.drawable.flag_in);
-            binding.ivFlag.setImageResource(india.getFlag());
-            binding.tvCode.setText(india.getDialCode());
-            registrationViewModel.CountryCode.setValue(india.getDialCode());
-        }
     }
 }

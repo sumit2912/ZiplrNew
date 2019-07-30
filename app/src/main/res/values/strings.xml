@@ -20,4 +20,12 @@
     <string name="validation_password_match">The password and confirm password must be same</string>
     <string name="validation_country_code">Please choose country code</string>
     <string name="validation_phone_no">Please enter phone number</string>
+    <string name="please_enter_your_mobile_number_and_verify_your_number">Please enter your mobile number and verify your number</string>
+    <string name="uk_country_code">+44</string>
+    <string name="enter_your_mobile_number">Enter Your Mobile Number</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="next">Next</string>
+    <string name="please_enter_your_password_and_quickly_to_manage_your_account">Please enter your password and quickly to manage your account</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="forgot_password">Forgot Password?</string>
 </resources>
