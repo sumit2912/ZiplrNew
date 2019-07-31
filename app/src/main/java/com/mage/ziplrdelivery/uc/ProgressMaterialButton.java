@@ -1,7 +1,6 @@
 package com.mage.ziplrdelivery.uc;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -83,10 +82,10 @@ public class ProgressMaterialButton extends RelativeLayout {
             textColor = attributes.getResourceId(R.styleable.CustomMaterialButton_bt_text_color, -1);
             setButtonTextColor(textColor);
 
-            textSize = attributes.getResourceId(R.styleable.CustomMaterialButton_bt_text_size,textSize);
-            materialButton.setTextSize(TypedValue.COMPLEX_UNIT_PX,context.getResources().getDimensionPixelSize(textSize));
+            textSize = attributes.getResourceId(R.styleable.CustomMaterialButton_bt_text_size, textSize);
+            materialButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimensionPixelSize(textSize));
 
-            materialButton.setAllCaps(attributes.getBoolean(R.styleable.CustomMaterialButton_bt_text_all_caps,false));
+            materialButton.setAllCaps(attributes.getBoolean(R.styleable.CustomMaterialButton_bt_text_all_caps, false));
 
             backgroundColor = attributes.getResourceId(R.styleable.CustomMaterialButton_bt_background_color, -1);
             setButtonBackgroundColor(backgroundColor);
@@ -113,6 +112,10 @@ public class ProgressMaterialButton extends RelativeLayout {
         }
     }
 
+    public String getButtonText() {
+        return this.text;
+    }
+
     public void setButtonText(String text) {
         this.text = text;
         materialButton.setText(this.text);
@@ -121,10 +124,6 @@ public class ProgressMaterialButton extends RelativeLayout {
     public void setButtonText(int resId) {
         this.text = context.getResources().getString(resId);
         materialButton.setText(this.text);
-    }
-
-    public String getButtonText() {
-        return this.text;
     }
 
     public void setButtonTextColor(int resId) {
@@ -136,22 +135,22 @@ public class ProgressMaterialButton extends RelativeLayout {
         }
     }
 
+    public float getButtonElevation() {
+        return buttonElevation;
+    }
+
     public void setButtonElevation(float elevation) {
         this.buttonElevation = elevation;
         materialButton.setElevation(elevation);
     }
 
-    public float getButtonElevation() {
-        return buttonElevation;
+    public int getButtonCornerRadius() {
+        return this.cornerRadius;
     }
 
     public void setButtonCornerRadius(int cornerRadius) {
         this.cornerRadius = cornerRadius;
         materialButton.setCornerRadius(this.cornerRadius);
-    }
-
-    public int getButtonCornerRadius() {
-        return this.cornerRadius;
     }
 
     public void setButtonBackgroundColor(int resId) {

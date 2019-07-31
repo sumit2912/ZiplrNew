@@ -3,9 +3,7 @@ package com.mage.ziplrdelivery.param_model;
 import android.text.TextUtils;
 import android.util.Patterns;
 
-import java.io.Serializable;
-
-public class RegistrationParamBean implements Serializable {
+public class RegistrationParamBean {
     private String name;
     private String email;
     private String password;
@@ -70,23 +68,34 @@ public class RegistrationParamBean implements Serializable {
         this.phone_number = phone_number;
     }
 
-    public int isValidData(){
-        if(TextUtils.isEmpty(getName()))
+    public int isValidData() {
+        if (TextUtils.isEmpty(getName()))
             return 0;
-        if(TextUtils.isEmpty(getEmail()))
+        if (TextUtils.isEmpty(getEmail()))
             return 1;
         if (!Patterns.EMAIL_ADDRESS.matcher(getEmail()).matches())
             return 1;
-        if(TextUtils.isEmpty(getPassword()))
+        if (TextUtils.isEmpty(getPassword()))
             return 2;
-        if(TextUtils.isEmpty(getConfirm_password()))
+        if (TextUtils.isEmpty(getConfirm_password()))
             return 3;
-        if(!getPassword().equals(getConfirm_password()))
+        if (!getPassword().equals(getConfirm_password()))
             return 4;
-        if(TextUtils.isEmpty(getCountry_code()))
+        if (TextUtils.isEmpty(getCountry_code()))
             return 5;
-        if(TextUtils.isEmpty(getPhone_number()))
+        if (TextUtils.isEmpty(getPhone_number()))
             return 6;
         return -1;
+    }
+
+    public String printParams() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("name = " + (getName() != null ? getName() : ""));
+        stringBuilder.append("  email = " + (getEmail() != null ? getEmail() : ""));
+        stringBuilder.append("  password = " + (getPassword() != null ? getPassword() : ""));
+        stringBuilder.append("  confirm_password = " + (getConfirm_password() != null ? getConfirm_password() : ""));
+        stringBuilder.append("  country_code = " + (getCountry_code() != null ? getCountry_code() : ""));
+        stringBuilder.append("  phone_number = " + (getPhone_number() != null ? getPhone_number() : ""));
+        return String.valueOf(stringBuilder);
     }
 }

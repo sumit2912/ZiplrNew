@@ -3,6 +3,7 @@ package com.mage.ziplrdelivery.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -35,6 +36,7 @@ public class Utils {
             Utils.print(title + " :: " + mesg);
         }
     }
+
     public static void print(String title, Exception e) {
         if (Utils.DO_SOP) {
             System.out.println("=======================" + title + "===========================");
@@ -52,17 +54,18 @@ public class Utils {
         toast.show();
     }
 
-    public static void showInternetMsg(Context context){
-        toast(context,context.getResources().getString(R.string.no_internet),false);
+    public static void showInternetMsg(Context context) {
+        toast(context, context.getResources().getString(R.string.no_internet), false);
     }
 
-    public static void logout(Context caller){
+    public static void logout(Context caller) {
     }
-    public static String padLong(long l){
-        if (l<10){
-            return "0"+l;
-        }else {
-            return ""+l;
+
+    public static String padLong(long l) {
+        if (l < 10) {
+            return "0" + l;
+        } else {
+            return "" + l;
         }
     }
 
@@ -87,9 +90,21 @@ public class Utils {
         ((Activity) context).finish();
     }*/
 
-    public static char getChar(int length)
-    {
+    public static char getChar(int length) {
         return String.valueOf(length).charAt(0);
+    }
+
+    public static void makeFullScreenActivity(AppCompatActivity activity) {
+        Window window = activity.getWindow();
+        activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    public static float getFloatFromDimen(Context context, int dimen) {
+        TypedValue outValue = new TypedValue();
+        context.getResources().getValue(dimen, outValue, true);
+        return outValue.getFloat();
     }
 
     public static class InternetCheck extends AsyncTask<Void, Void, Boolean> {
@@ -114,19 +129,12 @@ public class Utils {
 
         @Override
         protected void onPostExecute(Boolean internet) {
-            print("Utils","internet = " + internet);
+            print("Utils", "internet = " + internet);
             netListener.onNetChange(internet);
         }
 
-        public interface NetListener{
+        public interface NetListener {
             void onNetChange(boolean isInternet);
         }
-    }
-
-    public static void makeFullScreenActivity(AppCompatActivity activity){
-        Window window = activity.getWindow();
-        activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }

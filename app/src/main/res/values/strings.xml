@@ -31,4 +31,8 @@
     <string name="enter_verification_code_received_on_your_phone_number">Enter verification code received on your phone number</string>
     <string name="resend_code">Resend Code</string>
     <string name="verification">Verification</string>
+    <string name="change_password">Change Password</string>
+    <string name="please_enter_a_new_password">Please enter a new password</string>
+    <string name="hint_enter_new_password">Enter new password</string>
+    <string name="validation_mobile_no">Please enter mobile number</string>
 </resources>

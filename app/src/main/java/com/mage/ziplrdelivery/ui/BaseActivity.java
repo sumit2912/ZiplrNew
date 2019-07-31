@@ -5,21 +5,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.listener.ResponseListener;
 import com.mage.ziplrdelivery.utils.Utils;
 
+import java.util.Objects;
+
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, Utils.InternetCheck.NetListener {
 
+    protected static final String KEY_FROM_ACTIVITY = "KEY_FROM_ACTIVITY";
+    protected final Handler handler = new Handler();
+    protected String VALUE_FROM_ACTIVITY = null;
     protected boolean isInternet = false;
     protected AppManager appManager;
     protected Context mContext;
     protected boolean disableClick;
+    protected Intent dataIntent;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -38,6 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter("isInternet"));
         new Utils.InternetCheck(BaseActivity.this).execute();
+        dataIntent = getIntent();
     }
 
     @Override
@@ -71,5 +80,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public void onNetChange(boolean isInternet) {
         this.isInternet = isInternet;
         onInternetChange(isInternet);
+    }
+
+    protected String getEdValue(TextInputEditText ed) {
+        return Objects.requireNonNull(ed.getText()).toString().trim();
+    }
+
+    protected CharSequence getResString(int resId) {
+        return mContext.getResources().getString(resId);
     }
 }

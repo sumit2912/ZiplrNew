@@ -13,14 +13,14 @@ import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 
 import com.mage.ziplrdelivery.databinding.ActivityLoginMainBinding;
-import com.mage.ziplrdelivery.utils.Const;
+import com.mage.ziplrdelivery.utils.constant.ComConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 
 public class LoginMainActivity extends BaseActivity implements AppManager.DataMessageListener {
 
     private ActivityLoginMainBinding binding;
-    private Intent registrationIntent,mobileNoIntent;
+    private Intent registrationIntent, mobileNoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +56,19 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btMobileNo:
-                if(!disableClick){
+                if (!disableClick) {
                     disableClick = true;
-                    if(mobileNoIntent == null){
-                        mobileNoIntent = new Intent(LoginMainActivity.this,MobileNoActivity.class);
+                    if (mobileNoIntent == null) {
+                        mobileNoIntent = new Intent(LoginMainActivity.this, MobileNoActivity.class);
                     }
                     startActivity(mobileNoIntent);
                 }
                 break;
             case R.id.tvRegistration:
-                if(!disableClick){
+                if (!disableClick) {
                     disableClick = true;
-                    if(registrationIntent == null){
-                        registrationIntent = new Intent(LoginMainActivity.this,RegistrationActivity.class);
+                    if (registrationIntent == null) {
+                        registrationIntent = new Intent(LoginMainActivity.this, RegistrationActivity.class);
                     }
                     startActivity(registrationIntent);
                 }
@@ -91,7 +91,7 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     }
 
     @Override
-    public void onResponse(String tag, Const.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
 
     }
 }

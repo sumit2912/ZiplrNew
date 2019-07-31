@@ -14,19 +14,25 @@ import androidx.databinding.DataBindingUtil;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
+import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
-import com.mage.ziplrdelivery.utils.Const;
+import com.mage.ziplrdelivery.param_model.LoginBean;
+import com.mage.ziplrdelivery.utils.constant.ComConst;
 
 public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener {
 
+    private static final int PROGRESS_TAG = 0;
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
-    private Intent verifyIntent;
+    private Intent verifyIntent, dashBoardIntent;
+    private LoginBean loginBean;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(PasswordActivity.this, R.layout.activity_password);
+        loginBean = LoginBean.getInstance(mContext);
         initUi();
     }
 
@@ -67,18 +73,45 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
             case R.id.tvForgot:
                 if (!disableClick) {
                     disableClick = true;
-                    if(verifyIntent == null){
-                        verifyIntent = new Intent(PasswordActivity.this,VerificationActivity.class);
+                    if (verifyIntent == null) {
+                        verifyIntent = new Intent(PasswordActivity.this, VerificationActivity.class);
                     }
+                    VALUE_FROM_ACTIVITY = Screen.PASSWORD_ACTIVITY;
+                    verifyIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
                     startActivity(verifyIntent);
                 }
                 break;
             case R.id.btSubmit:
-                /*if (!disableClick) {
-                    disableClick = true;
-                }*/
+                validation();
                 break;
         }
+    }
+
+    private void validation() {
+        password = super.getEdValue(binding.edPassword);
+        loginBean.setPassword(password);
+        int error = loginBean.isValidData();
+        switch (error) {
+            case 1:
+                binding.edPassword.setError(super.getResString(R.string.validation_password));
+                binding.edPassword.requestFocus();
+                break;
+            default:
+                loginBean.printParams();
+                tempMethod();
+                break;
+        }
+    }
+
+    private void tempMethod() {
+        binding.btSubmit.showProgressBar(true, PROGRESS_TAG);
+        handler.postDelayed(() -> {
+            if (dashBoardIntent == null) {
+                dashBoardIntent = new Intent(PasswordActivity.this, DashBoardActivity.class);
+            }
+            startActivity(dashBoardIntent);
+            finishAffinity();
+        }, 3000);
     }
 
     @Override
@@ -96,7 +129,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     }
 
     @Override
-    public void onResponse(String tag, Const.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
 
     }
 

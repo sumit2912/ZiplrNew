@@ -3,7 +3,6 @@ package com.mage.ziplrdelivery.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -12,12 +11,11 @@ import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.databinding.ActivitySplashBinding;
-import com.mage.ziplrdelivery.utils.Const;
+import com.mage.ziplrdelivery.utils.constant.ComConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 public class SplashActivity extends BaseActivity implements AppManager.DataMessageListener {
 
-    final Handler handler = new Handler();
     Runnable runnable;
     private ActivitySplashBinding binding;
 
@@ -79,7 +77,7 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
     }
 
     @Override
-    public void onResponse(String tag, Const.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
 
     }
 }

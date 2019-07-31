@@ -20,7 +20,7 @@ public class MyApplication extends Application {
         appManager = AppManager.getInstance(getApplicationContext());
         callbacks = new Callbacks();
         networkChangeReceiver = new NetworkChangeReceiver();
-        registerReceiver(networkChangeReceiver,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         registerActivityLifecycleCallbacks(callbacks);
     }
 

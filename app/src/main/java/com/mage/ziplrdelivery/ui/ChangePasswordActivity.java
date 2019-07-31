@@ -1,46 +1,41 @@
 package com.mage.ziplrdelivery.ui;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.databinding.DataBindingUtil;
+
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.databinding.ActivityMobileNoBinding;
-import com.mage.ziplrdelivery.param_model.LoginBean;
+import com.mage.ziplrdelivery.databinding.ActivityChangePasswordBinding;
 import com.mage.ziplrdelivery.utils.constant.ComConst;
 
-public class MobileNoActivity extends BaseActivity implements AppManager.DataMessageListener {
+public class ChangePasswordActivity extends BaseActivity implements AppManager.DataMessageListener {
 
-    private ActivityMobileNoBinding binding;
+    private ActivityChangePasswordBinding binding;
     private AppCompatImageView ivBack;
-    private Intent passwordIntent;
-    private LoginBean loginBean;
-    private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(MobileNoActivity.this, R.layout.activity_mobile_no);
-        loginBean = LoginBean.getInstance(mContext);
+        binding = DataBindingUtil.setContentView(ChangePasswordActivity.this, R.layout.activity_change_password);
         initUi();
     }
 
     @Override
     protected Context getContext() {
-        return MobileNoActivity.this;
+        return ChangePasswordActivity.this;
     }
 
     @Override
     protected AppManager.DataMessageListener addDataMessageListener() {
-        return MobileNoActivity.this;
+        return ChangePasswordActivity.this;
     }
 
     @Override
@@ -50,45 +45,17 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         View backView = LayoutInflater.from(this).inflate(R.layout.layout_back_arrow, binding.toolbar, false);
         ivBack = backView.findViewById(R.id.ivBack);
         getSupportActionBar().setCustomView(backView);
-        binding.collapsingTl.setTitle(getResources().getString(R.string.enter_your_mobile_number));
+        binding.collapsingTl.setTitle(getResources().getString(R.string.change_password));
         binding.collapsingTl.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarTitle);
         binding.collapsingTl.setExpandedTitleTextAppearance(R.style.ExpandedAppBarTitle);
         binding.collapsingTl.setCollapsedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         binding.collapsingTl.setExpandedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         ivBack.setOnClickListener(this);
-        binding.ivFlag.setImageResource(R.drawable.img_flag);
-        binding.tvCode.setText(getResources().getString(R.string.uk_country_code));
-        binding.btNext.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ivBack:
-                onBackPressed();
-                break;
-            case R.id.btNext:
-                validation();
-                break;
-        }
-    }
 
-    private void validation() {
-        phoneNumber = super.getEdValue(binding.edMobileNo);
-        loginBean.setPhone_number(phoneNumber);
-        int error = loginBean.isValidData();
-        switch (error) {
-            case 0:
-                binding.edMobileNo.setError(super.getResString(R.string.validation_mobile_no));
-                binding.edMobileNo.requestFocus();
-                break;
-            default:
-                loginBean.printParams();
-                if (passwordIntent == null)
-                    passwordIntent = new Intent(MobileNoActivity.this, PasswordActivity.class);
-                startActivity(passwordIntent);
-                break;
-        }
     }
 
     @Override

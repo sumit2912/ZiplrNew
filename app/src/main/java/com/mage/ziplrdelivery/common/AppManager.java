@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mage.ziplrdelivery.utils.Const;
+import com.mage.ziplrdelivery.utils.constant.ComConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 import java.util.HashMap;
@@ -22,19 +22,19 @@ public class AppManager {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    public AppManager(Context mContext) {
+        this.context = mContext;
+        activityList = new HashMap<>();
+        dataMessageListenerList = new HashMap<>();
+        sharedPreferences = context.getSharedPreferences(ComConst.PREF_FILE, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+    }
+
     public static AppManager getInstance(Context mContext) {
         if (appManager == null) {
             appManager = new AppManager(mContext);
         }
         return appManager;
-    }
-
-    public AppManager(Context mContext){
-        this.context = mContext;
-        activityList = new HashMap<>();
-        dataMessageListenerList = new HashMap<>();
-        sharedPreferences = context.getSharedPreferences(Const.PREF_FILE,Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
     }
 
     public void prefSetStringValue(String key, String value) {
@@ -64,20 +64,20 @@ public class AppManager {
         return sharedPreferences.getBoolean(key, false);
     }
 
-    public void prefRemoveValue(String key){
+    public void prefRemoveValue(String key) {
         editor.remove(key);
         editor.commit();
     }
 
-    public void prefClearAll(){
+    public void prefClearAll() {
         editor = sharedPreferences.edit();
         editor.clear().apply();
     }
 
-    public void prefClearExcept(List<String> keyList){
-        Map<String,?> keys = sharedPreferences.getAll();
-        for(Map.Entry<String,?> entry : keys.entrySet()){
-            if(!keyList.contains(entry.getKey())){
+    public void prefClearExcept(List<String> keyList) {
+        Map<String, ?> keys = sharedPreferences.getAll();
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
+            if (!keyList.contains(entry.getKey())) {
                 prefRemoveValue(entry.getKey());
             }
         }
@@ -101,13 +101,13 @@ public class AppManager {
 
     public boolean sendDataMessage(String from, String to, String msg, Data data) {
         if (dataMessageListenerList.containsKey(to)) {
-            Utils.print("from = "+from+"    to = "+to+" msg = "+msg+" data = "+(data != null));
+            Utils.print("from = " + from + "    to = " + to + " msg = " + msg + " data = " + (data != null));
             dataMessageListenerList.get(to).onNewDataMessage(from, msg, data);
         }
         return dataMessageListenerList.containsKey(to);
     }
 
-    public void clearAllList(){
+    public void clearAllList() {
         activityList.clear();
         dataMessageListenerList.clear();
     }

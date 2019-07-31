@@ -16,7 +16,7 @@ public class Callbacks implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
-        Utils.print("Callbacks",activity.getClass().getSimpleName()+" Created");
+        Utils.print("Callbacks", activity.getClass().getSimpleName() + " Created");
         if (activity instanceof ActivityLayout) {
             activity.setContentView(layoutId(activity));
         }
@@ -29,32 +29,32 @@ public class Callbacks implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-        Utils.print("Callbacks",activity.getClass().getSimpleName()+" Started");
+        Utils.print("Callbacks", activity.getClass().getSimpleName() + " Started");
     }
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        Utils.print("Callbacks",activity.getClass().getSimpleName()+" Resumed");
+        Utils.print("Callbacks", activity.getClass().getSimpleName() + " Resumed");
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-        Utils.print("Callbacks",activity.getClass().getSimpleName()+" Paused");
+        Utils.print("Callbacks", activity.getClass().getSimpleName() + " Paused");
     }
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-        Utils.print("Callbacks",activity.getClass().getSimpleName()+" Stopped");
+        Utils.print("Callbacks", activity.getClass().getSimpleName() + " Stopped");
     }
 
     @Override
     public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle bundle) {
-        Utils.print("Callbacks",activity.getClass().getSimpleName()+" onActivitySaveInstanceState");
+        Utils.print("Callbacks", activity.getClass().getSimpleName() + " onActivitySaveInstanceState");
     }
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-        Utils.print("Callbacks",activity.getClass().getSimpleName()+" Destroyed");
+        Utils.print("Callbacks", activity.getClass().getSimpleName() + " Destroyed");
         appManager.removeActivity(activity);
         appManager.removeDataMessageListener(activity.getClass().getSimpleName());
     }
