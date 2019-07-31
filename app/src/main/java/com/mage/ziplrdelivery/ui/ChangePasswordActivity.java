@@ -14,7 +14,7 @@ import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.databinding.ActivityChangePasswordBinding;
-import com.mage.ziplrdelivery.utils.constant.ComConst;
+import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 public class ChangePasswordActivity extends BaseActivity implements AppManager.DataMessageListener {
 
@@ -73,7 +73,7 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
     }
 
     @Override
-    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
 
     }
 

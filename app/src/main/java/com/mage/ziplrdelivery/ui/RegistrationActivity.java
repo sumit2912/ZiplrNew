@@ -18,7 +18,7 @@ import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityRegistrationBinding;
 import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
-import com.mage.ziplrdelivery.utils.constant.ComConst;
+import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodel.RegistrationViewModel;
 
@@ -89,7 +89,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
-    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
 
     }
 

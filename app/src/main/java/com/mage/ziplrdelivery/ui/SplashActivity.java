@@ -11,7 +11,7 @@ import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.databinding.ActivitySplashBinding;
-import com.mage.ziplrdelivery.utils.constant.ComConst;
+import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 public class SplashActivity extends BaseActivity implements AppManager.DataMessageListener {
@@ -77,7 +77,7 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
     }
 
     @Override
-    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
 
     }
 }

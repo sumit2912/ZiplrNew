@@ -10,7 +10,7 @@ import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.databinding.ActivityDashBoardBinding;
-import com.mage.ziplrdelivery.utils.constant.ComConst;
+import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 public class DashBoardActivity extends BaseActivity implements AppManager.DataMessageListener {
 
@@ -57,7 +57,7 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
     }
 
     @Override
-    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
 
     }
 

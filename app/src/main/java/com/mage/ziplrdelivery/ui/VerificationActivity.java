@@ -17,7 +17,7 @@ import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityVerificationBinding;
-import com.mage.ziplrdelivery.utils.constant.ComConst;
+import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, TextWatcher {
@@ -91,7 +91,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
-    public void onResponse(String tag, ComConst.API_RESULT result, int status, String msg) {
+    public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
 
     }
 

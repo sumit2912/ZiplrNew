@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mage.ziplrdelivery.utils.constant.ComConst;
+import com.mage.ziplrdelivery.utils.constant.PrefConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class AppManager {
         this.context = mContext;
         activityList = new HashMap<>();
         dataMessageListenerList = new HashMap<>();
-        sharedPreferences = context.getSharedPreferences(ComConst.PREF_FILE, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(PrefConst.PREF_FILE, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 
