@@ -100,12 +100,15 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
+        super.onResponse(tag,result,status,msg);
+        Utils.print(Screen.REGISTRATION_ACTIVITY,"tag = "+tag+" result = "+result+" status = "+status+" msg ="+msg);
         if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.SUCCESS && status == 1){
             if (verificationIntent == null)
                 verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
             VALUE_FROM_ACTIVITY = Screen.REGISTRATION_ACTIVITY;
             verificationIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
-            verificationIntent.putExtra("otp",apiController.getResultData().getOtp());
+            verificationIntent.putExtra("otp",String.valueOf(apiController.getResultData().getOtp()));
+            verificationIntent.putExtra("id",apiController.getResultData().getId());
             startActivity(verificationIntent);
             finish();
         }else if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.FAIL){

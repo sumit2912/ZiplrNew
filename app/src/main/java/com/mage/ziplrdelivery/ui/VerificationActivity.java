@@ -26,6 +26,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     private AppCompatImageView ivBack;
     private Intent changePasswordIntent, dashBoardIntent;
     private String otp;
+    private long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,9 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         }
         if(dataIntent.hasExtra("otp")){
             otp = dataIntent.getStringExtra("otp");
+        }
+        if(dataIntent.hasExtra("id")){
+            id = dataIntent.getLongExtra("id",0);
         }
         initUi();
     }

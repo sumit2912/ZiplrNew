@@ -1,6 +1,8 @@
 package com.mage.ziplrdelivery.api;
 
 import android.content.Context;
+
+import com.mage.ziplrdelivery.data_model.ResponseBean;
 import com.mage.ziplrdelivery.listener.ApiResponseListener;
 import com.mage.ziplrdelivery.utils.Utils;
 
@@ -28,24 +30,23 @@ public class SingleResponse {
         return singleResponse;
     }
 
-    public void init(String method, Single<Response<Object>> observable, boolean isResultListBean) {
+    public void init(String method, Single<Response<ResponseBean>> observable) {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<Response<Object>>() {
+                .subscribe(new SingleObserver<Response<ResponseBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(Response<Object> response) {
-                        Utils.print(this.getClass().getSimpleName(),"response.isSuccessful = "+response.isSuccessful());
-                        apiResponseListener.onSuccessOccur(method,response, isResultListBean);
+                    public void onSuccess(Response<ResponseBean> response) {
+                        apiResponseListener.onSuccessOccur(method, response);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        apiResponseListener.onErrorOccur(method,e);
+                        apiResponseListener.onErrorOccur(method, e);
                     }
                 });
     }

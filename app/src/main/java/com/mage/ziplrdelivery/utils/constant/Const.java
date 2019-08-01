@@ -1,8 +1,8 @@
 package com.mage.ziplrdelivery.utils.constant;
 
-public class ComConst {
+public class Const {
 
-    public static String APP_NAME = "Ziplr";
+    public static final String APP_NAME = "Ziplr";
 
     public static final int INTENT_100 = 100;
     public static final int INTENT_200 = 200;

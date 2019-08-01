@@ -10,7 +10,7 @@ public class Result {
     private String name;
     @SerializedName("phone_number")
     @Expose
-    private int phoneNumber;
+    private String phoneNumber;
     @SerializedName("email")
     @Expose
     private String email;
@@ -22,7 +22,7 @@ public class Result {
     private int otp;
     @SerializedName("id")
     @Expose
-    private int id;
+    private long id;
     @SerializedName("avatar_url")
     @Expose
     private String avatarUrl;
@@ -35,11 +35,11 @@ public class Result {
         this.name = name;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -67,11 +67,11 @@ public class Result {
         this.otp = otp;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
