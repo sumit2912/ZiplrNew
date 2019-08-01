@@ -32,6 +32,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     private AppCompatImageView ivBack;
     private RegistrationViewModel registrationViewModel;
     private Intent verificationIntent;
+    private RegistrationParamBean registrationParamBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +86,31 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     protected void callApi(int tag) {
-
+        if(isInternet){
+            if(tag == 1){
+                if(registrationParamBean != null) {
+                    binding.btSubmit.showProgressBar(true, PROGRESS_TAG);
+                    apiController.getApiSignUp(registrationParamBean);
+                }
+            }
+        }else {
+            Utils.showInternetMsg(mContext);
+        }
     }
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-
+        if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.SUCCESS && status == 1){
+            if (verificationIntent == null)
+                verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
+            VALUE_FROM_ACTIVITY = Screen.REGISTRATION_ACTIVITY;
+            verificationIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
+            verificationIntent.putExtra("otp",apiController.getResultData().getOtp());
+            startActivity(verificationIntent);
+            finish();
+        }else if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.FAIL){
+            binding.btSubmit.showProgressBar(false, PROGRESS_TAG);
+        }
     }
 
     @Override
@@ -111,15 +131,19 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
         switch (error) {
             case 0:
                 binding.edName.setError(getResources().getString(R.string.validation_name));
+                binding.edName.requestFocus();
                 break;
             case 1:
                 binding.edEmail.setError(getResources().getString(R.string.validation_email));
+                binding.edEmail.requestFocus();
                 break;
             case 2:
                 binding.edPassword.setError(getResources().getString(R.string.validation_password));
+                binding.edPassword.requestFocus();
                 break;
             case 3:
                 binding.edCPassword.setError(getResources().getString(R.string.validation_c_password));
+                binding.edCPassword.requestFocus();
                 break;
             case 4:
                 binding.edCPassword.setError(getResources().getString(R.string.validation_password_match));
@@ -131,28 +155,11 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
                 binding.edPhoneNo.setError(getResources().getString(R.string.validation_phone_no));
                 break;
             default:
-                Utils.print(registrationParamBean.printParams());
-                tempMethod();
+                this.registrationParamBean = registrationParamBean;
+                callApi(1);
                 break;
         }
 
-    }
-
-    private void tempMethod() {
-        if (verificationIntent == null)
-            verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
-        VALUE_FROM_ACTIVITY = Screen.REGISTRATION_ACTIVITY;
-        verificationIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
-        binding.btSubmit.showProgressBar(true, PROGRESS_TAG);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Utils.toast(mContext, "Registered Successfully", true);
-                binding.btSubmit.showProgressBar(false, PROGRESS_TAG);
-                startActivity(verificationIntent);
-                finish();
-            }
-        }, 3000);
     }
 
     @Override

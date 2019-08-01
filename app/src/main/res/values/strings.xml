@@ -35,4 +35,5 @@
     <string name="please_enter_a_new_password">Please enter a new password</string>
     <string name="hint_enter_new_password">Enter new password</string>
     <string name="validation_mobile_no">Please enter your mobile number</string>
+    <string name="temporary_server_down">Something went wrong. Please check internet connection.</string>
 </resources>

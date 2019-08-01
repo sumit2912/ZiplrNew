@@ -34,6 +34,9 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         if (dataIntent.hasExtra(KEY_FROM_ACTIVITY)) {
             VALUE_FROM_ACTIVITY = dataIntent.getStringExtra(KEY_FROM_ACTIVITY);
         }
+        if(dataIntent.hasExtra("otp")){
+            otp = dataIntent.getStringExtra("otp");
+        }
         initUi();
     }
 
@@ -62,6 +65,9 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         ivBack.setOnClickListener(this);
         enableResendButton(false);
         binding.edOtpView.addTextChangedListener(this);
+        if(otp != null){
+            binding.edOtpView.setText(otp);
+        }
     }
 
     @Override

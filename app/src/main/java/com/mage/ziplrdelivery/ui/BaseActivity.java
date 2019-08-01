@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.mage.ziplrdelivery.api.ApiController;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.listener.ResponseListener;
 import com.mage.ziplrdelivery.utils.Utils;
@@ -35,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             new Utils.InternetCheck(BaseActivity.this).execute();
         }
     };
+    protected ApiController apiController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter("isInternet"));
         new Utils.InternetCheck(BaseActivity.this).execute();
         dataIntent = getIntent();
+        apiController = new ApiController(mContext, (ResponseListener) mContext);
     }
 
     @Override
