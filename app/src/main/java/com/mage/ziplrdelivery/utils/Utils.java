@@ -2,6 +2,7 @@ package com.mage.ziplrdelivery.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.R;
+import com.mage.ziplrdelivery.ui.LoginMainActivity;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -58,9 +61,6 @@ public class Utils {
         toast(context, context.getResources().getString(R.string.no_internet), false);
     }
 
-    public static void logout(Context caller) {
-    }
-
     public static String padLong(long l) {
         if (l < 10) {
             return "0" + l;
@@ -82,13 +82,13 @@ public class Utils {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    /*public static void showSessionDialog(final Context context) {
+    public static void showSessionDialog(final Context context) {
         Utils.toast(context,context.getResources().getString(R.string.session_expired_please_login_again),false);
-        Utils.logout(context);
-        Intent i = new Intent(context, SignInActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        MyApplication.getAppManager().prefClearAll();
+        Intent i = new Intent(context, LoginMainActivity.class);
+        ((Activity)context).finishAffinity();
         context.startActivity(i);
-        ((Activity) context).finish();
-    }*/
+    }
 
     public static char getChar(int length) {
         return String.valueOf(length).charAt(0);

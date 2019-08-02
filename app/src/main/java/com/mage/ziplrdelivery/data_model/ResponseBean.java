@@ -2,9 +2,6 @@ package com.mage.ziplrdelivery.data_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
-
-import java.util.List;
 
 public class ResponseBean {
     @SerializedName("result")
@@ -16,6 +13,9 @@ public class ResponseBean {
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("auth_toke")
+    @Expose
+    private AuthToke authToke;
 
     public Result getResult() {
         return result;
@@ -39,5 +39,13 @@ public class ResponseBean {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public AuthToke getAuthToke() {
+        return authToke;
+    }
+
+    public void setAuthToke(AuthToke authToke) {
+        this.authToke = authToke;
     }
 }

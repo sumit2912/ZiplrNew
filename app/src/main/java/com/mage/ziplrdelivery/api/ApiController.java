@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
+import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.data_model.ResponseBean;
 import com.mage.ziplrdelivery.data_model.Result;
@@ -15,6 +16,7 @@ import com.mage.ziplrdelivery.retrofit.RetrofitApiService;
 import com.mage.ziplrdelivery.retrofit.ServiceGenerator;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.utils.constant.PrefConst;
 
 
 import io.reactivex.Single;
@@ -76,8 +78,10 @@ public class ApiController implements ApiResponseListener {
             status = responseBean.getStatus();
             msg = responseBean.getMessage();
             result = responseBean.getResult();
+            if(responseBean.getAuthToke() != null){
+                MyApplication.getAppManager().prefSetStringValue(PrefConst.PREF_ACCESS_TOKEN,responseBean.getAuthToke().getAccessToken());
+            }
             Utils.print("status = " + status + "    msg = " + msg);
-            Utils.print("otp = " + result.getOtp());
         } else {
             msg = "We are upgrading our server";
         }
@@ -120,6 +124,13 @@ public class ApiController implements ApiResponseListener {
                         Utils.toast(caller, msg, false);
                         responseListener.onResponse(mMethod, ApiConst.API_RESULT.FAIL, mStatus, mMessage);
                         Utils.print("responseListener == 0 = " + mStatus);
+                    }else if(status == 2){
+                        Utils.showSessionDialog(caller);
+                        responseListener.onResponse(mMethod, ApiConst.API_RESULT.FAIL, mStatus, mMessage);
+                        Utils.print("responseListener == 2 = " + mStatus);
+                    }else {
+                        responseListener.onResponse(mMethod, ApiConst.API_RESULT.FAIL, mStatus, mMessage);
+                        Utils.print("responseListener >2 = " + mStatus);
                     }
                 } catch (Exception e) {
                     Utils.print(this.getClass().getSimpleName() + " ::doCallBack:: Exception :: method = " + mMethod, e);
