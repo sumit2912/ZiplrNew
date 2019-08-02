@@ -100,7 +100,6 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        super.onResponse(tag,result,status,msg);
         Utils.print(Screen.REGISTRATION_ACTIVITY,"tag = "+tag+" result = "+result+" status = "+status+" msg ="+msg);
         if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.SUCCESS && status == 1){
             if (verificationIntent == null)
@@ -113,6 +112,9 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
             finish();
         }else if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.FAIL){
             binding.btSubmit.showProgressBar(false, PROGRESS_TAG);
+            if(status == 0){
+                Utils.toast(mContext,msg,false);
+            }
         }
     }
 

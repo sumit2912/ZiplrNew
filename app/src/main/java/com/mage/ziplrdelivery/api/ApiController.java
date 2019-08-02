@@ -16,7 +16,6 @@ import com.mage.ziplrdelivery.retrofit.ServiceGenerator;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
-import java.util.List;
 
 import io.reactivex.Single;
 import retrofit2.Response;
@@ -30,13 +29,12 @@ public class ApiController implements ApiResponseListener {
     private String method, msg;
     private int status;
     private Result result;
-    private List<Result> resultList;
     private SingleResponse singleResponse;
 
     public ApiController(Context caller, ResponseListener responseListener) {
         this.caller = caller;
         this.responseListener = responseListener;
-        singleResponse = SingleResponse.getInstance(caller, ApiController.this);
+        singleResponse = SingleResponse.getInstance(caller);
     }
 
     private void init() {
@@ -46,15 +44,10 @@ public class ApiController implements ApiResponseListener {
         msg = null;
         status = -1;
         result = null;
-        resultList = null;
     }
 
     public Result getResultData() {
         return this.result;
-    }
-
-    public List<Result> getResultListData() {
-        return this.resultList;
     }
 
     private RetrofitApiService getJsonPostService(JsonObject obj) {
@@ -72,7 +65,7 @@ public class ApiController implements ApiResponseListener {
         Utils.print("param", registrationParamBean.printParams());
         jsonPostService = getJsonPostService(null);
         Single<Response<ResponseBean>> signUpObservable = jsonPostService.signUp(registrationParamBean);
-        singleResponse.init(method, signUpObservable);
+        singleResponse.init(method, signUpObservable, ApiController.this);
     }
 
     @Override
@@ -88,7 +81,7 @@ public class ApiController implements ApiResponseListener {
         } else {
             msg = "We are upgrading our server";
         }
-        doCallBack(method,status,msg);
+        doCallBack(method, status, msg);
     }
 
     @Override
@@ -96,7 +89,7 @@ public class ApiController implements ApiResponseListener {
         status = -2;
         msg = caller.getResources().getString(R.string.temporary_server_down);
         Utils.print("::::::::::::::::::::doPostRequest::::::::::onFailure::::::::::::::::::::::::::::::" + e.getMessage());
-        doCallBack(method,status,msg);
+        doCallBack(method, status, msg);
         try {
             Log.e("response-failure", "method = " + method + " Cause = " + e.getCause().getMessage());
             Utils.print(this.getClass() + " :: Exception :: ", e.getLocalizedMessage());
@@ -109,7 +102,7 @@ public class ApiController implements ApiResponseListener {
         }
     }
 
-    private void doCallBack(String method, int status, String msg) {
+    private void doCallBack(String mMethod, int mStatus, String mMessage) {
         ((Activity) caller).runOnUiThread(new Runnable() {
 
             @Override
@@ -117,17 +110,19 @@ public class ApiController implements ApiResponseListener {
 
                 try {
                     if (status == 1) {
-                        responseListener.onResponse(method, ApiConst.API_RESULT.SUCCESS, status, msg);
+                        responseListener.onResponse(mMethod, ApiConst.API_RESULT.SUCCESS, mStatus, mMessage);
+                        Utils.print("responseListener == 1 = " + mStatus);
                     } else if (status < 0) {
                         Utils.toast(caller, msg, false);
-                        responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
+                        responseListener.onResponse(mMethod, ApiConst.API_RESULT.FAIL, mStatus, mMessage);
+                        Utils.print("responseListener < 0 = " + mStatus);
                     } else if (status == 0) {
                         Utils.toast(caller, msg, false);
-                        responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
+                        responseListener.onResponse(mMethod, ApiConst.API_RESULT.FAIL, mStatus, mMessage);
+                        Utils.print("responseListener == 0 = " + mStatus);
                     }
-                    Utils.print("responseListener = " + status);
                 } catch (Exception e) {
-                    Utils.print(this.getClass().getSimpleName() + " ::doCallBack:: Exception :: method = " + method, e);
+                    Utils.print(this.getClass().getSimpleName() + " ::doCallBack:: Exception :: method = " + mMethod, e);
                 }
             }
         });

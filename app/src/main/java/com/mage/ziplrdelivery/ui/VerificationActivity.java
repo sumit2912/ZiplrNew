@@ -69,9 +69,6 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         ivBack.setOnClickListener(this);
         enableResendButton(false);
         binding.edOtpView.addTextChangedListener(this);
-        if(otp != null){
-            binding.edOtpView.setText(otp);
-        }
     }
 
     @Override
