@@ -53,6 +53,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/mainCL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingLeft="@dimen/_15sdp"
@@ -132,14 +133,13 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.mage.ziplrdelivery.uc.CustomMaterialButton
+                    <com.mage.ziplrdelivery.uc.ProgressMaterialButton
                         android:id="@+id/btNext"
-                        style="@style/MaterialButton_SemiBold_Orange"
-                        android:layout_width="@dimen/_150sdp"
+                        style="@style/ProgressMaterialButton_SemiBold_Orange"
+                        android:layout_width="@dimen/def_bt_width"
                         android:layout_height="@dimen/def_bt_height"
                         android:layout_marginTop="@dimen/_45sdp"
-                        android:text="@string/next"
-                        app:custom_font="semibold"
+                        app:bt_text="@string/next"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tilMobilNo" />

@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
@@ -79,12 +80,27 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
     }
 
     @Override
+    protected ViewDataBinding getViewDataBinding() {
+        return binding;
+    }
+
+    @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
 
     }
 
     @Override
     public void onNewDataMessage(String from, String msg, Data data) {
+
+    }
+
+    @Override
+    public void onNegativeClicked(String type) {
+
+    }
+
+    @Override
+    public void onPositiveClicked(String type) {
 
     }
 }

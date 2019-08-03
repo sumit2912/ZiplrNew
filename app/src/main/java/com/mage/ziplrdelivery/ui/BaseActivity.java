@@ -1,27 +1,41 @@
 package com.mage.ziplrdelivery.ui;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ContentFrameLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.ViewDataBinding;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.api.ApiController;
+import com.mage.ziplrdelivery.common.AlertDialogManager;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.listener.ResponseListener;
+import com.mage.ziplrdelivery.uc.CustomTextView;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 import java.util.Objects;
 
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, Utils.InternetCheck.NetListener {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, Utils.InternetCheck.NetListener, AlertDialogManager.AlertDialogListener {
 
+    protected static final String TYPE_NOT_REGISTERED = "TYPE_NOT_REGISTERED";
+    protected static final String TYPE_NOT_VERIFIED = "TYPE_NOT_VERIFIED";
+    protected static final int PROGRESS_TAG_0 = 0;
+    protected static final int PROGRESS_TAG_1 = 1;
+    protected static final int PROGRESS_TAG_2 = 2;
     protected static final String KEY_FROM_ACTIVITY = "KEY_FROM_ACTIVITY";
     protected static final String KEY_FP_CLICK = "KEY_FP_CLICK";
     protected static final String KEY_BEAN_1 = "KEY_BEAN_1";
@@ -36,6 +50,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected boolean disableClick;
     protected Intent dataIntent;
     protected ApiController apiController;
+    protected AlertDialogManager adManager;
+    protected ProgressBar progressBar;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -43,6 +59,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             new Utils.InternetCheck(BaseActivity.this).execute();
         }
     };
+
+    protected ViewDataBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +74,22 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         new Utils.InternetCheck(BaseActivity.this).execute();
         dataIntent = getIntent();
         apiController = new ApiController(mContext, this);
+        adManager = new AlertDialogManager(mContext, "", "", this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(progressBar == null){
+            binding = getViewDataBinding();
+            ConstraintLayout cl = binding.getRoot().findViewById(R.id.mainCL);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_progress_bar, cl, true);
+            progressBar = view.findViewById(R.id.pb);
+            if(progressBar.getParent() != null) {
+                ((ViewGroup)progressBar.getParent()).removeView(progressBar);
+            }
+            cl.addView(progressBar);
+        }
     }
 
     @Override
@@ -82,6 +116,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected abstract void enableScreen(boolean enable);
 
+    protected abstract ViewDataBinding getViewDataBinding();
+
     @Override
     public void onClick(View view) {
 
@@ -101,8 +137,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         return mContext.getResources().getString(resId);
     }
 
-    @Override
-    public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print("BaseActivity", "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+    protected void showProgressBar(boolean show) {
+            if (show) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
     }
 }

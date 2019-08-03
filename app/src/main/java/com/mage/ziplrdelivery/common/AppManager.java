@@ -64,6 +64,15 @@ public class AppManager {
         return sharedPreferences.getBoolean(key, false);
     }
 
+    public void prefSetLongValue(String key, long value) {
+        editor.putLong(key, value);
+        editor.commit();
+    }
+
+    public long prefGetLongValue(String key) {
+        return sharedPreferences.getLong(key, -1);
+    }
+
     public void prefRemoveValue(String key) {
         editor.remove(key);
         editor.commit();

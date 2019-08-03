@@ -44,6 +44,6 @@ public class ServiceGenerator {
     }
 
     private static boolean check(String api) {
-        return api.equals(ApiConst.AUTH_SIGNUP);
+        return ApiConst.getNonBearerApis().contains(api);
     }
 }

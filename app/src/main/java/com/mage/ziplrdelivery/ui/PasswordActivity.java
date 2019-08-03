@@ -10,29 +10,28 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
-import com.mage.ziplrdelivery.param_model.LoginBean;
+import com.mage.ziplrdelivery.param_model.LoginParamBean;
+import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
-public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener {
+public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
-    private static final int PROGRESS_TAG = 0;
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
     private Intent verifyIntent, dashBoardIntent;
-    private LoginBean loginBean;
     private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(PasswordActivity.this, R.layout.activity_password);
-        loginBean = LoginBean.getInstance(mContext);
         initUi();
     }
 
@@ -63,6 +62,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
         binding.tvForgot.setOnClickListener(this);
         binding.btSubmit.setOnClickListener(this);
         binding.nonClickable.setOnClickListener(this);
+        binding.edPassword.addTextChangedListener(new CustomTextWatcher(0,this));
     }
 
     @Override
@@ -89,23 +89,18 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     }
 
     private void validation() {
-        password = super.getEdValue(binding.edPassword);
-        loginBean.setPassword(password);
-        int error = loginBean.isValidData();
-        switch (error) {
-            case 2:
-                binding.edPassword.setError(super.getResString(R.string.validation_password));
-                binding.edPassword.requestFocus();
-                break;
-            default:
-                loginBean.printParams();
-                tempMethod();
-                break;
+        int error = LoginParamBean.getInstance(mContext).isValidPassword();
+        LoginParamBean.getInstance(mContext).printParams();
+        if (error == 1) {
+            binding.edPassword.setError(super.getResString(R.string.validation_password));
+            binding.edPassword.requestFocus();
+        }else {
+            callApi(1);
         }
     }
 
     private void tempMethod() {
-        binding.btSubmit.showProgressBar(true, PROGRESS_TAG);
+        binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
         handler.postDelayed(() -> {
             if (dashBoardIntent == null) {
                 dashBoardIntent = new Intent(PasswordActivity.this, DashBoardActivity.class);
@@ -135,12 +130,35 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     }
 
     @Override
+    protected ViewDataBinding getViewDataBinding() {
+        return binding;
+    }
+
+    @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
 
     }
 
     @Override
     public void onNewDataMessage(String from, String msg, Data data) {
+
+    }
+
+    @Override
+    public void onTextChanged(int edTag, String text) {
+        if(edTag == 0){
+            password = text;
+            LoginParamBean.getInstance(mContext).setPassword(password);
+        }
+    }
+
+    @Override
+    public void onNegativeClicked(String type) {
+
+    }
+
+    @Override
+    public void onPositiveClicked(String type) {
 
     }
 }

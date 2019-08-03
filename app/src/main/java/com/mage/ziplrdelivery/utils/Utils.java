@@ -17,7 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.R;
+import com.mage.ziplrdelivery.common.AppManager;
+import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.ui.LoginMainActivity;
+import com.mage.ziplrdelivery.utils.constant.PrefConst;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -136,5 +139,25 @@ public class Utils {
         public interface NetListener {
             void onNetChange(boolean isInternet);
         }
+    }
+
+    public static void storeLoginData(AppManager appManager, Result data) {
+        appManager.prefSetLongValue(PrefConst.PREF_USER_ID,data.getId());
+        appManager.prefSetStringValue(PrefConst.PREF_USER_NAME,data.getName());
+        appManager.prefSetStringValue(PrefConst.PREF_USER_EMAIL,data.getEmail());
+        appManager.prefSetStringValue(PrefConst.PREF_USER_AVATAR_URL,data.getAvatarUrl());
+        appManager.prefSetStringValue(PrefConst.PREF_USER_PHONE_NUMBER,data.getPhoneNumber());
+        appManager.prefSetStringValue(PrefConst.PREF_USER_COUNTRY_CODE,data.getCountryCode());
+    }
+
+    public static Result getLoginData(AppManager appManager){
+        Result result = new Result();
+        result.setId(appManager.prefGetLongValue(PrefConst.PREF_USER_ID));
+        result.setName(appManager.prefGetStringValue(PrefConst.PREF_USER_NAME));
+        result.setEmail(appManager.prefGetStringValue(PrefConst.PREF_USER_EMAIL));
+        result.setAvatarUrl(appManager.prefGetStringValue(PrefConst.PREF_USER_AVATAR_URL));
+        result.setPhoneNumber(appManager.prefGetStringValue(PrefConst.PREF_USER_PHONE_NUMBER));
+        result.setCountryCode(appManager.prefGetStringValue(PrefConst.PREF_USER_COUNTRY_CODE));
+        return result;
     }
 }

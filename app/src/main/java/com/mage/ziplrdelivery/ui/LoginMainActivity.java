@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
@@ -59,6 +60,11 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     }
 
     @Override
+    protected ViewDataBinding getViewDataBinding() {
+        return binding;
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btMobileNo:
@@ -98,6 +104,16 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
+
+    }
+
+    @Override
+    public void onNegativeClicked(String type) {
+
+    }
+
+    @Override
+    public void onPositiveClicked(String type) {
 
     }
 }

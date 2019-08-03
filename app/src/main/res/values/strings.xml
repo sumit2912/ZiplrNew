@@ -39,4 +39,10 @@
     <string name="session_expired_please_login_again">Session expired please login again</string>
     <string name="validation_phone_no_length">Phone number must have 0 digits</string>
     <string name="validation_mobile_no_length">Mobile number must have 0 digits</string>
+    <string name="lbl_cancel">Cancel</string>
+    <string name="lbl_ok">Ok</string>
+    <string name="alert_msg_not_registered">This mobile number is not registered with us!</string>
+    <string name="alert_msg_not_verified">This mobile number is not verified yet!</string>
+    <string name="lbl_register">Register</string>
+    <string name="lbl_verify">Verify</string>
 </resources>

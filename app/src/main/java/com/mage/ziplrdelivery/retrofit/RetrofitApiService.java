@@ -3,10 +3,11 @@ package com.mage.ziplrdelivery.retrofit;
 import com.google.gson.JsonObject;
 import com.mage.ziplrdelivery.data_model.ResponseBean;
 import com.mage.ziplrdelivery.data_model.Result;
+import com.mage.ziplrdelivery.param_model.LoginParamBean;
 import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
+import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 import io.reactivex.Single;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -20,10 +21,26 @@ public interface RetrofitApiService {
     })
 
     //signup
-    @POST("auth/signup")
+    @POST(ApiConst.SIGN_UP)
     Single<Response<ResponseBean>> signUp(@Body RegistrationParamBean registrationParamBean);
 
-    //otp
-    @POST("auth/verify/otp")
+    //verify otp
+    @POST(ApiConst.VERIFY_OTP)
     Single<Response<ResponseBean>> verifyOtp(@Body Result result);
+
+    //phone check
+    @POST(ApiConst.PHONE_CHECK)
+    Single<Response<ResponseBean>> phoneCheck(@Body JsonObject jsonObject);
+
+    //login
+    @POST(ApiConst.LOGIN)
+    Single<Response<ResponseBean>> login(@Body LoginParamBean loginParamBean);
+
+    //send otp
+    @POST(ApiConst.SEND_OTP)
+    Single<Response<ResponseBean>> sendOTP(@Body JsonObject jsonObject);
+
+    //forgot password
+    @POST(ApiConst.FORGOT_PASSWORD)
+    Single<Response<ResponseBean>> forgotPassword(@Body JsonObject jsonObject);
 }

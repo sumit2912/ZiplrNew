@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="def_bt_height">@dimen/_54sdp</dimen>
+    <dimen name="def_bt_width">@dimen/_150sdp</dimen>
     <dimen name="def_app_bar_height">@dimen/_65sdp</dimen>
     <dimen name="def_toolbar_height">@dimen/_40sdp</dimen>
     <dimen name="cp_dialog_width">@dimen/_250sdp</dimen>
     <dimen name="cp_dialog_height">@dimen/_400sdp</dimen>
     <item name="selected_bt_alpha" format="float" type="dimen">1.0</item>
     <dimen name="unselected_bt_alpha" format="float" type="dimen">0.3</dimen>
+    <dimen name="def_pb">@dimen/_35sdp</dimen>
 </resources>

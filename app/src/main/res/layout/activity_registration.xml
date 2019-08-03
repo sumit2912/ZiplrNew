@@ -60,6 +60,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/mainCL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingLeft="@dimen/_15sdp"
@@ -230,7 +231,7 @@
                     <com.mage.ziplrdelivery.uc.ProgressMaterialButton
                         android:id="@+id/btSubmit"
                         style="@style/ProgressMaterialButton_SemiBold_Orange"
-                        android:layout_width="@dimen/_150sdp"
+                        android:layout_width="@dimen/def_bt_width"
                         android:layout_height="@dimen/def_bt_height"
                         android:layout_marginTop="@dimen/_25sdp"
                         app:bt_text="@string/submit"

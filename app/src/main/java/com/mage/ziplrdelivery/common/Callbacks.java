@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mage.ziplrdelivery.listener.ActivityLayout;
 import com.mage.ziplrdelivery.utils.Utils;
 
 public class Callbacks implements Application.ActivityLifecycleCallbacks {
@@ -17,14 +16,7 @@ public class Callbacks implements Application.ActivityLifecycleCallbacks {
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
         Utils.print("Callbacks", activity.getClass().getSimpleName() + " Created");
-        if (activity instanceof ActivityLayout) {
-            activity.setContentView(layoutId(activity));
-        }
         appManager = AppManager.getInstance(activity);
-    }
-
-    private int layoutId(Activity activity) {
-        return ((ActivityLayout) activity).getLayoutId();
     }
 
     @Override

@@ -5,26 +5,21 @@ import android.text.TextUtils;
 
 import com.mage.ziplrdelivery.utils.Utils;
 
-public class LoginBean {
-    private static LoginBean loginBean;
+public class LoginParamBean {
+    private static LoginParamBean loginParamBean;
     private String phone_number;
     private String password;
     private Context context;
 
-    public LoginBean(Context context) {
+    public LoginParamBean(Context context) {
         this.context = context;
     }
 
-    public LoginBean(String phone_number, String password) {
-        this.phone_number = phone_number;
-        this.password = password;
-    }
-
-    public static LoginBean getInstance(Context context) {
-        if (loginBean == null) {
-            loginBean = new LoginBean(context);
+    public static LoginParamBean getInstance(Context context) {
+        if (loginParamBean == null) {
+            loginParamBean = new LoginParamBean(context);
         }
-        return loginBean;
+        return loginParamBean;
     }
 
     public String getPhone_number() {
@@ -43,11 +38,15 @@ public class LoginBean {
         this.password = password;
     }
 
-    public int isValidData() {
+    public int isValidPhoneNumber() {
         if (TextUtils.isEmpty(getPhone_number()))
             return 0;
-        if (getPhone_number().length()>9 && getPhone_number().length()<11)
+        if (!(getPhone_number().length()==10))
             return 1;
+        return -1;
+    }
+
+    public int isValidPassword(){
         if (TextUtils.isEmpty(getPassword()))
             return 2;
         return -1;
@@ -61,8 +60,8 @@ public class LoginBean {
     }
 
     public void resetAll() {
-        loginBean.setPhone_number("");
-        loginBean.setPassword("");
+        loginParamBean.setPhone_number("");
+        loginParamBean.setPassword("");
     }
 
 }

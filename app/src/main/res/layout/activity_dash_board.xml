@@ -5,15 +5,17 @@
     tools:context=".ui.DashBoardActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainCL"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.mage.ziplrdelivery.uc.CustomTextView
+            android:id="@+id/tvTemp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
             android:text="Magespider welcomes you to Ziplr User DashBoard"
-            android:textSize="@dimen/_50sdp"
+            android:textSize="@dimen/_12sdp"
             app:custom_font="semibold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

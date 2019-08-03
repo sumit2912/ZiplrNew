@@ -2,6 +2,7 @@ package com.mage.ziplrdelivery.ui;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,9 +25,10 @@ import java.util.Objects;
 
 public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
+    private static final String TAG = Screen.VERIFICATION_ACTIVITY;
     private ActivityVerificationBinding binding;
     private AppCompatImageView ivBack;
-    private Intent changePasswordIntent, dashBoardIntent;
+    private Intent changePasswordIntent, dashBoardIntent, passwordIntent;
     private String verifyOtp;
     private Result result;
 
@@ -98,6 +100,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     @Override
     protected void callApi(int tag) {
         if (isInternet) {
+            Utils.hideKeyBoardFromView(mContext);
             if (tag == 1) {
                 enableScreen(false);
                 apiController.getApiVerification(result);
@@ -115,9 +118,14 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
+    protected ViewDataBinding getViewDataBinding() {
+        return binding;
+    }
+
+    @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(Screen.VERIFICATION_ACTIVITY, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
-        if (tag == ApiConst.AUTH_VERIFY_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+        if (tag == ApiConst.VERIFY_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
                 if (dashBoardIntent == null)
                     dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);
@@ -129,7 +137,11 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                 startActivity(changePasswordIntent);
                 finish();
             }
-        } else if (tag == ApiConst.AUTH_VERIFY_OTP && result == ApiConst.API_RESULT.FAIL) {
+            Result data = apiController.getResultData();
+            if (data != null) {
+                Utils.storeLoginData(appManager, data);
+            }
+        } else if (tag == ApiConst.VERIFY_OTP && result == ApiConst.API_RESULT.FAIL) {
             if (status < 2) {
                 enableScreen(true);
             }
@@ -139,10 +151,11 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                         changePasswordIntent = new Intent(VerificationActivity.this, ChangePasswordActivity.class);
                     startActivity(changePasswordIntent);
                     finish();
-                } else {
-                    if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY)) {
-                        finish();
-                    }
+                } else if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY)) {
+                    finish();
+                }else {
+                    passwordIntent = new Intent(VerificationActivity.this,PasswordActivity.class);
+                    startActivity(passwordIntent);
                 }
             }
         }
@@ -168,5 +181,15 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onNegativeClicked(String type) {
+
+    }
+
+    @Override
+    public void onPositiveClicked(String type) {
+
     }
 }

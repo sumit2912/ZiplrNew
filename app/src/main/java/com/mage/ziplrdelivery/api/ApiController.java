@@ -65,7 +65,7 @@ public class ApiController implements ApiResponseListener {
 
     public void getApiSignUp(RegistrationParamBean registrationParamBean) {
         init();
-        method = ApiConst.AUTH_SIGNUP;
+        method = ApiConst.SIGN_UP;
         registrationParamBean.printParams();
         jsonPostService = getJsonPostService(null);
         Single<Response<ResponseBean>> signUpObservable = jsonPostService.signUp(registrationParamBean);
@@ -74,10 +74,26 @@ public class ApiController implements ApiResponseListener {
 
     public void getApiVerification(Result result) {
         init();
-        method = ApiConst.AUTH_VERIFY_OTP;
+        method = ApiConst.VERIFY_OTP;
         result.printVerifyOtpParams();
         jsonPostService = getJsonPostService(null);
         singleResponse.init(method, jsonPostService.verifyOtp(result), ApiController.this);
+    }
+
+    public void getApiPhoneCheck(String phone_number) {
+        init();
+        method = ApiConst.PHONE_CHECK;
+        jsonObject.addProperty("phone_number",phone_number);
+        jsonPostService = getJsonPostService(jsonObject);
+        singleResponse.init(method, jsonPostService.phoneCheck(jsonObject), ApiController.this);
+    }
+
+    public void getApiSendOTP(String phone_number) {
+        init();
+        method = ApiConst.SEND_OTP;
+        jsonObject.addProperty("phone_number",phone_number);
+        jsonPostService = getJsonPostService(jsonObject);
+        singleResponse.init(method, jsonPostService.sendOTP(jsonObject), ApiController.this);
     }
 
     public void set0status(boolean enable) {

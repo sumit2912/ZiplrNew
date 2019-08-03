@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -27,7 +29,7 @@ import java.util.Objects;
 
 public class RegistrationActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<RegistrationParamBean> {
 
-    private static final int PROGRESS_TAG = 0;
+    private static final String TAG = Screen.REGISTRATION_ACTIVITY;
     private ActivityRegistrationBinding binding;
     private AppCompatImageView ivBack;
     private RegistrationViewModel registrationViewModel;
@@ -88,8 +90,9 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     protected void callApi(int tag) {
         if (isInternet) {
             if (tag == 1) {
+                Utils.hideKeyBoardFromView(mContext);
                 if (registrationParamBean != null) {
-                    binding.btSubmit.showProgressBar(true, PROGRESS_TAG);
+                    binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
                     enableScreen(false);
                     apiController.getApiSignUp(registrationParamBean);
                 }
@@ -105,12 +108,17 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
+    protected ViewDataBinding getViewDataBinding() {
+        return binding;
+    }
+
+    @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(Screen.REGISTRATION_ACTIVITY, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
-        if (tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+        if (tag == ApiConst.SIGN_UP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             if (verificationIntent == null)
                 verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
-            VALUE_FROM_ACTIVITY = Screen.REGISTRATION_ACTIVITY;
+            VALUE_FROM_ACTIVITY = TAG;
             verificationIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
             Bundle bundle = new Bundle();
             apiController.getResultData().setPassword(registrationParamBean.getPassword());
@@ -118,9 +126,9 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
             verificationIntent.putExtras(bundle);
             startActivity(verificationIntent);
             finish();
-            Utils.print(Screen.REGISTRATION_ACTIVITY, "otp = " + apiController.getResultData().getOtp());
-        } else if (tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.FAIL) {
-            binding.btSubmit.showProgressBar(false, PROGRESS_TAG);
+            Utils.print(TAG, "otp = " + apiController.getResultData().getOtp());
+        } else if (tag == ApiConst.SIGN_UP && result == ApiConst.API_RESULT.FAIL) {
+            binding.btSubmit.showProgressBar(false, PROGRESS_TAG_0);
             enableScreen(true);
         }
     }
@@ -185,6 +193,16 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     public void onNewDataMessage(String from, String msg, Data data) {
+
+    }
+
+    @Override
+    public void onNegativeClicked(String type) {
+
+    }
+
+    @Override
+    public void onPositiveClicked(String type) {
 
     }
 }
