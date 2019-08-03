@@ -2,6 +2,7 @@ package com.mage.ziplrdelivery.retrofit;
 
 import com.google.gson.JsonObject;
 import com.mage.ziplrdelivery.data_model.ResponseBean;
+import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
 
 import io.reactivex.Single;
@@ -24,5 +25,5 @@ public interface RetrofitApiService {
 
     //otp
     @POST("auth/verify/otp")
-    Single<Response<ResponseBean>> verifyOtp(@Body RegistrationParamBean registrationParamBean);
+    Single<Response<ResponseBean>> verifyOtp(@Body Result result);
 }

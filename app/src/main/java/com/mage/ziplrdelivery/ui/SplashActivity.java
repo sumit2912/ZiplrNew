@@ -26,17 +26,7 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
         Utils.makeFullScreenActivity(SplashActivity.this);
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(SplashActivity.this, R.layout.activity_splash);
-        runnable = () -> {
-            if(appManager.prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN).isEmpty()){
-                goIntent = new Intent(SplashActivity.this, LoginMainActivity.class);
-            }else {
-                goIntent = new Intent(SplashActivity.this, DashBoardActivity.class);
-            }
-            startActivity(goIntent);
-            finish();
-        };
-
-        handler.postDelayed(runnable, 2000);
+        initUi();
     }
 
     @Override
@@ -51,11 +41,28 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
 
     @Override
     protected void initUi() {
+        binding.nonClickable.setOnClickListener(this);
+        runnable = () -> {
+            if (appManager.prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN).isEmpty()) {
+                goIntent = new Intent(SplashActivity.this, LoginMainActivity.class);
+            } else {
+                goIntent = new Intent(SplashActivity.this, DashBoardActivity.class);
+            }
+            startActivity(goIntent);
+            finish();
+        };
+
+        handler.postDelayed(runnable, 2000);
     }
 
     @Override
     protected void callApi(int tag) {
 
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override

@@ -50,6 +50,7 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
         binding.collapsingTl.setExpandedTitleTextAppearance(R.style.ExpandedAppBarTitle);
         binding.collapsingTl.setCollapsedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         binding.collapsingTl.setExpandedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
+        binding.nonClickable.setOnClickListener(this);
         ivBack.setOnClickListener(this);
     }
 
@@ -70,6 +71,11 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
     @Override
     protected void callApi(int tag) {
 
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override

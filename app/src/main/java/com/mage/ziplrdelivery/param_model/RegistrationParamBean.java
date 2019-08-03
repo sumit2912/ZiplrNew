@@ -3,6 +3,8 @@ package com.mage.ziplrdelivery.param_model;
 import android.text.TextUtils;
 import android.util.Patterns;
 
+import com.mage.ziplrdelivery.utils.Utils;
+
 import java.io.Serializable;
 
 public class RegistrationParamBean implements Serializable {
@@ -100,6 +102,7 @@ public class RegistrationParamBean implements Serializable {
         stringBuilder.append("  confirm_password = " + (getConfirm_password() != null ? getConfirm_password() : ""));
         stringBuilder.append("  country_code = " + (getCountry_code() != null ? getCountry_code() : ""));
         stringBuilder.append("  phone_number = " + (getPhone_number() != null ? getPhone_number() : ""));
+        Utils.print("registrationParamBean",String.valueOf(stringBuilder));
         return String.valueOf(stringBuilder);
     }
 }

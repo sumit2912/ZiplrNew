@@ -72,7 +72,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
         binding.tvCode.setText(mContext.getResources().getString(R.string.uk_country_code));
         registrationViewModel.CountryCode.setValue(mContext.getResources().getString(R.string.uk_country_code));
         binding.btSubmit.setOnClickListener(this);
-        binding.btSubmit.setButtonClickListener(this);
+        binding.nonClickable.setOnClickListener(this);
     }
 
     @Override
@@ -90,12 +90,18 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
             if (tag == 1) {
                 if (registrationParamBean != null) {
                     binding.btSubmit.showProgressBar(true, PROGRESS_TAG);
+                    enableScreen(false);
                     apiController.getApiSignUp(registrationParamBean);
                 }
             }
         } else {
             Utils.showInternetMsg(mContext);
         }
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -107,13 +113,15 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
             VALUE_FROM_ACTIVITY = Screen.REGISTRATION_ACTIVITY;
             verificationIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("registrationParamBean", registrationParamBean);
+            apiController.getResultData().setPassword(registrationParamBean.getPassword());
+            bundle.putSerializable(KEY_BEAN_1, apiController.getResultData());
             verificationIntent.putExtras(bundle);
             startActivity(verificationIntent);
             finish();
-            Utils.print(Screen.REGISTRATION_ACTIVITY,"otp = "+apiController.getResultData().getOtp());
+            Utils.print(Screen.REGISTRATION_ACTIVITY, "otp = " + apiController.getResultData().getOtp());
         } else if (tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.FAIL) {
             binding.btSubmit.showProgressBar(false, PROGRESS_TAG);
+            enableScreen(true);
         }
     }
 
@@ -124,7 +132,9 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
                 onBackPressed();
                 break;
             case R.id.btSubmit:
-                registrationViewModel.onClick(view);
+                if (binding.btSubmit.isButtonEnabled()) {
+                    registrationViewModel.onClick(view);
+                }
                 break;
         }
     }
@@ -162,7 +172,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
                 binding.edPhoneNo.requestFocus();
                 break;
             case 7:
-                binding.edPhoneNo.setError(getResources().getString(R.string.validation_phone_no_length).replace("0","10"));
+                binding.edPhoneNo.setError(getResources().getString(R.string.validation_phone_no_length).replace("0", "10"));
                 binding.edPhoneNo.requestFocus();
                 break;
             default:

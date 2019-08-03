@@ -1,7 +1,6 @@
 package com.mage.ziplrdelivery.uc;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -28,7 +27,6 @@ public class ProgressMaterialButton extends RelativeLayout {
     private int buttonWidth = -1, buttonHeight = -1;
     private int cornerRadius = 0;
     private ValueAnimator widthAnimator = null;
-    private OnClickListener onClickListener;
     private LayoutParams paramsButton, paramsProgress;
     private float buttonElevation = 0;
     private long animationDuration = 0;
@@ -36,6 +34,7 @@ public class ProgressMaterialButton extends RelativeLayout {
     private ProgressListener progressListener;
     private String fontPath = "";
     private int textSize = 0;
+    private boolean buttonEnable = true;
 
     public ProgressMaterialButton(Context context) {
         super(context);
@@ -188,9 +187,8 @@ public class ProgressMaterialButton extends RelativeLayout {
         }
     }
 
-    public void setButtonClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-        setOnClickListener(this.onClickListener);
+    public boolean isButtonEnabled(){
+        return this.buttonEnable;
     }
 
     public void setProgressListener(ProgressListener progressListener) {
@@ -203,6 +201,7 @@ public class ProgressMaterialButton extends RelativeLayout {
             buttonHeight = getHeight();
         }
         if (show) {
+            buttonEnable = false;
             widthAnimator = ValueAnimator.ofInt(buttonWidth, buttonHeight);
             widthAnimator.setDuration(animationDuration);
             materialButton.setVisibility(GONE);
@@ -210,18 +209,15 @@ public class ProgressMaterialButton extends RelativeLayout {
             this.postDelayed(() -> {
                 progressBar.setVisibility(VISIBLE);
             }, animationDuration);
-            setOnClickListener(null);
-            ((Activity)context).findViewById(android.R.id.content).setOnClickListener(null);
         } else {
             widthAnimator = ValueAnimator.ofInt(buttonHeight, buttonWidth);
             widthAnimator.setDuration(animationDuration);
             this.postDelayed(() -> {
-                setOnClickListener(onClickListener);
-                ((Activity)context).findViewById(android.R.id.content).setOnClickListener(onClickListener);
                 materialButton.setText(text);
                 setBackground(null);
                 materialButton.setVisibility(VISIBLE);
                 progressBar.setVisibility(GONE);
+                buttonEnable = true;
             }, animationDuration);
         }
         if (widthAnimator != null) {

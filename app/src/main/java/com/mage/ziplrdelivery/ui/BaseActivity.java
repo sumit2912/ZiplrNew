@@ -23,13 +23,19 @@ import java.util.Objects;
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, Utils.InternetCheck.NetListener {
 
     protected static final String KEY_FROM_ACTIVITY = "KEY_FROM_ACTIVITY";
+    protected static final String KEY_FP_CLICK = "KEY_FP_CLICK";
+    protected static final String KEY_BEAN_1 = "KEY_BEAN_1";
+    protected static final String KEY_BEAN_2 = "KEY_BEAN_2";
+    protected static final String KEY_BEAN_3 = "KEY_BEAN_3";
     protected final Handler handler = new Handler();
     protected String VALUE_FROM_ACTIVITY = null;
+    protected boolean VALUE_FP_CLICK = false;
     protected boolean isInternet = false;
     protected AppManager appManager;
     protected Context mContext;
     protected boolean disableClick;
     protected Intent dataIntent;
+    protected ApiController apiController;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -37,7 +43,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             new Utils.InternetCheck(BaseActivity.this).execute();
         }
     };
-    protected ApiController apiController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected abstract void callApi(int tag);
 
+    protected abstract void enableScreen(boolean enable);
+
     @Override
     public void onClick(View view) {
 
@@ -96,6 +103,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print("BaseActivity","tag = "+tag+" result = "+result+" status = "+status+" msg ="+msg);
+        Utils.print("BaseActivity", "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
     }
 }

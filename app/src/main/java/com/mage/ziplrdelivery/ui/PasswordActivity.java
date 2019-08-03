@@ -62,6 +62,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
         binding.tvForgot.setPaintFlags(binding.tvForgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         binding.tvForgot.setOnClickListener(this);
         binding.btSubmit.setOnClickListener(this);
+        binding.nonClickable.setOnClickListener(this);
     }
 
     @Override
@@ -126,6 +127,11 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     @Override
     protected void callApi(int tag) {
 
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override

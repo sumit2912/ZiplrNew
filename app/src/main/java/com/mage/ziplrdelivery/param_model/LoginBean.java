@@ -3,6 +3,8 @@ package com.mage.ziplrdelivery.param_model;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.mage.ziplrdelivery.utils.Utils;
+
 public class LoginBean {
     private static LoginBean loginBean;
     private String phone_number;
@@ -51,11 +53,11 @@ public class LoginBean {
         return -1;
     }
 
-    public String printParams() {
+    public void printParams() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("phone_number = " + (getPhone_number() != null ? getPhone_number() : ""));
         stringBuilder.append("  password = " + (getPassword() != null ? getPassword() : ""));
-        return String.valueOf(stringBuilder);
+        Utils.print("LoginParamBean",String.valueOf(stringBuilder));
     }
 
     public void resetAll() {

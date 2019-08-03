@@ -60,6 +60,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         binding.ivFlag.setImageResource(R.drawable.img_flag);
         binding.tvCode.setText(getResources().getString(R.string.uk_country_code));
         binding.btNext.setOnClickListener(this);
+        binding.nonClickable.setOnClickListener(this);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 binding.edMobileNo.requestFocus();
                 break;
             case 1:
-                binding.edMobileNo.setError(super.getResString(R.string.validation_phone_no_length).replace("0","10"));
+                binding.edMobileNo.setError(super.getResString(R.string.validation_mobile_no_length).replace("0", "10"));
                 binding.edMobileNo.requestFocus();
                 break;
             default:
@@ -107,6 +108,11 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     @Override
     protected void callApi(int tag) {
 
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override

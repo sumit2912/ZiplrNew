@@ -20,6 +20,7 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(DashBoardActivity.this, R.layout.activity_dash_board);
+        initUi();
     }
 
     @Override
@@ -34,7 +35,7 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
 
     @Override
     protected void initUi() {
-
+        binding.nonClickable.setOnClickListener(this);
     }
 
     @Override
@@ -54,6 +55,11 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
     @Override
     protected void callApi(int tag) {
 
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override

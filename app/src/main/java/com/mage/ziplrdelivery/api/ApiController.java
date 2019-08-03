@@ -66,18 +66,18 @@ public class ApiController implements ApiResponseListener {
     public void getApiSignUp(RegistrationParamBean registrationParamBean) {
         init();
         method = ApiConst.AUTH_SIGNUP;
-        Utils.print("param", registrationParamBean.printParams());
+        registrationParamBean.printParams();
         jsonPostService = getJsonPostService(null);
         Single<Response<ResponseBean>> signUpObservable = jsonPostService.signUp(registrationParamBean);
         singleResponse.init(method, signUpObservable, ApiController.this);
     }
 
-    public void getApiSignUpVerification(RegistrationParamBean registrationParamBean) {
+    public void getApiVerification(Result result) {
         init();
         method = ApiConst.AUTH_VERIFY_OTP;
-        Utils.print("param", registrationParamBean.printParams());
+        result.printVerifyOtpParams();
         jsonPostService = getJsonPostService(null);
-        singleResponse.init(method, jsonPostService.verifyOtp(registrationParamBean), ApiController.this);
+        singleResponse.init(method, jsonPostService.verifyOtp(result), ApiController.this);
     }
 
     public void set0status(boolean enable) {
@@ -135,8 +135,9 @@ public class ApiController implements ApiResponseListener {
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener < 0 = " + status);
                     } else if (status == 0) {
-                        if(enable0status)
-                        Utils.toast(caller, msg, false);
+                        if(enable0status) {
+                            Utils.toast(caller, msg, false);
+                        }
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener == 0 = " + status);
                     }else if(status == 2){

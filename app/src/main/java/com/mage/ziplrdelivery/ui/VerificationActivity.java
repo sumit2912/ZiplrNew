@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -16,11 +14,13 @@ import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
+import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.databinding.ActivityVerificationBinding;
-import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
+
+import java.util.Objects;
 
 public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
@@ -28,7 +28,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     private AppCompatImageView ivBack;
     private Intent changePasswordIntent, dashBoardIntent;
     private String verifyOtp;
-    private RegistrationParamBean registrationParamBean;
+    private Result result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,11 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         if (dataIntent.hasExtra(KEY_FROM_ACTIVITY)) {
             VALUE_FROM_ACTIVITY = dataIntent.getStringExtra(KEY_FROM_ACTIVITY);
         }
-        if (dataIntent.hasExtra("registrationParamBean")) {
-            registrationParamBean = (RegistrationParamBean) dataIntent.getExtras().getSerializable("registrationParamBean");
+        if (dataIntent.hasExtra(KEY_FP_CLICK)) {
+            VALUE_FP_CLICK = true;
+        }
+        if (dataIntent.hasExtra(KEY_BEAN_1)) {
+            result = (Result) Objects.requireNonNull(dataIntent.getExtras()).getSerializable(KEY_BEAN_1);
         }
         initUi();
     }
@@ -56,7 +59,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     @Override
     protected void initUi() {
         setSupportActionBar(binding.toolbar);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowCustomEnabled(true);
         View backView = LayoutInflater.from(this).inflate(R.layout.layout_back_arrow, binding.toolbar, false);
         ivBack = backView.findViewById(R.id.ivBack);
         getSupportActionBar().setCustomView(backView);
@@ -68,6 +71,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         ivBack.setOnClickListener(this);
         enableResendButton(false);
         binding.edOtpView.addTextChangedListener(new CustomTextWatcher(0, this));
+        binding.nonClickable.setOnClickListener(this);
     }
 
     @Override
@@ -95,13 +99,19 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     protected void callApi(int tag) {
         if (isInternet) {
             if (tag == 1) {
-                if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
-                    apiController.getApiSignUpVerification(registrationParamBean);
-                }
+                enableScreen(false);
+                apiController.getApiVerification(result);
+            } else if (tag == 2) {
+
             }
         } else {
             Utils.showInternetMsg(mContext);
         }
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -113,9 +123,28 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                     dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);
                 startActivity(dashBoardIntent);
                 finishAffinity();
+            } else if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY) && VALUE_FP_CLICK) {
+                if (changePasswordIntent == null)
+                    changePasswordIntent = new Intent(VerificationActivity.this, ChangePasswordActivity.class);
+                startActivity(changePasswordIntent);
+                finish();
             }
         } else if (tag == ApiConst.AUTH_VERIFY_OTP && result == ApiConst.API_RESULT.FAIL) {
-
+            if (status < 2) {
+                enableScreen(true);
+            }
+            if (status == 5) {
+                if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY) && VALUE_FP_CLICK) {
+                    if (changePasswordIntent == null)
+                        changePasswordIntent = new Intent(VerificationActivity.this, ChangePasswordActivity.class);
+                    startActivity(changePasswordIntent);
+                    finish();
+                } else {
+                    if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY)) {
+                        finish();
+                    }
+                }
+            }
         }
     }
 
@@ -136,21 +165,8 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                 verifyOtp = String.valueOf(text);
                 if (verifyOtp.length() == 4) {
                     callApi(1);
-//===========//after Verify User put this code cut and paste=================================================================
-            /*if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
-                if (dashBoardIntent == null)
-                    dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);
-                startActivity(dashBoardIntent);
-                finishAffinity();
-            } else if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY)) {
-                if (changePasswordIntent == null)
-                    changePasswordIntent = new Intent(VerificationActivity.this, ChangePasswordActivity.class);
-                startActivity(changePasswordIntent);
-                finish();
-            }*/
-//==========//after Verify User==============================================================================================
-                    break;
                 }
+                break;
         }
     }
 }

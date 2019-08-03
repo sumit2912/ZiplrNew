@@ -27,8 +27,7 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
         Utils.makeFullScreenActivity(LoginMainActivity.this);
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(LoginMainActivity.this, R.layout.activity_login_main);
-        binding.btMobileNo.setOnClickListener(this);
-        binding.tvRegistration.setOnClickListener(this);
+        initUi();
     }
 
     @Override
@@ -44,12 +43,19 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
 
     @Override
     protected void initUi() {
-
+        binding.btMobileNo.setOnClickListener(this);
+        binding.tvRegistration.setOnClickListener(this);
+        binding.nonClickable.setOnClickListener(this);
     }
 
     @Override
     protected void callApi(int tag) {
 
+    }
+
+    @Override
+    protected void enableScreen(boolean enable) {
+        binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
     }
 
     @Override

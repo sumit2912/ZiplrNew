@@ -2,6 +2,7 @@ package com.mage.ziplrdelivery.data_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mage.ziplrdelivery.utils.Utils;
 
 import java.io.Serializable;
 
@@ -28,6 +29,9 @@ public class Result implements Serializable {
     @SerializedName("avatar_url")
     @Expose
     private String avatarUrl;
+    @SerializedName("password")
+    @Expose
+    private String password;
 
     public String getName() {
         return name;
@@ -83,6 +87,18 @@ public class Result implements Serializable {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void printVerifyOtpParams() {
+        Utils.print("VerifyOtpParams", "phone_number = " + getPhoneNumber() + "  otp = " + getOtp() + "  password = " + getPassword());
     }
     //SignUp Response===============================================================================End====================
 }
