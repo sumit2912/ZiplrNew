@@ -13,11 +13,13 @@ import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.databinding.ActivitySplashBinding;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
+import com.mage.ziplrdelivery.utils.constant.PrefConst;
 
 public class SplashActivity extends BaseActivity implements AppManager.DataMessageListener {
 
     Runnable runnable;
     private ActivitySplashBinding binding;
+    private Intent goIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,12 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(SplashActivity.this, R.layout.activity_splash);
         runnable = () -> {
-            startActivity(new Intent(SplashActivity.this, LoginMainActivity.class));
+            if(appManager.prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN).isEmpty()){
+                goIntent = new Intent(SplashActivity.this, LoginMainActivity.class);
+            }else {
+                goIntent = new Intent(SplashActivity.this, DashBoardActivity.class);
+            }
+            startActivity(goIntent);
             finish();
         };
 

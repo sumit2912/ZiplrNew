@@ -17,16 +17,18 @@ import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityVerificationBinding;
+import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
+import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
-public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, TextWatcher {
+public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
     private ActivityVerificationBinding binding;
     private AppCompatImageView ivBack;
     private Intent changePasswordIntent, dashBoardIntent;
-    private String otp;
-    private long id;
+    private String verifyOtp;
+    private RegistrationParamBean registrationParamBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,8 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         if (dataIntent.hasExtra(KEY_FROM_ACTIVITY)) {
             VALUE_FROM_ACTIVITY = dataIntent.getStringExtra(KEY_FROM_ACTIVITY);
         }
-        if(dataIntent.hasExtra("otp")){
-            otp = dataIntent.getStringExtra("otp");
-        }
-        if(dataIntent.hasExtra("id")){
-            id = dataIntent.getLongExtra("id",0);
+        if (dataIntent.hasExtra("registrationParamBean")) {
+            registrationParamBean = (RegistrationParamBean) dataIntent.getExtras().getSerializable("registrationParamBean");
         }
         initUi();
     }
@@ -68,7 +67,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         binding.collapsingTl.setExpandedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         ivBack.setOnClickListener(this);
         enableResendButton(false);
-        binding.edOtpView.addTextChangedListener(this);
+        binding.edOtpView.addTextChangedListener(new CustomTextWatcher(0, this));
     }
 
     @Override
@@ -94,12 +93,30 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     protected void callApi(int tag) {
-
+        if (isInternet) {
+            if (tag == 1) {
+                if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
+                    apiController.getApiSignUpVerification(registrationParamBean);
+                }
+            }
+        } else {
+            Utils.showInternetMsg(mContext);
+        }
     }
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
+        Utils.print(Screen.VERIFICATION_ACTIVITY, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+        if (tag == ApiConst.AUTH_VERIFY_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+            if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
+                if (dashBoardIntent == null)
+                    dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);
+                startActivity(dashBoardIntent);
+                finishAffinity();
+            }
+        } else if (tag == ApiConst.AUTH_VERIFY_OTP && result == ApiConst.API_RESULT.FAIL) {
 
+        }
     }
 
     @Override
@@ -107,17 +124,20 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
 
     }
 
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+    private void enableResendButton(boolean enable) {
+        binding.btResend.setAlpha(Utils.getFloatFromDimen(VerificationActivity.this, enable ? R.dimen.selected_bt_alpha : R.dimen.unselected_bt_alpha));
+        binding.btResend.setOnClickListener(enable ? this : null);
     }
 
     @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        otp = String.valueOf(charSequence);
-        if (otp.length() == 4) {
+    public void onTextChanged(int edTag, String text) {
+        switch (edTag) {
+            case 0:
+                verifyOtp = String.valueOf(text);
+                if (verifyOtp.length() == 4) {
+                    callApi(1);
 //===========//after Verify User put this code cut and paste=================================================================
-            if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
+            /*if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
                 if (dashBoardIntent == null)
                     dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);
                 startActivity(dashBoardIntent);
@@ -127,18 +147,10 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                     changePasswordIntent = new Intent(VerificationActivity.this, ChangePasswordActivity.class);
                 startActivity(changePasswordIntent);
                 finish();
-            }
+            }*/
 //==========//after Verify User==============================================================================================
+                    break;
+                }
         }
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-
-    }
-
-    private void enableResendButton(boolean enable) {
-        binding.btResend.setAlpha(Utils.getFloatFromDimen(VerificationActivity.this, enable ? R.dimen.selected_bt_alpha : R.dimen.unselected_bt_alpha));
-        binding.btResend.setOnClickListener(enable ? this : null);
     }
 }

@@ -1,6 +1,7 @@
 package com.mage.ziplrdelivery.uc;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -210,11 +211,13 @@ public class ProgressMaterialButton extends RelativeLayout {
                 progressBar.setVisibility(VISIBLE);
             }, animationDuration);
             setOnClickListener(null);
+            ((Activity)context).findViewById(android.R.id.content).setOnClickListener(null);
         } else {
             widthAnimator = ValueAnimator.ofInt(buttonHeight, buttonWidth);
             widthAnimator.setDuration(animationDuration);
             this.postDelayed(() -> {
                 setOnClickListener(onClickListener);
+                ((Activity)context).findViewById(android.R.id.content).setOnClickListener(onClickListener);
                 materialButton.setText(text);
                 setBackground(null);
                 materialButton.setVisibility(VISIBLE);

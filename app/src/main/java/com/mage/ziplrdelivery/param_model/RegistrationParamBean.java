@@ -3,7 +3,9 @@ package com.mage.ziplrdelivery.param_model;
 import android.text.TextUtils;
 import android.util.Patterns;
 
-public class RegistrationParamBean {
+import java.io.Serializable;
+
+public class RegistrationParamBean implements Serializable {
     private String name;
     private String email;
     private String password;
@@ -85,6 +87,8 @@ public class RegistrationParamBean {
             return 5;
         if (TextUtils.isEmpty(getPhone_number()))
             return 6;
+        if (!(getPhone_number().length()==10))
+            return 7;
         return -1;
     }
 

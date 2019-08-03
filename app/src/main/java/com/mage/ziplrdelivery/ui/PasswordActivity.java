@@ -92,7 +92,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
         loginBean.setPassword(password);
         int error = loginBean.isValidData();
         switch (error) {
-            case 1:
+            case 2:
                 binding.edPassword.setError(super.getResString(R.string.validation_password));
                 binding.edPassword.requestFocus();
                 break;

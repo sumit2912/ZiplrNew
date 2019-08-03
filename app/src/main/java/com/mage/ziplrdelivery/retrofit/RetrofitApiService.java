@@ -24,5 +24,5 @@ public interface RetrofitApiService {
 
     //otp
     @POST("auth/verify/otp")
-    Call<JsonObject> verifyOtp(@Body JsonObject jsonObject);
+    Single<Response<ResponseBean>> verifyOtp(@Body RegistrationParamBean registrationParamBean);
 }

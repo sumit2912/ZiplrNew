@@ -30,6 +30,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(MobileNoActivity.this, R.layout.activity_mobile_no);
         loginBean = LoginBean.getInstance(mContext);
+        loginBean.resetAll();
         initUi();
     }
 
@@ -82,12 +83,15 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 binding.edMobileNo.setError(super.getResString(R.string.validation_mobile_no));
                 binding.edMobileNo.requestFocus();
                 break;
-            default:
-                loginBean.printParams();
-                if (passwordIntent == null)
-                    passwordIntent = new Intent(MobileNoActivity.this, PasswordActivity.class);
-                startActivity(passwordIntent);
+            case 1:
+                binding.edMobileNo.setError(super.getResString(R.string.validation_phone_no_length).replace("0","10"));
+                binding.edMobileNo.requestFocus();
                 break;
+            default:
+                /*loginBean.printParams();
+                if (passwordIntent == null)
+                    passwordIntent = new Intent(MobileNoActivity.this;*/
+
         }
     }
 

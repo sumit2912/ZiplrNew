@@ -90,7 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         return Objects.requireNonNull(ed.getText()).toString().trim();
     }
 
-    protected CharSequence getResString(int resId) {
+    protected String getResString(int resId) {
         return mContext.getResources().getString(resId);
     }
 

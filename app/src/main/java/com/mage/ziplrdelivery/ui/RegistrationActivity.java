@@ -86,35 +86,34 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     protected void callApi(int tag) {
-        if(isInternet){
-            if(tag == 1){
-                if(registrationParamBean != null) {
+        if (isInternet) {
+            if (tag == 1) {
+                if (registrationParamBean != null) {
                     binding.btSubmit.showProgressBar(true, PROGRESS_TAG);
                     apiController.getApiSignUp(registrationParamBean);
                 }
             }
-        }else {
+        } else {
             Utils.showInternetMsg(mContext);
         }
     }
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(Screen.REGISTRATION_ACTIVITY,"tag = "+tag+" result = "+result+" status = "+status+" msg ="+msg);
-        if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.SUCCESS && status == 1){
+        Utils.print(Screen.REGISTRATION_ACTIVITY, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+        if (tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             if (verificationIntent == null)
                 verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
             VALUE_FROM_ACTIVITY = Screen.REGISTRATION_ACTIVITY;
             verificationIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
-            verificationIntent.putExtra("otp",String.valueOf(apiController.getResultData().getOtp()));
-            verificationIntent.putExtra("id",apiController.getResultData().getId());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("registrationParamBean", registrationParamBean);
+            verificationIntent.putExtras(bundle);
             startActivity(verificationIntent);
             finish();
-        }else if(tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.FAIL){
+            Utils.print(Screen.REGISTRATION_ACTIVITY,"otp = "+apiController.getResultData().getOtp());
+        } else if (tag == ApiConst.AUTH_SIGNUP && result == ApiConst.API_RESULT.FAIL) {
             binding.btSubmit.showProgressBar(false, PROGRESS_TAG);
-            if(status == 0){
-                Utils.toast(mContext,msg,false);
-            }
         }
     }
 
@@ -152,12 +151,19 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
                 break;
             case 4:
                 binding.edCPassword.setError(getResources().getString(R.string.validation_password_match));
+                binding.edCPassword.requestFocus();
                 break;
             case 5:
                 binding.tvCode.setError(getResources().getString(R.string.validation_country_code));
+                binding.tvCode.requestFocus();
                 break;
             case 6:
                 binding.edPhoneNo.setError(getResources().getString(R.string.validation_phone_no));
+                binding.edPhoneNo.requestFocus();
+                break;
+            case 7:
+                binding.edPhoneNo.setError(getResources().getString(R.string.validation_phone_no_length).replace("0","10"));
+                binding.edPhoneNo.requestFocus();
                 break;
             default:
                 this.registrationParamBean = registrationParamBean;

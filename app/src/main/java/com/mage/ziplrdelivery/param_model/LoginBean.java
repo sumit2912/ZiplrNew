@@ -44,8 +44,10 @@ public class LoginBean {
     public int isValidData() {
         if (TextUtils.isEmpty(getPhone_number()))
             return 0;
-        if (TextUtils.isEmpty(getPassword()))
+        if (getPhone_number().length()>9 && getPhone_number().length()<11)
             return 1;
+        if (TextUtils.isEmpty(getPassword()))
+            return 2;
         return -1;
     }
 
@@ -54,6 +56,11 @@ public class LoginBean {
         stringBuilder.append("phone_number = " + (getPhone_number() != null ? getPhone_number() : ""));
         stringBuilder.append("  password = " + (getPassword() != null ? getPassword() : ""));
         return String.valueOf(stringBuilder);
+    }
+
+    public void resetAll() {
+        loginBean.setPhone_number("");
+        loginBean.setPassword("");
     }
 
 }

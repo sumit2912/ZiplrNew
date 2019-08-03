@@ -3,7 +3,9 @@ package com.mage.ziplrdelivery.data_model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Result {
+import java.io.Serializable;
+
+public class Result implements Serializable {
     //SignUp Response=============================================================================Start============================
     @SerializedName("name")
     @Expose
