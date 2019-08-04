@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -39,7 +36,6 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(RegistrationActivity.this, R.layout.activity_registration);
         registrationViewModel = ViewModelProviders.of(this).get(RegistrationViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setRegistrationViewModel(registrationViewModel);
@@ -50,6 +46,17 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     @Override
     protected Context getContext() {
         return RegistrationActivity.this;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_registration;
+    }
+
+    @Override
+    protected <S> S getViewBinding(S s) {
+        binding = (ActivityRegistrationBinding) s;
+        return (S) binding;
     }
 
     @Override
@@ -74,7 +81,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
         binding.tvCode.setText(mContext.getResources().getString(R.string.uk_country_code));
         registrationViewModel.CountryCode.setValue(mContext.getResources().getString(R.string.uk_country_code));
         binding.btSubmit.setOnClickListener(this);
-        binding.nonClickable.setOnClickListener(this);
+        binding.nonClickable.setOnClickListener(null);
     }
 
     @Override
@@ -108,25 +115,18 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
-    protected ViewDataBinding getViewDataBinding() {
-        return binding;
-    }
-
-    @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
         Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
         if (tag == ApiConst.SIGN_UP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             if (verificationIntent == null)
                 verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
-            VALUE_FROM_ACTIVITY = TAG;
-            verificationIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
+            verificationIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
             Bundle bundle = new Bundle();
             apiController.getResultData().setPassword(registrationParamBean.getPassword());
-            bundle.putSerializable(KEY_BEAN_1, apiController.getResultData());
+            bundle.putSerializable(KEY_RESULT_BEAN, apiController.getResultData());
             verificationIntent.putExtras(bundle);
             startActivity(verificationIntent);
             finish();
-            Utils.print(TAG, "otp = " + apiController.getResultData().getOtp());
         } else if (tag == ApiConst.SIGN_UP && result == ApiConst.API_RESULT.FAIL) {
             binding.btSubmit.showProgressBar(false, PROGRESS_TAG_0);
             enableScreen(true);

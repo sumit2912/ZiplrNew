@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ContentFrameLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -24,7 +24,6 @@ import com.mage.ziplrdelivery.api.ApiController;
 import com.mage.ziplrdelivery.common.AlertDialogManager;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.listener.ResponseListener;
-import com.mage.ziplrdelivery.uc.CustomTextView;
 import com.mage.ziplrdelivery.utils.Utils;
 
 import java.util.Objects;
@@ -38,9 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected static final int PROGRESS_TAG_2 = 2;
     protected static final String KEY_FROM_ACTIVITY = "KEY_FROM_ACTIVITY";
     protected static final String KEY_FP_CLICK = "KEY_FP_CLICK";
-    protected static final String KEY_BEAN_1 = "KEY_BEAN_1";
-    protected static final String KEY_BEAN_2 = "KEY_BEAN_2";
-    protected static final String KEY_BEAN_3 = "KEY_BEAN_3";
+    protected static final String KEY_RESULT_BEAN = "KEY_RESULT_BEAN";
     protected final Handler handler = new Handler();
     protected String VALUE_FROM_ACTIVITY = null;
     protected boolean VALUE_FP_CLICK = false;
@@ -52,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected ApiController apiController;
     protected AlertDialogManager adManager;
     protected ProgressBar progressBar;
+    private ViewDataBinding mBinding;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -59,13 +57,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             new Utils.InternetCheck(BaseActivity.this).execute();
         }
     };
-
-    protected ViewDataBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
+        mBinding = DataBindingUtil.setContentView((Activity) mContext, getLayoutId());
+        getViewBinding(mBinding);
         appManager = AppManager.getInstance(mContext);
         appManager.addActivity((AppCompatActivity) getContext());
         appManager.addDataMessageListener(getContext().getClass().getSimpleName(), addDataMessageListener());
@@ -75,21 +72,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         dataIntent = getIntent();
         apiController = new ApiController(mContext, this);
         adManager = new AlertDialogManager(mContext, "", "", this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(progressBar == null){
-            binding = getViewDataBinding();
-            ConstraintLayout cl = binding.getRoot().findViewById(R.id.mainCL);
-            View view = LayoutInflater.from(mContext).inflate(R.layout.layout_progress_bar, cl, true);
-            progressBar = view.findViewById(R.id.pb);
-            if(progressBar.getParent() != null) {
-                ((ViewGroup)progressBar.getParent()).removeView(progressBar);
-            }
-            cl.addView(progressBar);
+        ConstraintLayout cl = mBinding.getRoot().findViewById(R.id.mainCL);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_progress_bar, cl, true);
+        progressBar = view.findViewById(R.id.pb);
+        if(progressBar.getParent() != null) {
+            ((ViewGroup)progressBar.getParent()).removeView(progressBar);
         }
+        cl.addView(progressBar);
     }
 
     @Override
@@ -106,6 +95,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected abstract Context getContext();
 
+    protected abstract int getLayoutId();
+
+    protected abstract <S> S getViewBinding(S s);
+
     protected abstract AppManager.DataMessageListener addDataMessageListener();
 
     protected abstract void initUi();
@@ -115,13 +108,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected abstract void callApi(int tag);
 
     protected abstract void enableScreen(boolean enable);
-
-    protected abstract ViewDataBinding getViewDataBinding();
-
-    @Override
-    public void onClick(View view) {
-
-    }
 
     @Override
     public void onNetChange(boolean isInternet) {
@@ -135,6 +121,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected String getResString(int resId) {
         return mContext.getResources().getString(resId);
+    }
+
+    protected float getResdimen(int resId) {
+        return mContext.getResources().getDimension(resId);
     }
 
     protected void showProgressBar(boolean show) {

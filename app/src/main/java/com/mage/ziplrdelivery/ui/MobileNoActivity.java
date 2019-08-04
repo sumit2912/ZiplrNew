@@ -1,8 +1,6 @@
 package com.mage.ziplrdelivery.ui;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,13 +25,12 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     private static final String TAG = Screen.MOBILE_NO_ACTIVITY;
     private ActivityMobileNoBinding binding;
     private AppCompatImageView ivBack;
-    private Intent passwordIntent,registerIntent,verifyIntent;
+    private Intent passwordIntent, registerIntent, verifyIntent;
     private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(MobileNoActivity.this, R.layout.activity_mobile_no);
         LoginParamBean.getInstance(mContext).resetAll();
         initUi();
     }
@@ -41,6 +38,17 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     @Override
     protected Context getContext() {
         return MobileNoActivity.this;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_mobile_no;
+    }
+
+    @Override
+    protected <S> S getViewBinding(S s) {
+        binding = (ActivityMobileNoBinding) s;
+        return (S) binding;
     }
 
     @Override
@@ -64,7 +72,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         binding.ivFlag.setImageResource(R.drawable.img_flag);
         binding.tvCode.setText(getResources().getString(R.string.uk_country_code));
         binding.btNext.setOnClickListener(this);
-        binding.nonClickable.setOnClickListener(this);
+        binding.nonClickable.setOnClickListener(null);
         binding.edMobileNo.addTextChangedListener(new CustomTextWatcher(0, this));
     }
 
@@ -75,21 +83,22 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 onBackPressed();
                 break;
             case R.id.btNext:
-                validation();
+                if (binding.btNext.isButtonEnabled()) {
+                    validation();
+                }
                 break;
         }
     }
 
     private void validation() {
         int error = LoginParamBean.getInstance(mContext).isValidPhoneNumber();
-        LoginParamBean.getInstance(mContext).printParams();
         switch (error) {
             case 0:
-                binding.edMobileNo.setError(super.getResString(R.string.validation_mobile_no));
+                binding.edMobileNo.setError(getResString(R.string.validation_mobile_no));
                 binding.edMobileNo.requestFocus();
                 break;
             case 1:
-                binding.edMobileNo.setError(super.getResString(R.string.validation_mobile_no_length).replace("0", "10"));
+                binding.edMobileNo.setError(getResString(R.string.validation_mobile_no_length).replace("0", "10"));
                 binding.edMobileNo.requestFocus();
                 break;
             default:
@@ -117,7 +126,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 enableScreen(false);
                 apiController.getApiPhoneCheck(phoneNumber);
                 apiController.set0status(false);
-            }else if(tag == 2){
+            } else if (tag == 2) {
                 super.showProgressBar(true);
                 apiController.getApiSendOTP(phoneNumber);
             }
@@ -129,11 +138,6 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     @Override
     protected void enableScreen(boolean enable) {
         binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
-    }
-
-    @Override
-    protected ViewDataBinding getViewDataBinding() {
-        return binding;
     }
 
     @Override
@@ -149,12 +153,12 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
             binding.btNext.showProgressBar(false, PROGRESS_TAG_0);
             enableScreen(true);
             if (status == 0) { // not registered
-                adManager.init(TYPE_NOT_REGISTERED, super.getResString(R.string.mobile_number), super.getResString(R.string.alert_msg_not_registered));
-                adManager.setNegativePositive("", super.getResString(R.string.lbl_register));
+                adManager.init(TYPE_NOT_REGISTERED, getResString(R.string.mobile_number), super.getResString(R.string.alert_msg_not_registered));
+                adManager.setNegativePositive("", getResString(R.string.lbl_register));
                 adManager.show();
             } else if (status == 3) { // not verified
-                adManager.init(TYPE_NOT_VERIFIED, super.getResString(R.string.mobile_number), super.getResString(R.string.alert_msg_not_verified));
-                adManager.setNegativePositive("", super.getResString(R.string.lbl_verify));
+                adManager.init(TYPE_NOT_VERIFIED, getResString(R.string.mobile_number), super.getResString(R.string.alert_msg_not_verified));
+                adManager.setNegativePositive("", getResString(R.string.lbl_verify));
                 adManager.show();
             }
         }
@@ -162,14 +166,15 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             enableScreen(true);
             super.showProgressBar(false);
-            verifyIntent = new Intent(MobileNoActivity.this,VerificationActivity.class);
+            verifyIntent = new Intent(MobileNoActivity.this, VerificationActivity.class);
             Bundle bundle = new Bundle();
             Result data = new Result();
             data.setPhoneNumber(phoneNumber);
-            bundle.putSerializable(KEY_BEAN_1, data);
+            bundle.putSerializable(KEY_RESULT_BEAN, data);
             verifyIntent.putExtras(bundle);
+            verifyIntent.putExtra(KEY_FROM_ACTIVITY,TAG);
             startActivity(verifyIntent);
-        }else if(tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.FAIL){
+        } else if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.FAIL) {
             enableScreen(true);
             super.showProgressBar(false);
         }
@@ -198,7 +203,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         switch (type) {
             case TYPE_NOT_REGISTERED:
                 finish();
-                registerIntent = new Intent(MobileNoActivity.this,RegistrationActivity.class);
+                registerIntent = new Intent(MobileNoActivity.this, RegistrationActivity.class);
                 startActivity(registerIntent);
                 break;
             case TYPE_NOT_VERIFIED:

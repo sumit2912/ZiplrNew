@@ -9,8 +9,8 @@ import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.data_model.ResponseBean;
 import com.mage.ziplrdelivery.data_model.Result;
-import com.mage.ziplrdelivery.listener.ApiResponseListener;
 import com.mage.ziplrdelivery.listener.ResponseListener;
+import com.mage.ziplrdelivery.param_model.LoginParamBean;
 import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
 import com.mage.ziplrdelivery.retrofit.RetrofitApiService;
 import com.mage.ziplrdelivery.retrofit.ServiceGenerator;
@@ -18,122 +18,139 @@ import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.constant.PrefConst;
 
-
 import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class ApiController implements ApiResponseListener {
 
+public class ApiController {
+
+    private static final String TAG = "ApiController";
     private Context caller;
     private ResponseListener responseListener;
-    private JsonObject jsonObject;
-    private RetrofitApiService jsonPostService;
     private String method, msg;
     private int status;
     private Result result;
-    private SingleResponse singleResponse;
     private boolean enable0status = true;
+    private JsonObject jsonObject;
+    private Single<Response<ResponseBean>> observable;
 
     public ApiController(Context caller, ResponseListener responseListener) {
         this.caller = caller;
         this.responseListener = responseListener;
-        singleResponse = SingleResponse.getInstance(caller);
     }
 
     private void init() {
-        jsonObject = new JsonObject();
-        jsonPostService = null;
         method = null;
         msg = null;
         status = -1;
         result = null;
         enable0status = true;
+        jsonObject = new JsonObject();
+        observable = null;
     }
 
     public Result getResultData() {
         return this.result;
     }
 
-    private RetrofitApiService getJsonPostService(JsonObject obj) {
-        if (obj == null) {
-            Utils.print("method = " + method + "   request = " + ApiConst.API_HOST + method + " param = null");
-        } else {
-            Utils.print("method = " + method + "   request = " + ApiConst.API_HOST + method + " param = " + obj.toString());
-        }
-        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, method);
-    }
-
     public void getApiSignUp(RegistrationParamBean registrationParamBean) {
         init();
         method = ApiConst.SIGN_UP;
         registrationParamBean.printParams();
-        jsonPostService = getJsonPostService(null);
-        Single<Response<ResponseBean>> signUpObservable = jsonPostService.signUp(registrationParamBean);
-        singleResponse.init(method, signUpObservable, ApiController.this);
+        observable = ApiHelper.getApiSignUp(registrationParamBean);
+        executeApi();
     }
 
     public void getApiVerification(Result result) {
         init();
         method = ApiConst.VERIFY_OTP;
         result.printVerifyOtpParams();
-        jsonPostService = getJsonPostService(null);
-        singleResponse.init(method, jsonPostService.verifyOtp(result), ApiController.this);
+        observable = ApiHelper.getApiVerification(result);
+        executeApi();
     }
 
     public void getApiPhoneCheck(String phone_number) {
         init();
         method = ApiConst.PHONE_CHECK;
-        jsonObject.addProperty("phone_number",phone_number);
-        jsonPostService = getJsonPostService(jsonObject);
-        singleResponse.init(method, jsonPostService.phoneCheck(jsonObject), ApiController.this);
+        jsonObject.addProperty("phone_number", phone_number);
+        observable = ApiHelper.getApiPhoneCheck(jsonObject);
+        executeApi();
     }
 
     public void getApiSendOTP(String phone_number) {
         init();
         method = ApiConst.SEND_OTP;
-        jsonObject.addProperty("phone_number",phone_number);
-        jsonPostService = getJsonPostService(jsonObject);
-        singleResponse.init(method, jsonPostService.sendOTP(jsonObject), ApiController.this);
+        jsonObject.addProperty("phone_number", phone_number);
+        observable = ApiHelper.getApiSendOTP(jsonObject);
+        executeApi();
+    }
+
+    public void getApiLogin(LoginParamBean loginParamBean){
+        init();
+        method = ApiConst.LOGIN;
+        loginParamBean.printParams();
+        observable = ApiHelper.getApiLogin(loginParamBean);
+        executeApi();
     }
 
     public void set0status(boolean enable) {
         enable0status = enable;
     }
 
-    @Override
-    public void onSuccessOccur(String method, Response<ResponseBean> response) {
-        if (response.isSuccessful()) {
-            Utils.print(ApiController.class.getSimpleName(), "ResponseBean Success");
-            ResponseBean responseBean = response.body();
-            status = responseBean.getStatus();
-            msg = responseBean.getMessage();
-            result = responseBean.getResult();
-            if(responseBean.getAuthToke() != null){
-                MyApplication.getAppManager().prefSetStringValue(PrefConst.PREF_ACCESS_TOKEN,responseBean.getAuthToke().getAccessToken());
-            }
-            Utils.print("status = " + status + "    msg = " + msg);
-        } else {
-            msg = "We are upgrading our server";
-        }
-        doCallBack();
-    }
+    private void executeApi() {
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<Response<ResponseBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-    @Override
-    public void onErrorOccur(String method, Throwable e) {
-        status = -2;
-        msg = caller.getResources().getString(R.string.temporary_server_down);
-        Utils.print("::::::::::::::::::::doPostRequest::::::::::onFailure::::::::::::::::::::::::::::::" + e.getMessage());
-        doCallBack();
-        try {
-            Log.e("response-failure", "method = " + method + " Cause = " + e.getCause().getMessage());
-            Utils.print(this.getClass() + " :: Exception :: ", e.getLocalizedMessage());
-            StackTraceElement[] elements = e.getStackTrace();
-            for (int i = 0; i < elements.length; i++) {
-                Utils.print(this.getClass().getSimpleName(), elements[i].toString());
-            }
-        } catch (Exception exception) {
-            Utils.print(this.getClass().getSimpleName(), exception);
-        }
+                    }
+
+                    @Override
+                    public void onSuccess(Response<ResponseBean> response) {
+                        if (response.isSuccessful()) {
+                            Utils.print(TAG, "ResponseBean Success");
+                            ResponseBean responseBean = response.body();
+                            status = responseBean.getStatus();
+                            msg = responseBean.getMessage();
+                            result = responseBean.getResult();
+                            if (result.getOtp() != null) {
+                                Utils.print(TAG, "OTP = " + result.getOtp());
+                            }
+                            if (responseBean.getAuthToke() != null) {
+                                MyApplication.getAppManager().prefSetStringValue(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
+                                Utils.print(TAG, "Generated Access Token   ::::  " +
+                                        responseBean.getAuthToke().getTokenType() + " " + MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN));
+                            }
+                            Utils.print("status = " + status + "    msg = " + msg);
+                        } else {
+                            msg = "We are upgrading our server";
+                        }
+                        doCallBack();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        status = -2;
+                        msg = caller.getResources().getString(R.string.temporary_server_down);
+                        Utils.print("::::::::::::::::::::doPostRequest::::::::::onFailure::::::::::::::::::::::::::::::" + e.getMessage());
+                        doCallBack();
+                        try {
+                            Log.e("response-failure", "method = " + method + " Cause = " + e.getCause().getMessage());
+                            Utils.print(this.getClass() + " :: Exception :: ", e.getLocalizedMessage());
+                            StackTraceElement[] elements = e.getStackTrace();
+                            for (int i = 0; i < elements.length; i++) {
+                                Utils.print(this.getClass().getSimpleName(), elements[i].toString());
+                            }
+                        } catch (Exception exception) {
+                            Utils.print(this.getClass().getSimpleName(), exception);
+                        }
+                    }
+                });
     }
 
     private void doCallBack() {
@@ -151,16 +168,16 @@ public class ApiController implements ApiResponseListener {
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener < 0 = " + status);
                     } else if (status == 0) {
-                        if(enable0status) {
+                        if (enable0status) {
                             Utils.toast(caller, msg, false);
                         }
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener == 0 = " + status);
-                    }else if(status == 2){
+                    } else if (status == 2) {
                         Utils.showSessionDialog(caller);
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener == 2 = " + status);
-                    }else {
+                    } else {
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener >2 = " + status);
                     }

@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
@@ -19,25 +17,39 @@ import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
 import com.mage.ziplrdelivery.param_model.LoginParamBean;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
+import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
+    private static final String TAG = Screen.PASSWORD_ACTIVITY;
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
-    private Intent verifyIntent, dashBoardIntent;
+    private LoginParamBean loginParamBean;
+    private Intent verifyIntent, dashBoardIntent,registerIntent;
     private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(PasswordActivity.this, R.layout.activity_password);
+        loginParamBean = LoginParamBean.getInstance(mContext);
         initUi();
     }
 
     @Override
     protected Context getContext() {
         return PasswordActivity.this;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_password;
+    }
+
+    @Override
+    protected <S> S getViewBinding(S s) {
+        binding = (ActivityPasswordBinding) s;
+        return (S) binding;
     }
 
     @Override
@@ -61,8 +73,8 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
         binding.tvForgot.setPaintFlags(binding.tvForgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         binding.tvForgot.setOnClickListener(this);
         binding.btSubmit.setOnClickListener(this);
-        binding.nonClickable.setOnClickListener(this);
-        binding.edPassword.addTextChangedListener(new CustomTextWatcher(0,this));
+        binding.nonClickable.setOnClickListener(null);
+        binding.edPassword.addTextChangedListener(new CustomTextWatcher(0, this));
     }
 
     @Override
@@ -77,24 +89,24 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
                     if (verifyIntent == null) {
                         verifyIntent = new Intent(PasswordActivity.this, VerificationActivity.class);
                     }
-                    VALUE_FROM_ACTIVITY = Screen.PASSWORD_ACTIVITY;
-                    verifyIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
+                    verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
                     startActivity(verifyIntent);
                 }
                 break;
             case R.id.btSubmit:
-                validation();
+                if (binding.btSubmit.isButtonEnabled()) {
+                    validation();
+                }
                 break;
         }
     }
 
     private void validation() {
-        int error = LoginParamBean.getInstance(mContext).isValidPassword();
-        LoginParamBean.getInstance(mContext).printParams();
+        int error = loginParamBean.isValidPassword();
         if (error == 1) {
-            binding.edPassword.setError(super.getResString(R.string.validation_password));
+            binding.edPassword.setError(getResString(R.string.validation_password));
             binding.edPassword.requestFocus();
-        }else {
+        } else {
             callApi(1);
         }
     }
@@ -121,7 +133,14 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
 
     @Override
     protected void callApi(int tag) {
-
+        if (isInternet) {
+            if (tag == 1) {
+                enableScreen(false);
+                apiController.getApiLogin(loginParamBean);
+            }
+        } else {
+            Utils.showInternetMsg(mContext);
+        }
     }
 
     @Override
@@ -130,13 +149,13 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     }
 
     @Override
-    protected ViewDataBinding getViewDataBinding() {
-        return binding;
-    }
-
-    @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
+        if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
 
+        } else if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.FAIL) {
+            enableScreen(true);
+            binding.btSubmit.showProgressBar(false, PROGRESS_TAG_0);
+        }
     }
 
     @Override
@@ -146,9 +165,9 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
 
     @Override
     public void onTextChanged(int edTag, String text) {
-        if(edTag == 0){
+        if (edTag == 0) {
             password = text;
-            LoginParamBean.getInstance(mContext).setPassword(password);
+            loginParamBean.setPassword(password);
         }
     }
 
@@ -159,6 +178,15 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
 
     @Override
     public void onPositiveClicked(String type) {
-
+        switch (type) {
+            case TYPE_NOT_REGISTERED:
+                finish();
+                registerIntent = new Intent(PasswordActivity.this, RegistrationActivity.class);
+                startActivity(registerIntent);
+                break;
+            case TYPE_NOT_VERIFIED:
+                callApi(2);
+                break;
+        }
     }
 }

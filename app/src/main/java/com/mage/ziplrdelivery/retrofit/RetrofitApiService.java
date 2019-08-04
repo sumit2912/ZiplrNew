@@ -32,13 +32,13 @@ public interface RetrofitApiService {
     @POST(ApiConst.PHONE_CHECK)
     Single<Response<ResponseBean>> phoneCheck(@Body JsonObject jsonObject);
 
-    //login
-    @POST(ApiConst.LOGIN)
-    Single<Response<ResponseBean>> login(@Body LoginParamBean loginParamBean);
-
     //send otp
     @POST(ApiConst.SEND_OTP)
     Single<Response<ResponseBean>> sendOTP(@Body JsonObject jsonObject);
+
+    //login
+    @POST(ApiConst.LOGIN)
+    Single<Response<ResponseBean>> login(@Body LoginParamBean loginParamBean);
 
     //forgot password
     @POST(ApiConst.FORGOT_PASSWORD)

@@ -22,7 +22,7 @@ public class Result implements Serializable {
     private String countryCode;
     @SerializedName("otp")
     @Expose
-    private int otp;
+    private String otp;
     @SerializedName("id")
     @Expose
     private long id;
@@ -65,11 +65,11 @@ public class Result implements Serializable {
         this.countryCode = countryCode;
     }
 
-    public int getOtp() {
+    public String getOtp() {
         return otp;
     }
 
-    public void setOtp(int otp) {
+    public void setOtp(String otp) {
         this.otp = otp;
     }
 

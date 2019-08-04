@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 
+import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityLoginMainBinding;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
@@ -20,6 +18,7 @@ import com.mage.ziplrdelivery.utils.Utils;
 
 public class LoginMainActivity extends BaseActivity implements AppManager.DataMessageListener {
 
+    private static final String TAG = Screen.LOGIN_MAIN_ACTIVITY;
     private ActivityLoginMainBinding binding;
     private Intent registrationIntent, mobileNoIntent;
 
@@ -27,13 +26,23 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     protected void onCreate(Bundle savedInstanceState) {
         Utils.makeFullScreenActivity(LoginMainActivity.this);
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(LoginMainActivity.this, R.layout.activity_login_main);
         initUi();
     }
 
     @Override
     protected Context getContext() {
         return LoginMainActivity.this;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_login_main;
+    }
+
+    @Override
+    protected <S> S getViewBinding(S s) {
+        binding = (ActivityLoginMainBinding) s;
+        return (S) binding;
     }
 
 
@@ -46,7 +55,7 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     protected void initUi() {
         binding.btMobileNo.setOnClickListener(this);
         binding.tvRegistration.setOnClickListener(this);
-        binding.nonClickable.setOnClickListener(this);
+        binding.nonClickable.setOnClickListener(null);
     }
 
     @Override
@@ -57,11 +66,6 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
     @Override
     protected void enableScreen(boolean enable) {
         binding.nonClickable.setVisibility(enable ? View.GONE : View.VISIBLE);
-    }
-
-    @Override
-    protected ViewDataBinding getViewDataBinding() {
-        return binding;
     }
 
     @Override

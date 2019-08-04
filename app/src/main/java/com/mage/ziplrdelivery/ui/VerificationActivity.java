@@ -1,8 +1,6 @@
 package com.mage.ziplrdelivery.ui;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,15 +33,14 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(VerificationActivity.this, R.layout.activity_verification);
         if (dataIntent.hasExtra(KEY_FROM_ACTIVITY)) {
             VALUE_FROM_ACTIVITY = dataIntent.getStringExtra(KEY_FROM_ACTIVITY);
         }
         if (dataIntent.hasExtra(KEY_FP_CLICK)) {
             VALUE_FP_CLICK = true;
         }
-        if (dataIntent.hasExtra(KEY_BEAN_1)) {
-            result = (Result) Objects.requireNonNull(dataIntent.getExtras()).getSerializable(KEY_BEAN_1);
+        if (dataIntent.hasExtra(KEY_RESULT_BEAN)) {
+            result = (Result) Objects.requireNonNull(dataIntent.getExtras()).getSerializable(KEY_RESULT_BEAN);
         }
         initUi();
     }
@@ -51,6 +48,17 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     @Override
     protected Context getContext() {
         return VerificationActivity.this;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_verification;
+    }
+
+    @Override
+    protected <S> S getViewBinding(S s) {
+        binding = (ActivityVerificationBinding) s;
+        return (S) binding;
     }
 
     @Override
@@ -73,7 +81,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         ivBack.setOnClickListener(this);
         enableResendButton(false);
         binding.edOtpView.addTextChangedListener(new CustomTextWatcher(0, this));
-        binding.nonClickable.setOnClickListener(this);
+        binding.nonClickable.setOnClickListener(null);
     }
 
     @Override
@@ -118,11 +126,6 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
-    protected ViewDataBinding getViewDataBinding() {
-        return binding;
-    }
-
-    @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
         Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
         if (tag == ApiConst.VERIFY_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
@@ -153,9 +156,10 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                     finish();
                 } else if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY)) {
                     finish();
-                }else {
-                    passwordIntent = new Intent(VerificationActivity.this,PasswordActivity.class);
+                } else {
+                    passwordIntent = new Intent(VerificationActivity.this, PasswordActivity.class);
                     startActivity(passwordIntent);
+                    finish();
                 }
             }
         }

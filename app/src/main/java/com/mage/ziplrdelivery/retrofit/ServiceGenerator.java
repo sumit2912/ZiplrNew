@@ -13,10 +13,14 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
+    private static final String TAG = "ServiceGenerator";
     private static HttpLoggingInterceptor interceptor;
     private static OkHttpClient.Builder httpClient;
 
     public static <S> S createService(Class<S> serviceClass, String baseUrl, String api) {
+
+        Utils.print(TAG,"Request url = "+baseUrl+api);
+
         if (interceptor == null) {
             interceptor = new HttpLoggingInterceptor();
         }
