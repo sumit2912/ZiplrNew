@@ -14,11 +14,14 @@ import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
+import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
 import com.mage.ziplrdelivery.param_model.LoginParamBean;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
+
+import java.util.Objects;
 
 public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
@@ -26,13 +29,13 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
     private LoginParamBean loginParamBean;
-    private Intent verifyIntent, dashBoardIntent,registerIntent;
+    private Intent verifyIntent, dashBoardIntent, registerIntent;
     private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loginParamBean = LoginParamBean.getInstance(mContext);
+        loginParamBean = LoginParamBean.getInstance();
         initUi();
     }
 
@@ -86,11 +89,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
             case R.id.tvForgot:
                 if (!disableClick) {
                     disableClick = true;
-                    if (verifyIntent == null) {
-                        verifyIntent = new Intent(PasswordActivity.this, VerificationActivity.class);
-                    }
-                    verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
-                    startActivity(verifyIntent);
+                    callApi(2);
                 }
                 break;
             case R.id.btSubmit:
@@ -111,17 +110,6 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
         }
     }
 
-    private void tempMethod() {
-        binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
-        handler.postDelayed(() -> {
-            if (dashBoardIntent == null) {
-                dashBoardIntent = new Intent(PasswordActivity.this, DashBoardActivity.class);
-            }
-            startActivity(dashBoardIntent);
-            finishAffinity();
-        }, 3000);
-    }
-
     @Override
     protected void onInternetChange(boolean isInternet) {
         if (isInternet) {
@@ -135,8 +123,14 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     protected void callApi(int tag) {
         if (isInternet) {
             if (tag == 1) {
+                Utils.hideKeyBoardFromView(mContext);
                 enableScreen(false);
+                binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
                 apiController.getApiLogin(loginParamBean);
+            } else if (tag == 2) {
+                enableScreen(false);
+                showProgressBar(true);
+                apiController.getApiSendOTP(loginParamBean.getPhone_number());
             }
         } else {
             Utils.showInternetMsg(mContext);
@@ -150,11 +144,49 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
+        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
         if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-
+            Result data = apiController.getResultData();
+            if (data != null) {
+                Utils.storeLoginData(appManager, data);
+            }
+            if (dashBoardIntent == null)
+                dashBoardIntent = new Intent(PasswordActivity.this, DashBoardActivity.class);
+            startActivity(dashBoardIntent);
+            finishAffinity();
         } else if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.FAIL) {
             enableScreen(true);
             binding.btSubmit.showProgressBar(false, PROGRESS_TAG_0);
+
+            if (status == 4) { // not registered
+                adManager.init(TYPE_NOT_REGISTERED, getResString(R.string.mobile_number), super.getResString(R.string.alert_msg_not_registered));
+                adManager.setNegativePositive("", getResString(R.string.lbl_register));
+                adManager.show();
+            } else if (status == 3) { // not verified
+                adManager.init(TYPE_NOT_VERIFIED, getResString(R.string.mobile_number), super.getResString(R.string.alert_msg_not_verified));
+                adManager.setNegativePositive("", getResString(R.string.lbl_verify));
+                adManager.show();
+            }
+        }
+
+        if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+            Utils.toast(mContext, msg, false);
+            enableScreen(true);
+            super.showProgressBar(false);
+            verifyIntent = new Intent(PasswordActivity.this, VerificationActivity.class);
+            Bundle bundle = new Bundle();
+            Result data = new Result();
+            Utils.print(TAG, "PhoneNo = " + loginParamBean.getPhone_number());
+            data.setPhoneNumber(loginParamBean.getPhone_number());
+            data.setPassword(password);
+            bundle.putSerializable(KEY_RESULT_BEAN, data);
+            verifyIntent.putExtras(bundle);
+            verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
+            verifyIntent.putExtra(KEY_FP_CLICK, true);
+            startActivity(verifyIntent);
+        } else if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.FAIL) {
+            enableScreen(true);
+            super.showProgressBar(false);
         }
     }
 
@@ -183,6 +215,10 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
                 finish();
                 registerIntent = new Intent(PasswordActivity.this, RegistrationActivity.class);
                 startActivity(registerIntent);
+                if (appManager.getActivityList().containsKey(Screen.MOBILE_NO_ACTIVITY)) {
+                    Objects.requireNonNull(appManager.getActivityList().get(Screen.MOBILE_NO_ACTIVITY)).finish();
+                }
+                finish();
                 break;
             case TYPE_NOT_VERIFIED:
                 callApi(2);

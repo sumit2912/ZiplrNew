@@ -33,12 +33,12 @@ public class ApiHelper {
 
     public static Single<Response<ResponseBean>> getApiPhoneCheck(JsonObject jsonObject) {
         printParameters(jsonObject);
-        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.VERIFY_OTP).phoneCheck(jsonObject);
+        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.PHONE_CHECK).phoneCheck(jsonObject);
     }
 
     public static Single<Response<ResponseBean>> getApiSendOTP(JsonObject jsonObject) {
         printParameters(jsonObject);
-        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.VERIFY_OTP).sendOTP(jsonObject);
+        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.SEND_OTP).sendOTP(jsonObject);
     }
 
     public static Single<Response<ResponseBean>> getApiLogin(LoginParamBean loginParamBean) {
@@ -46,8 +46,13 @@ public class ApiHelper {
         return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.LOGIN).login(loginParamBean);
     }
 
-    public static Single<Response<ResponseBean>> getApiForgotPassword(JsonObject jsonObject) {
-        printParameters(jsonObject);
-        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.FORGOT_PASSWORD).forgotPassword(jsonObject);
+    public static Single<Response<ResponseBean>> getApiForgotPassword(LoginParamBean loginParamBean) {
+        printParameters(null);
+        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.FORGOT_PASSWORD).forgotPassword(loginParamBean);
+    }
+
+    public static Single<Response<ResponseBean>> getApiLogout(){
+        printParameters(null);
+        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.LOGOUT).logout();
     }
 }

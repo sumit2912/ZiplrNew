@@ -89,11 +89,26 @@ public class ApiController {
         executeApi();
     }
 
-    public void getApiLogin(LoginParamBean loginParamBean){
+    public void getApiLogin(LoginParamBean loginParamBean) {
         init();
         method = ApiConst.LOGIN;
         loginParamBean.printParams();
         observable = ApiHelper.getApiLogin(loginParamBean);
+        executeApi();
+    }
+
+    public void getApiForgotPassword(LoginParamBean loginParamBean) {
+        init();
+        method = ApiConst.FORGOT_PASSWORD;
+        loginParamBean.printParams();
+        observable = ApiHelper.getApiForgotPassword(loginParamBean);
+        executeApi();
+    }
+
+    public void getApiLogout() {
+        init();
+        method = ApiConst.LOGOUT;
+        observable = ApiHelper.getApiLogout();
         executeApi();
     }
 
@@ -140,7 +155,6 @@ public class ApiController {
                         Utils.print("::::::::::::::::::::doPostRequest::::::::::onFailure::::::::::::::::::::::::::::::" + e.getMessage());
                         doCallBack();
                         try {
-                            Log.e("response-failure", "method = " + method + " Cause = " + e.getCause().getMessage());
                             Utils.print(this.getClass() + " :: Exception :: ", e.getLocalizedMessage());
                             StackTraceElement[] elements = e.getStackTrace();
                             for (int i = 0; i < elements.length; i++) {

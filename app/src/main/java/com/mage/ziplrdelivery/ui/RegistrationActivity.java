@@ -118,6 +118,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
         Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
         if (tag == ApiConst.SIGN_UP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+            Utils.toast(mContext, msg, false);
             if (verificationIntent == null)
                 verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
             verificationIntent.putExtra(KEY_FROM_ACTIVITY, TAG);

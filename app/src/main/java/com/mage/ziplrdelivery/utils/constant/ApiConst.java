@@ -18,7 +18,8 @@ public class ApiConst {
     public static final String SEND_OTP = "auth/send/otp";
     public static final String PHONE_CHECK = "auth/check";
     public static final String LOGIN = "auth/login";
-    public static final String FORGOT_PASSWORD = "auth/password/reset";
+    public static final String FORGOT_PASSWORD = "auth/password/forgot";
+    public static final String LOGOUT = "auth/logout";
     public static final String GET_USER = "auth/user";
     public static final String USER_UPDATE = "auth/user/update";
     public static final String USER_AVATAR_UPDATE = "auth/user/avatar";

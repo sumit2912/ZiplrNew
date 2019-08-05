@@ -31,7 +31,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoginParamBean.getInstance(mContext).resetAll();
+        LoginParamBean.getInstance().resetAll();
         initUi();
     }
 
@@ -91,7 +91,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     }
 
     private void validation() {
-        int error = LoginParamBean.getInstance(mContext).isValidPhoneNumber();
+        int error = LoginParamBean.getInstance().isValidPhoneNumber();
         switch (error) {
             case 0:
                 binding.edMobileNo.setError(getResString(R.string.validation_mobile_no));
@@ -142,7 +142,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
         if (tag == ApiConst.PHONE_CHECK && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             binding.btNext.showProgressBar(false, PROGRESS_TAG_0);
             enableScreen(true);
@@ -152,7 +152,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         } else if (tag == ApiConst.PHONE_CHECK && result == ApiConst.API_RESULT.FAIL) {
             binding.btNext.showProgressBar(false, PROGRESS_TAG_0);
             enableScreen(true);
-            if (status == 0) { // not registered
+            if (status == 4) { // not registered
                 adManager.init(TYPE_NOT_REGISTERED, getResString(R.string.mobile_number), super.getResString(R.string.alert_msg_not_registered));
                 adManager.setNegativePositive("", getResString(R.string.lbl_register));
                 adManager.show();
@@ -164,6 +164,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         }
 
         if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+            Utils.toast(mContext, msg, false);
             enableScreen(true);
             super.showProgressBar(false);
             verifyIntent = new Intent(MobileNoActivity.this, VerificationActivity.class);
@@ -172,7 +173,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
             data.setPhoneNumber(phoneNumber);
             bundle.putSerializable(KEY_RESULT_BEAN, data);
             verifyIntent.putExtras(bundle);
-            verifyIntent.putExtra(KEY_FROM_ACTIVITY,TAG);
+            verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
             startActivity(verifyIntent);
         } else if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.FAIL) {
             enableScreen(true);
@@ -189,7 +190,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     public void onTextChanged(int edTag, String text) {
         if (edTag == 0) {
             phoneNumber = text;
-            LoginParamBean.getInstance(mContext).setPhone_number(phoneNumber);
+            LoginParamBean.getInstance().setPhone_number(phoneNumber);
         }
     }
 

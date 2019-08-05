@@ -45,4 +45,6 @@
     <string name="alert_msg_not_verified">This mobile number is not verified yet!</string>
     <string name="lbl_register">Register</string>
     <string name="lbl_verify">Verify</string>
+    <string name="validation_new_password">Please enter your new password</string>
+    <string name="validation_new_password_match">The new password and confirm password must be same</string>
 </resources>

@@ -10,16 +10,19 @@ import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.databinding.ActivityDashBoardBinding;
+import com.mage.ziplrdelivery.param_model.LoginParamBean;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 public class DashBoardActivity extends BaseActivity implements AppManager.DataMessageListener {
+
     private static final String TAG = Screen.DASH_BOARD_ACTIVITY;
     private ActivityDashBoardBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LoginParamBean.getInstance().resetAll();
         initUi();
     }
 
@@ -47,6 +50,7 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
     @Override
     protected void initUi() {
         binding.nonClickable.setOnClickListener(null);
+        binding.btLogout.setOnClickListener(this);
         Result data = Utils.getLoginData(appManager);
         if (data != null) {
             binding.tvTemp.setText("User_Id = " + data.getId() + "\nName = " + data.getName() + "\nEmail = " + data.getEmail() + "\nMobile No = "
@@ -56,7 +60,13 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.btLogout:
+                if (binding.btLogout.isButtonEnabled()) {
+                    callApi(1);
+                }
+                break;
+        }
     }
 
     @Override
@@ -70,7 +80,16 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
 
     @Override
     protected void callApi(int tag) {
-
+        if (isInternet) {
+            if (tag == 1) {
+                enableScreen(false);
+                binding.btLogout.showProgressBar(true, PROGRESS_TAG_0);
+                apiController.getApiLogout();
+                apiController.set0status(false);
+            }
+        } else {
+            Utils.showInternetMsg(mContext);
+        }
     }
 
     @Override
@@ -80,7 +99,13 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-
+        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
+        if (tag == ApiConst.LOGOUT && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+            Utils.logoutFromApp(mContext);
+        } else if (tag == ApiConst.LOGOUT && result == ApiConst.API_RESULT.FAIL) {
+            enableScreen(true);
+            binding.btLogout.showProgressBar(false, PROGRESS_TAG_0);
+        }
     }
 
     @Override

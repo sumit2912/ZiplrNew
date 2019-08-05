@@ -14,13 +14,23 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
-            android:text="Magespider welcomes you to Ziplr User DashBoard"
             android:textSize="@dimen/_12sdp"
             app:custom_font="semibold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.mage.ziplrdelivery.uc.ProgressMaterialButton
+            android:id="@+id/btLogout"
+            style="@style/ProgressMaterialButton_SemiBold_Orange"
+            android:layout_width="@dimen/def_bt_width"
+            android:layout_height="@dimen/def_bt_height"
+            app:bt_text="Logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginBottom="@dimen/_10sdp"/>
 
         <RelativeLayout
             android:id="@+id/rlInternet"

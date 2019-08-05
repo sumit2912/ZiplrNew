@@ -9,15 +9,13 @@ public class LoginParamBean {
     private static LoginParamBean loginParamBean;
     private String phone_number;
     private String password;
-    private Context context;
 
-    public LoginParamBean(Context context) {
-        this.context = context;
+    public LoginParamBean() {
     }
 
-    public static LoginParamBean getInstance(Context context) {
+    public static LoginParamBean getInstance() {
         if (loginParamBean == null) {
-            loginParamBean = new LoginParamBean(context);
+            loginParamBean = new LoginParamBean();
         }
         return loginParamBean;
     }
@@ -60,8 +58,8 @@ public class LoginParamBean {
     }
 
     public void resetAll() {
-        loginParamBean.setPhone_number("");
-        loginParamBean.setPassword("");
+        loginParamBean.setPhone_number(null);
+        loginParamBean.setPassword(null);
     }
 
 }

@@ -64,11 +64,11 @@ public class Utils {
         toast(context, context.getResources().getString(R.string.no_internet), false);
     }
 
-    public static String padLong(long l) {
-        if (l < 10) {
-            return "0" + l;
+    public static String padInt(int i) {
+        if (i < 10) {
+            return "0" + i;
         } else {
-            return "" + l;
+            return "" + i;
         }
     }
 
@@ -159,5 +159,12 @@ public class Utils {
         result.setPhoneNumber(appManager.prefGetStringValue(PrefConst.PREF_USER_PHONE_NUMBER));
         result.setCountryCode(appManager.prefGetStringValue(PrefConst.PREF_USER_COUNTRY_CODE));
         return result;
+    }
+
+    public static void logoutFromApp(Context mContext) {
+        MyApplication.getAppManager().prefClearAll();
+        Utils.print("Clear Token = "+MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN));
+        mContext.startActivity(new Intent(mContext,LoginMainActivity.class));
+        ((Activity)mContext).finishAffinity();
     }
 }

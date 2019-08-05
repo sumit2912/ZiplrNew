@@ -4,6 +4,7 @@ package com.mage.ziplrdelivery.ui;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,17 +15,23 @@ import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
 import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityChangePasswordBinding;
+import com.mage.ziplrdelivery.param_model.LoginParamBean;
+import com.mage.ziplrdelivery.uc.CustomTextWatcher;
+import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
-public class ChangePasswordActivity extends BaseActivity implements AppManager.DataMessageListener {
+public class ChangePasswordActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
     private static final String TAG = Screen.CHANGE_PASSWORD_ACTIVITY;
     private ActivityChangePasswordBinding binding;
     private AppCompatImageView ivBack;
+    private LoginParamBean loginParamBean;
+    private String newPassword = "", confirmPassword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loginParamBean = LoginParamBean.getInstance();
         initUi();
     }
 
@@ -63,11 +70,35 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
         binding.collapsingTl.setExpandedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         binding.nonClickable.setOnClickListener(null);
         ivBack.setOnClickListener(this);
+        binding.btSubmit.setOnClickListener(this);
+        binding.edNewPassword.addTextChangedListener(new CustomTextWatcher(0, ChangePasswordActivity.this));
+        binding.edConfPassword.addTextChangedListener(new CustomTextWatcher(1, ChangePasswordActivity.this));
     }
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btSubmit:
+                if (binding.btSubmit.isButtonEnabled()) {
+                    validation();
+                }
+                break;
+        }
+    }
 
+    private void validation() {
+        if (TextUtils.isEmpty(newPassword)) {
+            binding.edNewPassword.setError(getResString(R.string.validation_new_password));
+            binding.edNewPassword.requestFocus();
+        } else if (TextUtils.isEmpty(confirmPassword)) {
+            binding.edConfPassword.setError(getResString(R.string.validation_c_password));
+            binding.edConfPassword.requestFocus();
+        } else if (!newPassword.equals(confirmPassword)) {
+            binding.edConfPassword.setError(getResString(R.string.validation_new_password_match));
+            binding.edConfPassword.requestFocus();
+        } else {
+            callApi(1);
+        }
     }
 
     @Override
@@ -81,7 +112,16 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
 
     @Override
     protected void callApi(int tag) {
-
+        if (isInternet) {
+            if (tag == 1) {
+                Utils.hideKeyBoardFromView(mContext);
+                binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
+                enableScreen(false);
+                apiController.getApiForgotPassword(loginParamBean);
+            }
+        } else {
+            Utils.showInternetMsg(mContext);
+        }
     }
 
     @Override
@@ -91,7 +131,14 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-
+        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
+        if (tag == ApiConst.FORGOT_PASSWORD && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+            Utils.toast(mContext,msg,false);
+            finish();
+        } else if (tag == ApiConst.FORGOT_PASSWORD && result == ApiConst.API_RESULT.FAIL) {
+            binding.btSubmit.showProgressBar(false, PROGRESS_TAG_0);
+            enableScreen(true);
+        }
     }
 
     @Override
@@ -107,5 +154,18 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
     @Override
     public void onPositiveClicked(String type) {
 
+    }
+
+    @Override
+    public void onTextChanged(int edTag, String text) {
+        switch (edTag) {
+            case 0:
+                newPassword = text;
+                loginParamBean.setPassword(newPassword);
+                break;
+            case 1:
+                confirmPassword = text;
+                break;
+        }
     }
 }

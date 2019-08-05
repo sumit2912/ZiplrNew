@@ -10,6 +10,7 @@ import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import io.reactivex.Single;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -42,5 +43,9 @@ public interface RetrofitApiService {
 
     //forgot password
     @POST(ApiConst.FORGOT_PASSWORD)
-    Single<Response<ResponseBean>> forgotPassword(@Body JsonObject jsonObject);
+    Single<Response<ResponseBean>> forgotPassword(@Body LoginParamBean loginParamBean);
+
+    //logout
+    @GET(ApiConst.LOGOUT)
+    Single<Response<ResponseBean>> logout();
 }

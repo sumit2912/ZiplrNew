@@ -14,20 +14,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
     private static final String TAG = "ServiceGenerator";
-    private static HttpLoggingInterceptor interceptor;
-    private static OkHttpClient.Builder httpClient;
 
     public static <S> S createService(Class<S> serviceClass, String baseUrl, String api) {
 
         Utils.print(TAG,"Request url = "+baseUrl+api);
-
-        if (interceptor == null) {
-            interceptor = new HttpLoggingInterceptor();
-        }
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        if (httpClient == null) {
-            httpClient = new OkHttpClient.Builder();
-        }
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addNetworkInterceptor(interceptor);
         if (!check(api)) {
             Utils.print("Access Token   ::::  " + MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN));

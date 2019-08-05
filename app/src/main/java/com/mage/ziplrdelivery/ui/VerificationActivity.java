@@ -12,6 +12,7 @@ import android.view.View;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Data;
+import com.mage.ziplrdelivery.common.MyTimerTask;
 import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.databinding.ActivityVerificationBinding;
@@ -20,8 +21,9 @@ import com.mage.ziplrdelivery.utils.constant.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 import java.util.Objects;
+import java.util.Timer;
 
-public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
+public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener, MyTimerTask.TaskListener {
 
     private static final String TAG = Screen.VERIFICATION_ACTIVITY;
     private ActivityVerificationBinding binding;
@@ -29,6 +31,9 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     private Intent changePasswordIntent, dashBoardIntent, passwordIntent;
     private String verifyOtp;
     private Result result;
+    private Timer timer;
+    private MyTimerTask myTimerTask;
+    private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,11 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
             VALUE_FP_CLICK = true;
         }
         if (dataIntent.hasExtra(KEY_RESULT_BEAN)) {
-            result = (Result) Objects.requireNonNull(dataIntent.getExtras()).getSerializable(KEY_RESULT_BEAN);
+            result = new Result();
+            Result tempResult = (Result) Objects.requireNonNull(dataIntent.getExtras()).getSerializable(KEY_RESULT_BEAN);
+            result.setPhoneNumber(tempResult.getPhoneNumber());
+            if(!VALUE_FP_CLICK)
+            result.setPassword(tempResult.getPassword());
         }
         initUi();
     }
@@ -79,9 +88,9 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
         binding.collapsingTl.setCollapsedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         binding.collapsingTl.setExpandedTitleTypeface(Typeface.createFromAsset(getAssets(), "font/ProximaNova-Bold.ttf"));
         ivBack.setOnClickListener(this);
-        enableResendButton(false);
         binding.edOtpView.addTextChangedListener(new CustomTextWatcher(0, this));
         binding.nonClickable.setOnClickListener(null);
+        initTimerTask();
     }
 
     @Override
@@ -91,7 +100,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                 onBackPressed();
                 break;
             case R.id.btResend:
-
+                callApi(2);
                 break;
         }
     }
@@ -111,9 +120,12 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
             Utils.hideKeyBoardFromView(mContext);
             if (tag == 1) {
                 enableScreen(false);
+                showProgressBar(true);
                 apiController.getApiVerification(result);
             } else if (tag == 2) {
-
+                enableScreen(false);
+                binding.btResend.showProgressBar(true,PROGRESS_TAG_0);
+                apiController.getApiSendOTP(result.getPhoneNumber());
             }
         } else {
             Utils.showInternetMsg(mContext);
@@ -127,27 +139,23 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
         if (tag == ApiConst.VERIFY_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-            if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY)) {
+            enableScreen(true);
+            showProgressBar(false);
+            if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY) && !VALUE_FP_CLICK) {
+                Result data = apiController.getResultData();
+                if (data != null) {
+                    Utils.storeLoginData(appManager, data);
+                }
                 if (dashBoardIntent == null)
                     dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);
                 startActivity(dashBoardIntent);
                 finishAffinity();
-            } else if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY) && VALUE_FP_CLICK) {
-                if (changePasswordIntent == null)
-                    changePasswordIntent = new Intent(VerificationActivity.this, ChangePasswordActivity.class);
-                startActivity(changePasswordIntent);
-                finish();
-            }
-            Result data = apiController.getResultData();
-            if (data != null) {
-                Utils.storeLoginData(appManager, data);
             }
         } else if (tag == ApiConst.VERIFY_OTP && result == ApiConst.API_RESULT.FAIL) {
-            if (status < 2) {
-                enableScreen(true);
-            }
+            enableScreen(true);
+            showProgressBar(false);
             if (status == 5) {
                 if (VALUE_FROM_ACTIVITY.equals(Screen.PASSWORD_ACTIVITY) && VALUE_FP_CLICK) {
                     if (changePasswordIntent == null)
@@ -162,6 +170,16 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
                     finish();
                 }
             }
+        }
+
+        if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
+            enableScreen(true);
+            binding.btResend.showProgressBar(false,PROGRESS_TAG_0);
+            Utils.toast(mContext, msg, false);
+            initTimerTask();
+        } else if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.FAIL) {
+            enableScreen(true);
+            binding.btResend.showProgressBar(false,PROGRESS_TAG_0);
         }
     }
 
@@ -181,6 +199,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
             case 0:
                 verifyOtp = String.valueOf(text);
                 if (verifyOtp.length() == 4) {
+                    result.setOtp(verifyOtp);
                     callApi(1);
                 }
                 break;
@@ -195,5 +214,31 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     @Override
     public void onPositiveClicked(String type) {
 
+    }
+
+    private void initTimerTask() {
+        enableResendButton(false);
+        counter = 30;
+        timer = new Timer();
+        myTimerTask = new MyTimerTask(VerificationActivity.this);
+        binding.tvTimer.setText("00:" + counter);
+        timer.schedule(myTimerTask, 0,1000);
+    }
+
+    @Override
+    public void updateUi() {
+        binding.tvTimer.post(() -> {
+            if (counter == 0) {
+                if (timer != null) {
+                    timer.cancel();
+                    timer = null;
+                    myTimerTask = null;
+                }
+                enableResendButton(true);
+            }
+            binding.tvTimer.setText("00:" + Utils.padInt(counter));
+            if (counter > 0)
+                counter--;
+        });
     }
 }
