@@ -73,10 +73,10 @@ public class ApiController {
         executeApi();
     }
 
-    public void getApiPhoneCheck(String phone_number) {
+    public void getApiPhoneCheck(LoginParamBean loginParamBean) {
         init();
         method = ApiConst.PHONE_CHECK;
-        jsonObject.addProperty("phone_number", phone_number);
+        jsonObject.addProperty("phone_number", loginParamBean.getPhone_number());
         observable = ApiHelper.getApiPhoneCheck(jsonObject);
         executeApi();
     }

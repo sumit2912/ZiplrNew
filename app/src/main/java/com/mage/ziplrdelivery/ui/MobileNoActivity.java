@@ -1,6 +1,8 @@
 package com.mage.ziplrdelivery.ui;
 
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,19 +21,29 @@ import com.mage.ziplrdelivery.param_model.LoginParamBean;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.viewmodel.LoginViewModel;
+import com.mage.ziplrdelivery.viewmodel.LoginViewModelFactory;
 
-public class MobileNoActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
+public class MobileNoActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<LoginParamBean> {
 
     private static final String TAG = Screen.MOBILE_NO_ACTIVITY;
     private ActivityMobileNoBinding binding;
     private AppCompatImageView ivBack;
     private Intent passwordIntent, registerIntent, verifyIntent;
     private String phoneNumber;
+    private LoginViewModelFactory viewModelFactory;
+    private LoginViewModel loginViewModel;
+    private LoginParamBean loginParamBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoginParamBean.getInstance().resetAll();
+        viewModelFactory = LoginViewModelFactory.provideViewModelFactory();
+        viewModelFactory.clearLoginViewModel();
+        loginViewModel = viewModelFactory.create(LoginViewModel.class);
+        binding.setLifecycleOwner(this);
+        binding.setLoginViewModel(loginViewModel);
+        loginViewModel.getLoginParamBean().observe(this, this);
         initUi();
     }
 
@@ -73,7 +85,6 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
         binding.tvCode.setText(getResources().getString(R.string.uk_country_code));
         binding.btNext.setOnClickListener(this);
         binding.nonClickable.setOnClickListener(null);
-        binding.edMobileNo.addTextChangedListener(new CustomTextWatcher(0, this));
     }
 
     @Override
@@ -84,7 +95,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 break;
             case R.id.btNext:
                 if (binding.btNext.isButtonEnabled()) {
-                    validation();
+                    loginViewModel.onClick(view);
                 }
                 break;
         }
@@ -102,6 +113,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 binding.edMobileNo.requestFocus();
                 break;
             default:
+                this.loginParamBean = loginParamBean;
                 callApi(1);
                 break;
 
@@ -124,7 +136,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 Utils.hideKeyBoardFromView(mContext);
                 binding.btNext.showProgressBar(true, PROGRESS_TAG_0);
                 enableScreen(false);
-                apiController.getApiPhoneCheck(phoneNumber);
+                apiController.getApiPhoneCheck(loginParamBean);
                 apiController.set0status(false);
             } else if (tag == 2) {
                 super.showProgressBar(true);
@@ -170,7 +182,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
             verifyIntent = new Intent(MobileNoActivity.this, VerificationActivity.class);
             Bundle bundle = new Bundle();
             Result data = new Result();
-            data.setPhoneNumber(phoneNumber);
+            data.setPhoneNumber(loginParamBean.getPhone_number());
             bundle.putSerializable(KEY_RESULT_BEAN, data);
             verifyIntent.putExtras(bundle);
             verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
@@ -184,14 +196,6 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     @Override
     public void onNewDataMessage(String from, String msg, Data data) {
 
-    }
-
-    @Override
-    public void onTextChanged(int edTag, String text) {
-        if (edTag == 0) {
-            phoneNumber = text;
-            LoginParamBean.getInstance().setPhone_number(phoneNumber);
-        }
     }
 
     @Override
@@ -210,6 +214,26 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
             case TYPE_NOT_VERIFIED:
                 callApi(2);
                 break;
+        }
+    }
+
+    @Override
+    public void onChanged(LoginParamBean loginParamBean) {
+        int error = loginParamBean.isValidPhoneNumber();
+        switch (error) {
+            case 0:
+                binding.edMobileNo.setError(getResString(R.string.validation_mobile_no));
+                binding.edMobileNo.requestFocus();
+                break;
+            case 1:
+                binding.edMobileNo.setError(getResString(R.string.validation_mobile_no_length).replace("0", "10"));
+                binding.edMobileNo.requestFocus();
+                break;
+            default:
+                this.loginParamBean = loginParamBean;
+                callApi(1);
+                break;
+
         }
     }
 }
