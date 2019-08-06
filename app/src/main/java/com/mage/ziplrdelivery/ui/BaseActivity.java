@@ -38,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected static final String KEY_FROM_ACTIVITY = "KEY_FROM_ACTIVITY";
     protected static final String KEY_FP_CLICK = "KEY_FP_CLICK";
     protected static final String KEY_RESULT_BEAN = "KEY_RESULT_BEAN";
+    protected static final String KEY_PHONE_NO = "KEY_PHONE_NO";
     protected final Handler handler = new Handler();
     protected String VALUE_FROM_ACTIVITY = null;
     protected boolean VALUE_FP_CLICK = false;

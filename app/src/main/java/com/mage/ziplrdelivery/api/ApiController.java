@@ -84,16 +84,17 @@ public class ApiController {
     public void getApiSendOTP(String phone_number) {
         init();
         method = ApiConst.SEND_OTP;
+        jsonObject.addProperty("country_code", "+91");
         jsonObject.addProperty("phone_number", phone_number);
         observable = ApiHelper.getApiSendOTP(jsonObject);
         executeApi();
     }
 
-    public void getApiLogin(LoginParamBean loginParamBean) {
+    public void getApiLogin() {
         init();
         method = ApiConst.LOGIN;
-        loginParamBean.printParams();
-        observable = ApiHelper.getApiLogin(loginParamBean);
+        LoginParamBean.getInstance().printParams();
+        observable = ApiHelper.getApiLogin();
         executeApi();
     }
 

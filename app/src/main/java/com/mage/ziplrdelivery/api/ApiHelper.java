@@ -41,9 +41,9 @@ public class ApiHelper {
         return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.SEND_OTP).sendOTP(jsonObject);
     }
 
-    public static Single<Response<ResponseBean>> getApiLogin(LoginParamBean loginParamBean) {
+    public static Single<Response<ResponseBean>> getApiLogin() {
         printParameters(null);
-        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.LOGIN).login(loginParamBean);
+        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.LOGIN).login(LoginParamBean.getInstance());
     }
 
     public static Single<Response<ResponseBean>> getApiForgotPassword(LoginParamBean loginParamBean) {

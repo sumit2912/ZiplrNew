@@ -2,7 +2,6 @@ package com.mage.ziplrdelivery.ui;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +17,10 @@ import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.databinding.ActivityMobileNoBinding;
 import com.mage.ziplrdelivery.param_model.LoginParamBean;
-import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
-import com.mage.ziplrdelivery.viewmodel.LoginViewModel;
 import com.mage.ziplrdelivery.viewmodel.LoginViewModelFactory;
+import com.mage.ziplrdelivery.viewmodel.MobileNoViewModel;
 
 public class MobileNoActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<LoginParamBean> {
 
@@ -30,20 +28,15 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     private ActivityMobileNoBinding binding;
     private AppCompatImageView ivBack;
     private Intent passwordIntent, registerIntent, verifyIntent;
-    private String phoneNumber;
-    private LoginViewModelFactory viewModelFactory;
-    private LoginViewModel loginViewModel;
-    private LoginParamBean loginParamBean;
+    private MobileNoViewModel mobileNoViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModelFactory = LoginViewModelFactory.provideViewModelFactory();
-        viewModelFactory.clearLoginViewModel();
-        loginViewModel = viewModelFactory.create(LoginViewModel.class);
+        mobileNoViewModel = LoginViewModelFactory.provideViewModelFactory().create(MobileNoViewModel.class);
         binding.setLifecycleOwner(this);
-        binding.setLoginViewModel(loginViewModel);
-        loginViewModel.getLoginParamBean().observe(this, this);
+        binding.setMobileNoViewModel(mobileNoViewModel);
+        mobileNoViewModel.getMobileNoLiveData().observe(this, this);
         initUi();
     }
 
@@ -95,28 +88,9 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 break;
             case R.id.btNext:
                 if (binding.btNext.isButtonEnabled()) {
-                    loginViewModel.onClick(view);
+                    mobileNoViewModel.onClick(view);
                 }
                 break;
-        }
-    }
-
-    private void validation() {
-        int error = LoginParamBean.getInstance().isValidPhoneNumber();
-        switch (error) {
-            case 0:
-                binding.edMobileNo.setError(getResString(R.string.validation_mobile_no));
-                binding.edMobileNo.requestFocus();
-                break;
-            case 1:
-                binding.edMobileNo.setError(getResString(R.string.validation_mobile_no_length).replace("0", "10"));
-                binding.edMobileNo.requestFocus();
-                break;
-            default:
-                this.loginParamBean = loginParamBean;
-                callApi(1);
-                break;
-
         }
     }
 
@@ -132,15 +106,16 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     @Override
     protected void callApi(int tag) {
         if (isInternet) {
+            LoginParamBean.getInstance().setPassword(null);
             if (tag == 1) {
                 Utils.hideKeyBoardFromView(mContext);
                 binding.btNext.showProgressBar(true, PROGRESS_TAG_0);
                 enableScreen(false);
-                apiController.getApiPhoneCheck(loginParamBean);
+                apiController.getApiPhoneCheck(LoginParamBean.getInstance());
                 apiController.set0status(false);
             } else if (tag == 2) {
                 super.showProgressBar(true);
-                apiController.getApiSendOTP(phoneNumber);
+                apiController.getApiSendOTP(LoginParamBean.getInstance().getPhone_number());
             }
         } else {
             Utils.showInternetMsg(mContext);
@@ -160,6 +135,8 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
             enableScreen(true);
             if (passwordIntent == null)
                 passwordIntent = new Intent(MobileNoActivity.this, PasswordActivity.class);
+                passwordIntent.putExtra(KEY_PHONE_NO,LoginParamBean.getInstance().getPhone_number());
+                Utils.print(TAG,"KEY_PHONE_NO = "+LoginParamBean.getInstance().getPhone_number());
             startActivity(passwordIntent);
         } else if (tag == ApiConst.PHONE_CHECK && result == ApiConst.API_RESULT.FAIL) {
             binding.btNext.showProgressBar(false, PROGRESS_TAG_0);
@@ -182,7 +159,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
             verifyIntent = new Intent(MobileNoActivity.this, VerificationActivity.class);
             Bundle bundle = new Bundle();
             Result data = new Result();
-            data.setPhoneNumber(loginParamBean.getPhone_number());
+            data.setPhoneNumber(LoginParamBean.getInstance().getPhone_number());
             bundle.putSerializable(KEY_RESULT_BEAN, data);
             verifyIntent.putExtras(bundle);
             verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
@@ -230,7 +207,6 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
                 binding.edMobileNo.requestFocus();
                 break;
             default:
-                this.loginParamBean = loginParamBean;
                 callApi(1);
                 break;
 

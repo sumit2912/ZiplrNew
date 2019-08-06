@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.lifecycle.Observer;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
@@ -17,25 +18,29 @@ import com.mage.ziplrdelivery.common.Screen;
 import com.mage.ziplrdelivery.data_model.Result;
 import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
 import com.mage.ziplrdelivery.param_model.LoginParamBean;
-import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.viewmodel.LoginViewModelFactory;
+import com.mage.ziplrdelivery.viewmodel.PasswordViewModel;
 
 import java.util.Objects;
 
-public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
+public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<LoginParamBean> {
 
     private static final String TAG = Screen.PASSWORD_ACTIVITY;
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
-    private LoginParamBean loginParamBean;
     private Intent verifyIntent, dashBoardIntent, registerIntent;
-    private String password;
+    private PasswordViewModel passwordViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loginParamBean = LoginParamBean.getInstance();
+        passwordViewModel = LoginViewModelFactory.provideViewModelFactory().create(PasswordViewModel.class);
+        binding.setLifecycleOwner(this);
+        binding.setPasswordViewModel(passwordViewModel);
+        passwordViewModel.getPasswordLiveData().observe(this, this);
+        Utils.print(TAG,"PhNO = "+LoginParamBean.getInstance().getPhone_number());
         initUi();
     }
 
@@ -77,7 +82,6 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
         binding.tvForgot.setOnClickListener(this);
         binding.btSubmit.setOnClickListener(this);
         binding.nonClickable.setOnClickListener(null);
-        binding.edPassword.addTextChangedListener(new CustomTextWatcher(0, this));
     }
 
     @Override
@@ -94,19 +98,9 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
                 break;
             case R.id.btSubmit:
                 if (binding.btSubmit.isButtonEnabled()) {
-                    validation();
+                    passwordViewModel.onClick(view);
                 }
                 break;
-        }
-    }
-
-    private void validation() {
-        int error = loginParamBean.isValidPassword();
-        if (error == 1) {
-            binding.edPassword.setError(getResString(R.string.validation_password));
-            binding.edPassword.requestFocus();
-        } else {
-            callApi(1);
         }
     }
 
@@ -126,11 +120,11 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
                 Utils.hideKeyBoardFromView(mContext);
                 enableScreen(false);
                 binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
-                apiController.getApiLogin(loginParamBean);
+                apiController.getApiLogin();
             } else if (tag == 2) {
                 enableScreen(false);
                 showProgressBar(true);
-                apiController.getApiSendOTP(loginParamBean.getPhone_number());
+                apiController.getApiSendOTP(LoginParamBean.getInstance().getPhone_number());
             }
         } else {
             Utils.showInternetMsg(mContext);
@@ -176,9 +170,8 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
             verifyIntent = new Intent(PasswordActivity.this, VerificationActivity.class);
             Bundle bundle = new Bundle();
             Result data = new Result();
-            Utils.print(TAG, "PhoneNo = " + loginParamBean.getPhone_number());
-            data.setPhoneNumber(loginParamBean.getPhone_number());
-            data.setPassword(password);
+            data.setPhoneNumber(LoginParamBean.getInstance().getPhone_number());
+            data.setPassword(LoginParamBean.getInstance().getPassword());
             bundle.putSerializable(KEY_RESULT_BEAN, data);
             verifyIntent.putExtras(bundle);
             verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
@@ -193,14 +186,6 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     @Override
     public void onNewDataMessage(String from, String msg, Data data) {
 
-    }
-
-    @Override
-    public void onTextChanged(int edTag, String text) {
-        if (edTag == 0) {
-            password = text;
-            loginParamBean.setPassword(password);
-        }
     }
 
     @Override
@@ -223,6 +208,17 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
             case TYPE_NOT_VERIFIED:
                 callApi(2);
                 break;
+        }
+    }
+
+    @Override
+    public void onChanged(LoginParamBean loginParamBean) {
+        int error = loginParamBean.isValidPassword();
+        if (error == 0) {
+            binding.edPassword.setError(getResString(R.string.validation_password));
+            binding.edPassword.requestFocus();
+        } else {
+            callApi(1);
         }
     }
 }

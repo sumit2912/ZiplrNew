@@ -39,14 +39,14 @@ public class LoginParamBean {
     public int isValidPhoneNumber() {
         if (TextUtils.isEmpty(getPhone_number()))
             return 0;
-        if (!(getPhone_number().length()==10))
+        if (!(getPhone_number().length() == 10))
             return 1;
         return -1;
     }
 
-    public int isValidPassword(){
+    public int isValidPassword() {
         if (TextUtils.isEmpty(getPassword()))
-            return 2;
+            return 0;
         return -1;
     }
 
@@ -54,12 +54,11 @@ public class LoginParamBean {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("phone_number = " + (getPhone_number() != null ? getPhone_number() : ""));
         stringBuilder.append("  password = " + (getPassword() != null ? getPassword() : ""));
-        Utils.print("LoginParamBean",String.valueOf(stringBuilder));
+        Utils.print("LoginParamBean", String.valueOf(stringBuilder));
     }
 
     public void resetAll() {
-        loginParamBean.setPhone_number(null);
-        loginParamBean.setPassword(null);
+        setPhone_number(null);
+        setPassword(null);
     }
-
 }

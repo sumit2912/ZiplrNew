@@ -17,7 +17,7 @@ public class RegistrationViewModel extends ViewModel {
 
     private MutableLiveData<RegistrationParamBean> registrationLiveData;
 
-    public MutableLiveData<RegistrationParamBean> getRegistrationParamBean() {
+    public MutableLiveData<RegistrationParamBean> getRegistrationLiveData() {
         if (registrationLiveData == null) {
             registrationLiveData = new MutableLiveData<>();
         }

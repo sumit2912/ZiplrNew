@@ -5,10 +5,9 @@
     tools:context=".ui.MobileNoActivity">
 
     <data>
-
         <variable
-            name="LoginViewModel"
-            type="com.mage.ziplrdelivery.viewmodel.LoginViewModel" />
+            name="MobileNoViewModel"
+            type="com.mage.ziplrdelivery.viewmodel.MobileNoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -136,7 +135,7 @@
                             android:layout_height="match_parent"
                             android:inputType="number"
                             android:maxLength="10"
-                            android:text="@={LoginViewModel.PhoneNumber}"
+                            android:text="@={MobileNoViewModel.PhoneNumber}"
                             app:custom_font="regular" />
 
                     </com.google.android.material.textfield.TextInputLayout>

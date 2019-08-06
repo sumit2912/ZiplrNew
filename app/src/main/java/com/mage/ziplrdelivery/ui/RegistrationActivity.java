@@ -39,7 +39,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
         registrationViewModel = ViewModelProviders.of(this).get(RegistrationViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setRegistrationViewModel(registrationViewModel);
-        registrationViewModel.getRegistrationParamBean().observe(this, this);
+        registrationViewModel.getRegistrationLiveData().observe(this, this);
         initUi();
     }
 
