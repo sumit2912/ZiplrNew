@@ -108,7 +108,7 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-
+        super.onResponse(tag,result,status,msg);
     }
 
     @Override

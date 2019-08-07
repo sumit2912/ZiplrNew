@@ -131,7 +131,7 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
+        super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.FORGOT_PASSWORD && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             Utils.toast(mContext,msg,false);
             finish();

@@ -138,7 +138,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
+        super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             Result data = apiController.getResultData();
             if (data != null) {

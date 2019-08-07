@@ -25,6 +25,7 @@ import com.mage.ziplrdelivery.common.AlertDialogManager;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.listener.ResponseListener;
 import com.mage.ziplrdelivery.utils.Utils;
+import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 import java.util.Objects;
 
@@ -134,5 +135,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             } else {
                 progressBar.setVisibility(View.GONE);
             }
+    }
+
+    @Override
+    public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
+        Utils.print(((AppCompatActivity)getContext()).getClass().getSimpleName(), "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
     }
 }

@@ -116,7 +116,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg =" + msg);
+        super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.SIGN_UP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             Utils.toast(mContext, msg, false);
             if (verificationIntent == null)

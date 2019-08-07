@@ -32,6 +32,9 @@ public class Result implements Serializable {
     @SerializedName("password")
     @Expose
     private String password;
+    @SerializedName("UserProfile")
+    @Expose
+    UserProfile userProfile;
 
     public String getName() {
         return name;
@@ -101,4 +104,14 @@ public class Result implements Serializable {
         Utils.print("VerifyOtpParams", "phone_number = " + getPhoneNumber() + "  otp = " + getOtp() + "  password = " + getPassword());
     }
     //SignUp Response===============================================================================End====================
+
+    //Profile Response=============================================================================start=======================
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
+    //Profile Response==============================================================================End=============================
 }

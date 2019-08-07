@@ -102,6 +102,7 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
+        super.onResponse(tag,result,status,msg);
 
     }
 

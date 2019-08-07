@@ -129,7 +129,7 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(TAG, "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
+        super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.PHONE_CHECK && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             binding.btNext.showProgressBar(false, PROGRESS_TAG_0);
             enableScreen(true);

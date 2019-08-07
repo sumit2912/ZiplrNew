@@ -61,6 +61,7 @@ public class ApiController {
         init();
         method = ApiConst.SIGN_UP;
         registrationParamBean.printParams();
+        registrationParamBean.setCountry_code("+91");  //========================== temp=====================================
         observable = ApiHelper.getApiSignUp(registrationParamBean);
         executeApi();
     }
@@ -84,7 +85,6 @@ public class ApiController {
     public void getApiSendOTP(String phone_number) {
         init();
         method = ApiConst.SEND_OTP;
-        jsonObject.addProperty("country_code", "+91");
         jsonObject.addProperty("phone_number", phone_number);
         observable = ApiHelper.getApiSendOTP(jsonObject);
         executeApi();
@@ -141,6 +141,9 @@ public class ApiController {
                                 MyApplication.getAppManager().prefSetStringValue(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
                                 Utils.print(TAG, "Generated Access Token   ::::  " +
                                         responseBean.getAuthToke().getTokenType() + " " + MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN));
+                            }
+                            if(result.getUserProfile() != null){
+
                             }
                             Utils.print("status = " + status + "    msg = " + msg);
                         } else {
