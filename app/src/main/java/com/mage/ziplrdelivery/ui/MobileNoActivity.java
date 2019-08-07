@@ -28,12 +28,15 @@ public class MobileNoActivity extends BaseActivity implements AppManager.DataMes
     private ActivityMobileNoBinding binding;
     private AppCompatImageView ivBack;
     private Intent passwordIntent, registerIntent, verifyIntent;
+    private LoginViewModelFactory viewModelFactory;
     private MobileNoViewModel mobileNoViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mobileNoViewModel = LoginViewModelFactory.provideViewModelFactory().create(MobileNoViewModel.class);
+        appManager.getLoginViewModelList().clear();
+        viewModelFactory = new LoginViewModelFactory(appManager.getLoginViewModelList());
+        mobileNoViewModel = viewModelFactory.create(MobileNoViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setMobileNoViewModel(mobileNoViewModel);
         mobileNoViewModel.getMobileNoLiveData().observe(this, this);

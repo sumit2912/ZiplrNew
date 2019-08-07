@@ -3,19 +3,14 @@ package com.mage.ziplrdelivery.viewmodel;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.util.HashMap;
 
 public class LoginViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    private static LoginViewModelFactory viewModelFactory;
-    final HashMap<String, ViewModel> viewModelHashMap = new HashMap<>();
+    private HashMap<String,ViewModel> viewModelHashMap;
 
-    public static LoginViewModelFactory provideViewModelFactory() {
-        if (viewModelFactory == null) {
-            viewModelFactory = new LoginViewModelFactory();
-        }
-        return viewModelFactory;
+    public LoginViewModelFactory(HashMap<String, ViewModel> viewModelHashMap) {
+        this.viewModelHashMap = viewModelHashMap;
     }
 
     @NonNull
@@ -32,6 +27,6 @@ public class LoginViewModelFactory extends ViewModelProvider.NewInstanceFactory 
             }
             return (T) viewModelHashMap.get(PasswordViewModel.class.getSimpleName());
         }
-        return null;
+        return super.create(modelClass);
     }
 }

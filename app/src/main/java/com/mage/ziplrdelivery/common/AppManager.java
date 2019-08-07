@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
 
 import com.mage.ziplrdelivery.utils.constant.PrefConst;
 import com.mage.ziplrdelivery.utils.Utils;
@@ -19,6 +20,7 @@ public class AppManager {
     private Context context;
     private HashMap<String, AppCompatActivity> activityList;
     private HashMap<String, DataMessageListener> dataMessageListenerList;
+    private HashMap<String, ViewModel> loginViewModelList;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
@@ -26,6 +28,7 @@ public class AppManager {
         this.context = mContext;
         activityList = new HashMap<>();
         dataMessageListenerList = new HashMap<>();
+        loginViewModelList = new HashMap<>();
         sharedPreferences = context.getSharedPreferences(PrefConst.PREF_FILE, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
@@ -106,6 +109,10 @@ public class AppManager {
         if (!dataMessageListenerList.containsKey(screen)) {
             dataMessageListenerList.put(screen, listener);
         }
+    }
+
+    public HashMap<String, ViewModel> getLoginViewModelList(){
+        return loginViewModelList;
     }
 
     public boolean sendDataMessage(String from, String to, String msg, Data data) {

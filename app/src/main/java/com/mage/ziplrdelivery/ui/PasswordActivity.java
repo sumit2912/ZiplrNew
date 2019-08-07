@@ -31,12 +31,15 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
     private Intent verifyIntent, dashBoardIntent, registerIntent;
+    private LoginViewModelFactory viewModelFactory;
     private PasswordViewModel passwordViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        passwordViewModel = LoginViewModelFactory.provideViewModelFactory().create(PasswordViewModel.class);
+        appManager.getLoginViewModelList().remove(PasswordViewModel.class.getSimpleName());
+        viewModelFactory = new LoginViewModelFactory(appManager.getLoginViewModelList());
+        passwordViewModel = viewModelFactory.create(PasswordViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setPasswordViewModel(passwordViewModel);
         passwordViewModel.getPasswordLiveData().observe(this, this);
