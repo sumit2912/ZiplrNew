@@ -34,10 +34,12 @@ public class ApiController {
     private boolean enable0status = true;
     private JsonObject jsonObject;
     private Single<Response<ResponseBean>> observable;
+    private Utils utils;
 
     public ApiController(Context caller, ResponseListener responseListener) {
         this.caller = caller;
         this.responseListener = responseListener;
+        utils = MyApplication.getAppManager().getUtils();
     }
 
     private void init() {
@@ -162,7 +164,7 @@ public class ApiController {
                                 Utils.print(this.getClass().getSimpleName(), elements[i].toString());
                             }
                         } catch (Exception exception) {
-                            Utils.print(this.getClass().getSimpleName(), exception);
+                            utils.print(this.getClass().getSimpleName(), exception);
                         }
                     }
                 });
@@ -179,17 +181,17 @@ public class ApiController {
                         responseListener.onResponse(method, ApiConst.API_RESULT.SUCCESS, status, msg);
                         Utils.print("responseListener == 1 = " + status);
                     } else if (status < 0) {
-                        Utils.toast(caller, msg, false);
+                        utils.toast(caller, msg, false);
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener < 0 = " + status);
                     } else if (status == 0) {
                         if (enable0status) {
-                            Utils.toast(caller, msg, false);
+                            utils.toast(caller, msg, false);
                         }
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener == 0 = " + status);
                     } else if (status == 2) {
-                        Utils.showSessionDialog(caller);
+                        utils.showSessionDialog(caller);
                         responseListener.onResponse(method, ApiConst.API_RESULT.FAIL, status, msg);
                         Utils.print("responseListener == 2 = " + status);
                     } else {
@@ -197,7 +199,7 @@ public class ApiController {
                         Utils.print("responseListener >2 = " + status);
                     }
                 } catch (Exception e) {
-                    Utils.print(this.getClass().getSimpleName() + " ::doCallBack:: Exception :: method = " + method, e);
+                    utils.print(this.getClass().getSimpleName() + " ::doCallBack:: Exception :: method = " + method, e);
                 }
             }
         });

@@ -29,6 +29,7 @@ import com.mage.ziplrdelivery.prefmanager.PrefManager;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.viewmodelfactory.ViewModelFactory;
 
 import java.util.Objects;
 
@@ -50,6 +51,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected AppManager appManager;
     protected PrefManager prefManager;
     protected ScreenHelper screenHelper;
+    protected ViewModelFactory viewModelFactory;
+    protected Utils utils;
     protected SingletonFactory singletonFactory;
     protected Context mContext;
     protected boolean disableClick;
@@ -74,6 +77,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         appManager = AppManager.getInstance(mContext);
         prefManager = appManager.getPrefManager();
         screenHelper = appManager.getScreenHelper();
+        viewModelFactory = screenHelper.getViewModelFactory();
+        utils = appManager.getUtils();
         singletonFactory = SingletonFactory.getInstance();
         screenHelper.addActivity((AppCompatActivity) getContext());
         screenHelper.addDataMessageListener(getContext().getClass().getSimpleName(), addDataMessageListener());
@@ -122,6 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onNetChange(boolean isInternet) {
+        utils.print("isInternet = "+isInternet);
         this.isInternet = isInternet;
         onInternetChange(isInternet);
     }
@@ -148,6 +154,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        Utils.print(((AppCompatActivity)getContext()).getClass().getSimpleName(), "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
+        utils.print(((AppCompatActivity)getContext()).getClass().getSimpleName(), "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
     }
 }

@@ -33,25 +33,25 @@ public class Utils {
     public static boolean DO_SOP = true;
 
     public static void print(String mesg) {
-        if (Utils.DO_SOP) {
+        if (DO_SOP) {
             System.out.println(mesg);
         }
     }
 
     public static void print(String title, String mesg) {
-        if (Utils.DO_SOP) {
-            Utils.print(title + " :: " + mesg);
+        if (DO_SOP) {
+            print(title + " :: " + mesg);
         }
     }
 
     public static void print(String title, Exception e) {
-        if (Utils.DO_SOP) {
+        if (DO_SOP) {
             System.out.println("=======================" + title + "===========================");
             e.printStackTrace();
         }
     }
 
-    public static void toast(Context context, String mgs, boolean isShort) {
+    public void toast(Context context, String mgs, boolean isShort) {
         View layoutValue = LayoutInflater.from(context).inflate(R.layout.toast, null);
         Toast toast = new Toast(context);
         toast.setDuration(isShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
@@ -61,11 +61,11 @@ public class Utils {
         toast.show();
     }
 
-    public static void showInternetMsg(Context context) {
+    public void showInternetMsg(Context context) {
         toast(context, context.getResources().getString(R.string.no_internet), false);
     }
 
-    public static String padInt(int i) {
+    public String padInt(int i) {
         if (i < 10) {
             return "0" + i;
         } else {
@@ -73,7 +73,7 @@ public class Utils {
         }
     }
 
-    public static void hideKeyBoardFromView(Context context) {
+    public void hideKeyBoardFromView(Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         // Find the currently focused view, so we can grab the correct window
         // token from it.
@@ -86,15 +86,15 @@ public class Utils {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static void showSessionDialog(final Context context) {
-        Utils.toast(context, context.getResources().getString(R.string.session_expired_please_login_again), false);
+    public void showSessionDialog(final Context context) {
+        toast(context, context.getResources().getString(R.string.session_expired_please_login_again), false);
         MyApplication.getAppManager().getPrefManager().clearAll();
         Intent i = new Intent(context, LoginMainActivity.class);
         ((Activity) context).finishAffinity();
         context.startActivity(i);
     }
 
-    public static char getChar(int length) {
+    public char getChar(int length) {
         return String.valueOf(length).charAt(0);
     }
 
@@ -105,13 +105,13 @@ public class Utils {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    public static float getFloatFromDimen(Context context, int dimen) {
+    public float getFloatFromDimen(Context context, int dimen) {
         TypedValue outValue = new TypedValue();
         context.getResources().getValue(dimen, outValue, true);
         return outValue.getFloat();
     }
 
-    public static void storeLoginData(AppManager appManager, Result data) {
+    public void storeLoginData(AppManager appManager, Result data) {
         PrefManager pm = appManager.getPrefManager();
         pm.setLong(PrefConst.PREF_USER_ID, data.getId());
         pm.setString(PrefConst.PREF_USER_NAME, data.getName());
@@ -121,7 +121,7 @@ public class Utils {
         pm.setString(PrefConst.PREF_USER_COUNTRY_CODE, data.getCountryCode());
     }
 
-    public static Result getLoginData(AppManager appManager) {
+    public Result getLoginData(AppManager appManager) {
         PrefManager pm = appManager.getPrefManager();
         Result result = new Result();
         result.setId(pm.getLong(PrefConst.PREF_USER_ID));
@@ -133,9 +133,9 @@ public class Utils {
         return result;
     }
 
-    public static void logoutFromApp(Context mContext) {
+    public void logoutFromApp(Context mContext) {
         PrefManager prefManager = (mContext == null) ? MyApplication.getAppManager().getPrefManager() : new AppManager(mContext).getPrefManager();
-        Utils.print("Clearing Token = " + prefManager.getString(PrefConst.PREF_ACCESS_TOKEN));
+        print("Clearing Token = " + prefManager.getString(PrefConst.PREF_ACCESS_TOKEN));
         prefManager.clearAll();
         mContext.startActivity(new Intent(mContext, LoginMainActivity.class));
         ((Activity) mContext).finishAffinity();
@@ -163,7 +163,6 @@ public class Utils {
 
         @Override
         protected void onPostExecute(Boolean internet) {
-            print("Utils", "internet = " + internet);
             netListener.onNetChange(internet);
         }
 

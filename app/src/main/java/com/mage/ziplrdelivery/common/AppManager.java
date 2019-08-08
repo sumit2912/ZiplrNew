@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.mage.ziplrdelivery.prefmanager.PrefConst;
 import com.mage.ziplrdelivery.prefmanager.PrefManager;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
+import com.mage.ziplrdelivery.utils.Utils;
 
 
 public class AppManager {
@@ -15,6 +16,7 @@ public class AppManager {
     private SharedPreferences.Editor editor;
     private PrefManager prefManager;
     private ScreenHelper screenHelper;
+    private Utils utils;
 
     public AppManager(Context mContext) {
         this.context = mContext;
@@ -22,6 +24,7 @@ public class AppManager {
         editor = sharedPreferences.edit();
         prefManager = new PrefManager(sharedPreferences,editor);
         screenHelper = new ScreenHelper();
+        utils = new Utils();
     }
 
     public static AppManager getInstance(Context mContext) {
@@ -38,4 +41,6 @@ public class AppManager {
     public ScreenHelper getScreenHelper(){
         return this.screenHelper;
     }
+
+    public Utils getUtils(){return utils;}
 }

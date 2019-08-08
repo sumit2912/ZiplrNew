@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.model.data.Result;
@@ -20,7 +19,6 @@ import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.api.ApiConst;
-import com.mage.ziplrdelivery.viewmodelfactory.ViewModelFactory;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.MobileNoViewModel;
 
 public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<LoginParamBean> {
@@ -29,7 +27,6 @@ public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataM
     private ActivityMobileNoBinding binding;
     private AppCompatImageView ivBack;
     private Intent passwordIntent, registerIntent, verifyIntent;
-    private ViewModelFactory viewModelFactory;
     private MobileNoViewModel mobileNoViewModel;
     private LoginParamBean loginParamBean;
 
@@ -38,7 +35,6 @@ public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataM
         super.onCreate(savedInstanceState);
         loginParamBean = singletonFactory.getLoginParamBean();
         screenHelper.getViewModelList().clear();
-        viewModelFactory = new ViewModelFactory(screenHelper.getViewModelList(),screenHelper.getViewModelDestroyerList());
         mobileNoViewModel = viewModelFactory.create(MobileNoViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setMobileNoViewModel(mobileNoViewModel);
@@ -114,7 +110,7 @@ public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataM
         if (isInternet) {
             loginParamBean.setPassword(null);
             if (tag == 1) {
-                Utils.hideKeyBoardFromView(mContext);
+                utils.hideKeyBoardFromView(mContext);
                 binding.btNext.showProgressBar(true, PROGRESS_TAG_0);
                 enableScreen(false);
                 apiController.getApiPhoneCheck(loginParamBean);
@@ -124,7 +120,7 @@ public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataM
                 apiController.getApiSendOTP(loginParamBean.getPhone_number());
             }
         } else {
-            Utils.showInternetMsg(mContext);
+            utils.showInternetMsg(mContext);
         }
     }
 
@@ -159,7 +155,7 @@ public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataM
         }
 
         if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-            Utils.toast(mContext, msg, false);
+            utils.toast(mContext, msg, false);
             enableScreen(true);
             super.showProgressBar(false);
             verifyIntent = new Intent(MobileNoActivity.this, VerificationActivity.class);

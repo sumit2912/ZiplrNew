@@ -11,7 +11,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.Observer;
 
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityRegistrationBinding;
@@ -20,7 +19,6 @@ import com.mage.ziplrdelivery.api.ApiConst;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.RegistrationViewModel;
-import com.mage.ziplrdelivery.viewmodelfactory.ViewModelFactory;
 
 import java.util.Objects;
 
@@ -30,7 +28,6 @@ public class RegistrationActivity extends BaseActivity implements ScreenHelper.D
     private static final String TAG = Screen.REGISTRATION_ACTIVITY;
     private ActivityRegistrationBinding binding;
     private AppCompatImageView ivBack;
-    private ViewModelFactory viewModelFactory;
     private RegistrationViewModel registrationViewModel;
     private Intent verificationIntent;
     private RegistrationParamBean registrationParamBean;
@@ -38,7 +35,6 @@ public class RegistrationActivity extends BaseActivity implements ScreenHelper.D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModelFactory = new ViewModelFactory(screenHelper.getViewModelList(), screenHelper.getViewModelDestroyerList());
         registrationViewModel = viewModelFactory.create(RegistrationViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setRegistrationViewModel(registrationViewModel);
@@ -100,7 +96,7 @@ public class RegistrationActivity extends BaseActivity implements ScreenHelper.D
     protected void callApi(int tag) {
         if (isInternet) {
             if (tag == 1) {
-                Utils.hideKeyBoardFromView(mContext);
+                utils.hideKeyBoardFromView(mContext);
                 if (registrationParamBean != null) {
                     binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
                     enableScreen(false);
@@ -108,7 +104,7 @@ public class RegistrationActivity extends BaseActivity implements ScreenHelper.D
                 }
             }
         } else {
-            Utils.showInternetMsg(mContext);
+            utils.showInternetMsg(mContext);
         }
     }
 
@@ -121,7 +117,7 @@ public class RegistrationActivity extends BaseActivity implements ScreenHelper.D
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
         super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.SIGN_UP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-            Utils.toast(mContext, msg, false);
+            utils.toast(mContext, msg, false);
             if (verificationIntent == null)
                 verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
             verificationIntent.putExtra(KEY_FROM_ACTIVITY, TAG);

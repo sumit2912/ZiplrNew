@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityDashBoardBinding;
-import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.api.ApiConst;
@@ -52,7 +50,7 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     protected void initUi() {
         binding.nonClickable.setOnClickListener(null);
         binding.btLogout.setOnClickListener(this);
-        Result data = Utils.getLoginData(appManager);
+        Result data = utils.getLoginData(appManager);
         if (data != null) {
             binding.tvTemp.setText("User_Id = " + data.getId() + "\nName = " + data.getName() + "\nEmail = " + data.getEmail() + "\nMobile No = "
                     + data.getCountryCode() + data.getPhoneNumber() + "\nImage_Url = " + data.getAvatarUrl());
@@ -89,7 +87,7 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
                 apiController.set0status(false);
             }
         } else {
-            Utils.showInternetMsg(mContext);
+            utils.showInternetMsg(mContext);
         }
     }
 
@@ -102,7 +100,7 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
         super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.LOGOUT && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-            Utils.logoutFromApp(mContext);
+            utils.logoutFromApp(mContext);
         } else if (tag == ApiConst.LOGOUT && result == ApiConst.API_RESULT.FAIL) {
             enableScreen(true);
             binding.btLogout.showProgressBar(false, PROGRESS_TAG_0);

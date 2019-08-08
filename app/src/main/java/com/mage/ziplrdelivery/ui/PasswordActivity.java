@@ -12,7 +12,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.Observer;
 
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.model.data.Result;
@@ -21,7 +20,6 @@ import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.api.ApiConst;
-import com.mage.ziplrdelivery.viewmodelfactory.ViewModelFactory;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.PasswordViewModel;
 
 import java.util.Objects;
@@ -32,7 +30,6 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
     private Intent verifyIntent, dashBoardIntent, registerIntent;
-    private ViewModelFactory viewModelFactory;
     private PasswordViewModel passwordViewModel;
     private LoginParamBean loginParamBean;
 
@@ -41,12 +38,11 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
         super.onCreate(savedInstanceState);
         loginParamBean = singletonFactory.getLoginParamBean();
         screenHelper.getViewModelList().remove(PasswordViewModel.class.getSimpleName());
-        viewModelFactory = new ViewModelFactory(screenHelper.getViewModelList(), screenHelper.getViewModelDestroyerList());
         passwordViewModel = viewModelFactory.create(PasswordViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setPasswordViewModel(passwordViewModel);
         passwordViewModel.getPasswordLiveData().observe(this, this);
-        Utils.print(TAG,"PhNO = "+loginParamBean.getPhone_number());
+        utils.print(TAG,"PhNO = "+loginParamBean.getPhone_number());
         initUi();
     }
 
@@ -123,7 +119,7 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
     protected void callApi(int tag) {
         if (isInternet) {
             if (tag == 1) {
-                Utils.hideKeyBoardFromView(mContext);
+                utils.hideKeyBoardFromView(mContext);
                 enableScreen(false);
                 binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
                 apiController.getApiLogin();
@@ -133,7 +129,7 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
                 apiController.getApiSendOTP(loginParamBean.getPhone_number());
             }
         } else {
-            Utils.showInternetMsg(mContext);
+            utils.showInternetMsg(mContext);
         }
     }
 
@@ -148,7 +144,7 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
         if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             Result data = apiController.getResultData();
             if (data != null) {
-                Utils.storeLoginData(appManager, data);
+                utils.storeLoginData(appManager, data);
             }
             if (dashBoardIntent == null)
                 dashBoardIntent = new Intent(PasswordActivity.this, DashBoardActivity.class);
@@ -170,7 +166,7 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
         }
 
         if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-            Utils.toast(mContext, msg, false);
+            utils.toast(mContext, msg, false);
             enableScreen(true);
             super.showProgressBar(false);
             verifyIntent = new Intent(PasswordActivity.this, VerificationActivity.class);

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 
 import com.mage.ziplrdelivery.utils.Utils;
+import com.mage.ziplrdelivery.viewmodelfactory.ViewModelFactory;
 
 import java.util.HashMap;
 
@@ -15,12 +16,14 @@ public class ScreenHelper {
     private HashMap<String, DataMessageListener> dataMessageListenerList;
     private HashMap<String, ViewModel> viewModelList;
     private HashMap<String, String> viewModelDestroyerList;
+    private ViewModelFactory viewModelFactory;
 
     public ScreenHelper(){
         activityList = new HashMap<>();
         dataMessageListenerList = new HashMap<>();
         viewModelList = new HashMap<>();
         viewModelDestroyerList = new HashMap<>();
+        viewModelFactory = new ViewModelFactory(viewModelList,viewModelDestroyerList);
     }
 
     public void addActivity(AppCompatActivity activity) {
@@ -45,6 +48,10 @@ public class ScreenHelper {
 
     public HashMap<String, String> getViewModelDestroyerList(){
         return viewModelDestroyerList;
+    }
+
+    public ViewModelFactory getViewModelFactory(){
+        return viewModelFactory;
     }
 
     public boolean sendDataMessage(String from, String to, String msg, Data data) {

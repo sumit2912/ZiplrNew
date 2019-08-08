@@ -114,13 +114,13 @@ public class ChangePasswordActivity extends BaseActivity implements ScreenHelper
     protected void callApi(int tag) {
         if (isInternet) {
             if (tag == 1) {
-                Utils.hideKeyBoardFromView(mContext);
+                utils.hideKeyBoardFromView(mContext);
                 binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
                 enableScreen(false);
                 apiController.getApiForgotPassword(loginParamBean);
             }
         } else {
-            Utils.showInternetMsg(mContext);
+            utils.showInternetMsg(mContext);
         }
     }
 
@@ -133,7 +133,7 @@ public class ChangePasswordActivity extends BaseActivity implements ScreenHelper
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
         super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.FORGOT_PASSWORD && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-            Utils.toast(mContext,msg,false);
+            utils.toast(mContext,msg,false);
             finish();
         } else if (tag == ApiConst.FORGOT_PASSWORD && result == ApiConst.API_RESULT.FAIL) {
             binding.btSubmit.showProgressBar(false, PROGRESS_TAG_0);

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.databinding.ActivitySplashBinding;

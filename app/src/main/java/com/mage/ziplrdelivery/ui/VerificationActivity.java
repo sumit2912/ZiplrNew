@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.common.MyTimerTask;
 import com.mage.ziplrdelivery.screen.Screen;
@@ -118,7 +117,7 @@ public class VerificationActivity extends BaseActivity implements ScreenHelper.D
     @Override
     protected void callApi(int tag) {
         if (isInternet) {
-            Utils.hideKeyBoardFromView(mContext);
+            utils.hideKeyBoardFromView(mContext);
             if (tag == 1) {
                 enableScreen(false);
                 showProgressBar(true);
@@ -129,7 +128,7 @@ public class VerificationActivity extends BaseActivity implements ScreenHelper.D
                 apiController.getApiSendOTP(result.getPhoneNumber());
             }
         } else {
-            Utils.showInternetMsg(mContext);
+            utils.showInternetMsg(mContext);
         }
     }
 
@@ -147,7 +146,7 @@ public class VerificationActivity extends BaseActivity implements ScreenHelper.D
             if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY) && !VALUE_FP_CLICK) {
                 Result data = apiController.getResultData();
                 if (data != null) {
-                    Utils.storeLoginData(appManager, data);
+                    utils.storeLoginData(appManager, data);
                 }
                 if (dashBoardIntent == null)
                     dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);
@@ -176,7 +175,7 @@ public class VerificationActivity extends BaseActivity implements ScreenHelper.D
         if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             enableScreen(true);
             binding.btResend.showProgressBar(false,PROGRESS_TAG_0);
-            Utils.toast(mContext, msg, false);
+            utils.toast(mContext, msg, false);
             initTimerTask();
         } else if (tag == ApiConst.SEND_OTP && result == ApiConst.API_RESULT.FAIL) {
             enableScreen(true);
@@ -190,7 +189,7 @@ public class VerificationActivity extends BaseActivity implements ScreenHelper.D
     }
 
     private void enableResendButton(boolean enable) {
-        binding.btResend.setAlpha(Utils.getFloatFromDimen(VerificationActivity.this, enable ? R.dimen.selected_bt_alpha : R.dimen.unselected_bt_alpha));
+        binding.btResend.setAlpha(utils.getFloatFromDimen(VerificationActivity.this, enable ? R.dimen.selected_bt_alpha : R.dimen.unselected_bt_alpha));
         binding.btResend.setOnClickListener(enable ? this : null);
     }
 
@@ -237,7 +236,7 @@ public class VerificationActivity extends BaseActivity implements ScreenHelper.D
                 }
                 enableResendButton(true);
             }
-            binding.tvTimer.setText("00:" + Utils.padInt(counter));
+            binding.tvTimer.setText("00:" + utils.padInt(counter));
             if (counter > 0)
                 counter--;
         });
