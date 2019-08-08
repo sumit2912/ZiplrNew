@@ -1,4 +1,6 @@
-package com.mage.ziplrdelivery.utils.constant;
+package com.mage.ziplrdelivery.prefmanager;
+
+import com.mage.ziplrdelivery.utils.Const;
 
 public class PrefConst {
 

@@ -1,4 +1,4 @@
-package com.mage.ziplrdelivery.param_model;
+package com.mage.ziplrdelivery.model.param;
 
 import android.text.TextUtils;
 import android.util.Patterns;

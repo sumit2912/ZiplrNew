@@ -7,7 +7,7 @@
     <data>
         <variable
             name="MobileNoViewModel"
-            type="com.mage.ziplrdelivery.viewmodel.MobileNoViewModel" />
+            type="com.mage.ziplrdelivery.viewmodelfactory.viewmodel.MobileNoViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

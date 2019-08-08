@@ -2,21 +2,18 @@ package com.mage.ziplrdelivery.api;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.data_model.ResponseBean;
-import com.mage.ziplrdelivery.data_model.Result;
+import com.mage.ziplrdelivery.model.SingletonFactory;
+import com.mage.ziplrdelivery.model.data.ResponseBean;
+import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.listener.ResponseListener;
-import com.mage.ziplrdelivery.param_model.LoginParamBean;
-import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
-import com.mage.ziplrdelivery.retrofit.RetrofitApiService;
-import com.mage.ziplrdelivery.retrofit.ServiceGenerator;
+import com.mage.ziplrdelivery.model.param.LoginParamBean;
+import com.mage.ziplrdelivery.model.param.RegistrationParamBean;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
-import com.mage.ziplrdelivery.utils.constant.PrefConst;
+import com.mage.ziplrdelivery.prefmanager.PrefConst;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -93,7 +90,7 @@ public class ApiController {
     public void getApiLogin() {
         init();
         method = ApiConst.LOGIN;
-        LoginParamBean.getInstance().printParams();
+        SingletonFactory.getInstance().getLoginParamBean().printParams();
         observable = ApiHelper.getApiLogin();
         executeApi();
     }
@@ -138,9 +135,9 @@ public class ApiController {
                                 Utils.print(TAG, "OTP = " + result.getOtp());
                             }
                             if (responseBean.getAuthToke() != null) {
-                                MyApplication.getAppManager().prefSetStringValue(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
+                                MyApplication.getAppManager().getPrefManager().setString(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
                                 Utils.print(TAG, "Generated Access Token   ::::  " +
-                                        responseBean.getAuthToke().getTokenType() + " " + MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN));
+                                        responseBean.getAuthToke().getTokenType() + " " + MyApplication.getAppManager().getPrefManager().getString(PrefConst.PREF_ACCESS_TOKEN));
                             }
                             if(result.getUserProfile() != null){
 

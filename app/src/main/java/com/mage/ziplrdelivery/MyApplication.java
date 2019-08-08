@@ -44,7 +44,7 @@ public class MyApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        appManager.clearAllList();
+        appManager.getPrefManager().clearAll();
         unregisterReceiver(networkChangeReceiver);
     }
 }

@@ -1,11 +1,12 @@
-package com.mage.ziplrdelivery.viewmodel;
+package com.mage.ziplrdelivery.viewmodelfactory.viewmodel;
 
 import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.mage.ziplrdelivery.param_model.LoginParamBean;
+import com.mage.ziplrdelivery.model.SingletonFactory;
+import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.utils.Utils;
 
 public class PasswordViewModel extends ViewModel {
@@ -21,8 +22,8 @@ public class PasswordViewModel extends ViewModel {
     }
 
     public void onClick(View view) {
-        LoginParamBean.getInstance().setPassword(Password.getValue());
-        passwordLiveData.setValue(LoginParamBean.getInstance());
+        SingletonFactory.getInstance().getLoginParamBean().setPassword(Password.getValue());
+        passwordLiveData.setValue(SingletonFactory.getInstance().getLoginParamBean());
         Utils.print("PasswordViewModel","Password = "+Password.getValue());
     }
 }

@@ -1,11 +1,11 @@
-package com.mage.ziplrdelivery.viewmodel;
+package com.mage.ziplrdelivery.viewmodelfactory.viewmodel;
 
 import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
+import com.mage.ziplrdelivery.model.param.RegistrationParamBean;
 
 public class RegistrationViewModel extends ViewModel {
     public MutableLiveData<String> Name = new MutableLiveData<>();

@@ -1,11 +1,12 @@
-package com.mage.ziplrdelivery.viewmodel;
+package com.mage.ziplrdelivery.viewmodelfactory.viewmodel;
 
 import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.mage.ziplrdelivery.param_model.LoginParamBean;
+import com.mage.ziplrdelivery.model.SingletonFactory;
+import com.mage.ziplrdelivery.model.param.LoginParamBean;
 
 public class MobileNoViewModel extends ViewModel {
     public MutableLiveData<String> PhoneNumber = new MutableLiveData<>();
@@ -20,7 +21,7 @@ public class MobileNoViewModel extends ViewModel {
     }
 
     public void onClick(View view) {
-        LoginParamBean.getInstance().setPhone_number(PhoneNumber.getValue());
-        mobileNoLiveData.setValue(LoginParamBean.getInstance());
+        SingletonFactory.getInstance().getLoginParamBean().setPhone_number(PhoneNumber.getValue());
+        mobileNoLiveData.setValue(SingletonFactory.getInstance().getLoginParamBean());
     }
 }

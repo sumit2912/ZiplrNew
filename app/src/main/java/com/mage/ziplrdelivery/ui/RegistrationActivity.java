@@ -9,26 +9,28 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.common.Screen;
+import com.mage.ziplrdelivery.screen.Data;
+import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityRegistrationBinding;
-import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.model.param.RegistrationParamBean;
+import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.viewmodel.RegistrationViewModel;
+import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.RegistrationViewModel;
+import com.mage.ziplrdelivery.viewmodelfactory.ViewModelFactory;
 
 import java.util.Objects;
 
 
-public class RegistrationActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<RegistrationParamBean> {
+public class RegistrationActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<RegistrationParamBean> {
 
     private static final String TAG = Screen.REGISTRATION_ACTIVITY;
     private ActivityRegistrationBinding binding;
     private AppCompatImageView ivBack;
+    private ViewModelFactory viewModelFactory;
     private RegistrationViewModel registrationViewModel;
     private Intent verificationIntent;
     private RegistrationParamBean registrationParamBean;
@@ -36,7 +38,8 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registrationViewModel = ViewModelProviders.of(this).get(RegistrationViewModel.class);
+        viewModelFactory = new ViewModelFactory(screenHelper.getViewModelList(), screenHelper.getViewModelDestroyerList());
+        registrationViewModel = viewModelFactory.create(RegistrationViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setRegistrationViewModel(registrationViewModel);
         registrationViewModel.getRegistrationLiveData().observe(this, this);
@@ -60,7 +63,7 @@ public class RegistrationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
-    protected AppManager.DataMessageListener addDataMessageListener() {
+    protected ScreenHelper.DataMessageListener addDataMessageListener() {
         return RegistrationActivity.this;
     }
 

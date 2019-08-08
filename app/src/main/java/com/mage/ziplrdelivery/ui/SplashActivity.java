@@ -7,14 +7,15 @@ import android.view.View;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.common.Screen;
+import com.mage.ziplrdelivery.screen.Data;
+import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.databinding.ActivitySplashBinding;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.PrefConst;
+import com.mage.ziplrdelivery.prefmanager.PrefConst;
 
-public class SplashActivity extends BaseActivity implements AppManager.DataMessageListener {
+public class SplashActivity extends BaseActivity implements ScreenHelper.DataMessageListener {
 
     private static final String TAG = Screen.SPLASH_ACTIVITY;
     Runnable runnable;
@@ -45,7 +46,7 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
     }
 
     @Override
-    protected AppManager.DataMessageListener addDataMessageListener() {
+    protected ScreenHelper.DataMessageListener addDataMessageListener() {
         return SplashActivity.this;
     }
 
@@ -53,7 +54,7 @@ public class SplashActivity extends BaseActivity implements AppManager.DataMessa
     protected void initUi() {
         binding.nonClickable.setOnClickListener(null);
         runnable = () -> {
-            if (appManager.prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN).isEmpty()) {
+            if (appManager.getPrefManager().getString(PrefConst.PREF_ACCESS_TOKEN).isEmpty()) {
                 goIntent = new Intent(SplashActivity.this, LoginMainActivity.class);
             } else {
                 goIntent = new Intent(SplashActivity.this, DashBoardActivity.class);

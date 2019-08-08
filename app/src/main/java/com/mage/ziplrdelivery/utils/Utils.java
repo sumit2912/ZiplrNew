@@ -18,9 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.data_model.Result;
+import com.mage.ziplrdelivery.model.data.Result;
+import com.mage.ziplrdelivery.prefmanager.PrefConst;
+import com.mage.ziplrdelivery.prefmanager.PrefManager;
 import com.mage.ziplrdelivery.ui.LoginMainActivity;
-import com.mage.ziplrdelivery.utils.constant.PrefConst;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -86,10 +87,10 @@ public class Utils {
     }
 
     public static void showSessionDialog(final Context context) {
-        Utils.toast(context,context.getResources().getString(R.string.session_expired_please_login_again),false);
-        MyApplication.getAppManager().prefClearAll();
+        Utils.toast(context, context.getResources().getString(R.string.session_expired_please_login_again), false);
+        MyApplication.getAppManager().getPrefManager().clearAll();
         Intent i = new Intent(context, LoginMainActivity.class);
-        ((Activity)context).finishAffinity();
+        ((Activity) context).finishAffinity();
         context.startActivity(i);
     }
 
@@ -108,6 +109,36 @@ public class Utils {
         TypedValue outValue = new TypedValue();
         context.getResources().getValue(dimen, outValue, true);
         return outValue.getFloat();
+    }
+
+    public static void storeLoginData(AppManager appManager, Result data) {
+        PrefManager pm = appManager.getPrefManager();
+        pm.setLong(PrefConst.PREF_USER_ID, data.getId());
+        pm.setString(PrefConst.PREF_USER_NAME, data.getName());
+        pm.setString(PrefConst.PREF_USER_EMAIL, data.getEmail());
+        pm.setString(PrefConst.PREF_USER_AVATAR_URL, data.getAvatarUrl());
+        pm.setString(PrefConst.PREF_USER_PHONE_NUMBER, data.getPhoneNumber());
+        pm.setString(PrefConst.PREF_USER_COUNTRY_CODE, data.getCountryCode());
+    }
+
+    public static Result getLoginData(AppManager appManager) {
+        PrefManager pm = appManager.getPrefManager();
+        Result result = new Result();
+        result.setId(pm.getLong(PrefConst.PREF_USER_ID));
+        result.setName(pm.getString(PrefConst.PREF_USER_NAME));
+        result.setEmail(pm.getString(PrefConst.PREF_USER_EMAIL));
+        result.setAvatarUrl(pm.getString(PrefConst.PREF_USER_AVATAR_URL));
+        result.setPhoneNumber(pm.getString(PrefConst.PREF_USER_PHONE_NUMBER));
+        result.setCountryCode(pm.getString(PrefConst.PREF_USER_COUNTRY_CODE));
+        return result;
+    }
+
+    public static void logoutFromApp(Context mContext) {
+        PrefManager prefManager = (mContext == null) ? MyApplication.getAppManager().getPrefManager() : new AppManager(mContext).getPrefManager();
+        Utils.print("Clearing Token = " + prefManager.getString(PrefConst.PREF_ACCESS_TOKEN));
+        prefManager.clearAll();
+        mContext.startActivity(new Intent(mContext, LoginMainActivity.class));
+        ((Activity) mContext).finishAffinity();
     }
 
     public static class InternetCheck extends AsyncTask<Void, Void, Boolean> {
@@ -139,32 +170,5 @@ public class Utils {
         public interface NetListener {
             void onNetChange(boolean isInternet);
         }
-    }
-
-    public static void storeLoginData(AppManager appManager, Result data) {
-        appManager.prefSetLongValue(PrefConst.PREF_USER_ID,data.getId());
-        appManager.prefSetStringValue(PrefConst.PREF_USER_NAME,data.getName());
-        appManager.prefSetStringValue(PrefConst.PREF_USER_EMAIL,data.getEmail());
-        appManager.prefSetStringValue(PrefConst.PREF_USER_AVATAR_URL,data.getAvatarUrl());
-        appManager.prefSetStringValue(PrefConst.PREF_USER_PHONE_NUMBER,data.getPhoneNumber());
-        appManager.prefSetStringValue(PrefConst.PREF_USER_COUNTRY_CODE,data.getCountryCode());
-    }
-
-    public static Result getLoginData(AppManager appManager){
-        Result result = new Result();
-        result.setId(appManager.prefGetLongValue(PrefConst.PREF_USER_ID));
-        result.setName(appManager.prefGetStringValue(PrefConst.PREF_USER_NAME));
-        result.setEmail(appManager.prefGetStringValue(PrefConst.PREF_USER_EMAIL));
-        result.setAvatarUrl(appManager.prefGetStringValue(PrefConst.PREF_USER_AVATAR_URL));
-        result.setPhoneNumber(appManager.prefGetStringValue(PrefConst.PREF_USER_PHONE_NUMBER));
-        result.setCountryCode(appManager.prefGetStringValue(PrefConst.PREF_USER_COUNTRY_CODE));
-        return result;
-    }
-
-    public static void logoutFromApp(Context mContext) {
-        MyApplication.getAppManager().prefClearAll();
-        Utils.print("Clear Token = "+MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN));
-        mContext.startActivity(new Intent(mContext,LoginMainActivity.class));
-        ((Activity)mContext).finishAffinity();
     }
 }

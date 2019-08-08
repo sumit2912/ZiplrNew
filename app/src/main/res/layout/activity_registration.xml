@@ -8,7 +8,7 @@
 
         <variable
             name="RegistrationViewModel"
-            type="com.mage.ziplrdelivery.viewmodel.RegistrationViewModel" />
+            type="com.mage.ziplrdelivery.viewmodelfactory.viewmodel.RegistrationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

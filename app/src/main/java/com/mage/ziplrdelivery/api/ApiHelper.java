@@ -1,14 +1,14 @@
 package com.mage.ziplrdelivery.api;
 
 import com.google.gson.JsonObject;
-import com.mage.ziplrdelivery.data_model.ResponseBean;
-import com.mage.ziplrdelivery.data_model.Result;
-import com.mage.ziplrdelivery.param_model.LoginParamBean;
-import com.mage.ziplrdelivery.param_model.RegistrationParamBean;
+import com.mage.ziplrdelivery.model.SingletonFactory;
+import com.mage.ziplrdelivery.model.data.ResponseBean;
+import com.mage.ziplrdelivery.model.data.Result;
+import com.mage.ziplrdelivery.model.param.LoginParamBean;
+import com.mage.ziplrdelivery.model.param.RegistrationParamBean;
 import com.mage.ziplrdelivery.retrofit.RetrofitApiService;
 import com.mage.ziplrdelivery.retrofit.ServiceGenerator;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
 
 import io.reactivex.Single;
 import retrofit2.Response;
@@ -43,7 +43,7 @@ public class ApiHelper {
 
     public static Single<Response<ResponseBean>> getApiLogin() {
         printParameters(null);
-        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.LOGIN).login(LoginParamBean.getInstance());
+        return ServiceGenerator.createService(RetrofitApiService.class, ApiConst.API_HOST, ApiConst.LOGIN).login(SingletonFactory.getInstance().getLoginParamBean());
     }
 
     public static Single<Response<ResponseBean>> getApiForgotPassword(LoginParamBean loginParamBean) {

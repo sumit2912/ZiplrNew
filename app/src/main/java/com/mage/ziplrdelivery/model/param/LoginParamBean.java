@@ -1,23 +1,14 @@
-package com.mage.ziplrdelivery.param_model;
+package com.mage.ziplrdelivery.model.param;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.mage.ziplrdelivery.utils.Utils;
 
 public class LoginParamBean {
-    private static LoginParamBean loginParamBean;
     private String phone_number;
     private String password;
 
     public LoginParamBean() {
-    }
-
-    public static LoginParamBean getInstance() {
-        if (loginParamBean == null) {
-            loginParamBean = new LoginParamBean();
-        }
-        return loginParamBean;
     }
 
     public String getPhone_number() {

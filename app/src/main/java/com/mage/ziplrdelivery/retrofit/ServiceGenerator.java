@@ -2,8 +2,8 @@ package com.mage.ziplrdelivery.retrofit;
 
 import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
-import com.mage.ziplrdelivery.utils.constant.PrefConst;
+import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.prefmanager.PrefConst;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,9 +23,9 @@ public class ServiceGenerator {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addNetworkInterceptor(interceptor);
         if (!check(api)) {
-            Utils.print("Access Token   ::::  " + MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN));
+            Utils.print("Access Token   ::::  " + MyApplication.getAppManager().getPrefManager().getString(PrefConst.PREF_ACCESS_TOKEN));
             httpClient.addInterceptor(chain -> {
-                Request request = chain.request().newBuilder().addHeader("Authorization", "Bearer " + MyApplication.getAppManager().prefGetStringValue(PrefConst.PREF_ACCESS_TOKEN)).build();
+                Request request = chain.request().newBuilder().addHeader("Authorization", "Bearer " + MyApplication.getAppManager().getPrefManager().getString(PrefConst.PREF_ACCESS_TOKEN)).build();
                 return chain.proceed(request);
             });
         }

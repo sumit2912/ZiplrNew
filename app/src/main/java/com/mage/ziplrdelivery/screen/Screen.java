@@ -1,4 +1,4 @@
-package com.mage.ziplrdelivery.common;
+package com.mage.ziplrdelivery.screen;
 
 import com.mage.ziplrdelivery.ui.ChangePasswordActivity;
 import com.mage.ziplrdelivery.ui.DashBoardActivity;

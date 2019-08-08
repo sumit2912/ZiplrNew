@@ -8,15 +8,16 @@ import android.view.View;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.common.Data;
+import com.mage.ziplrdelivery.screen.Data;
 
-import com.mage.ziplrdelivery.common.Screen;
+import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityLoginMainBinding;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
 
 
-public class LoginMainActivity extends BaseActivity implements AppManager.DataMessageListener {
+public class LoginMainActivity extends BaseActivity implements ScreenHelper.DataMessageListener {
 
     private static final String TAG = Screen.LOGIN_MAIN_ACTIVITY;
     private ActivityLoginMainBinding binding;
@@ -47,7 +48,7 @@ public class LoginMainActivity extends BaseActivity implements AppManager.DataMe
 
 
     @Override
-    protected AppManager.DataMessageListener addDataMessageListener() {
+    protected ScreenHelper.DataMessageListener addDataMessageListener() {
         return LoginMainActivity.this;
     }
 

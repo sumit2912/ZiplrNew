@@ -13,37 +13,40 @@ import androidx.lifecycle.Observer;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.common.Screen;
-import com.mage.ziplrdelivery.data_model.Result;
+import com.mage.ziplrdelivery.screen.Data;
+import com.mage.ziplrdelivery.screen.Screen;
+import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
-import com.mage.ziplrdelivery.param_model.LoginParamBean;
+import com.mage.ziplrdelivery.model.param.LoginParamBean;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
-import com.mage.ziplrdelivery.viewmodel.LoginViewModelFactory;
-import com.mage.ziplrdelivery.viewmodel.PasswordViewModel;
+import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.viewmodelfactory.ViewModelFactory;
+import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.PasswordViewModel;
 
 import java.util.Objects;
 
-public class PasswordActivity extends BaseActivity implements AppManager.DataMessageListener, Observer<LoginParamBean> {
+public class PasswordActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<LoginParamBean> {
 
     private static final String TAG = Screen.PASSWORD_ACTIVITY;
     private ActivityPasswordBinding binding;
     private AppCompatImageView ivBack;
     private Intent verifyIntent, dashBoardIntent, registerIntent;
-    private LoginViewModelFactory viewModelFactory;
+    private ViewModelFactory viewModelFactory;
     private PasswordViewModel passwordViewModel;
+    private LoginParamBean loginParamBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        appManager.getLoginViewModelList().remove(PasswordViewModel.class.getSimpleName());
-        viewModelFactory = new LoginViewModelFactory(appManager.getLoginViewModelList());
+        loginParamBean = singletonFactory.getLoginParamBean();
+        screenHelper.getViewModelList().remove(PasswordViewModel.class.getSimpleName());
+        viewModelFactory = new ViewModelFactory(screenHelper.getViewModelList(), screenHelper.getViewModelDestroyerList());
         passwordViewModel = viewModelFactory.create(PasswordViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setPasswordViewModel(passwordViewModel);
         passwordViewModel.getPasswordLiveData().observe(this, this);
-        Utils.print(TAG,"PhNO = "+LoginParamBean.getInstance().getPhone_number());
+        Utils.print(TAG,"PhNO = "+loginParamBean.getPhone_number());
         initUi();
     }
 
@@ -64,7 +67,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
     }
 
     @Override
-    protected AppManager.DataMessageListener addDataMessageListener() {
+    protected ScreenHelper.DataMessageListener addDataMessageListener() {
         return PasswordActivity.this;
     }
 
@@ -127,7 +130,7 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
             } else if (tag == 2) {
                 enableScreen(false);
                 showProgressBar(true);
-                apiController.getApiSendOTP(LoginParamBean.getInstance().getPhone_number());
+                apiController.getApiSendOTP(loginParamBean.getPhone_number());
             }
         } else {
             Utils.showInternetMsg(mContext);
@@ -173,8 +176,8 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
             verifyIntent = new Intent(PasswordActivity.this, VerificationActivity.class);
             Bundle bundle = new Bundle();
             Result data = new Result();
-            data.setPhoneNumber(LoginParamBean.getInstance().getPhone_number());
-            data.setPassword(LoginParamBean.getInstance().getPassword());
+            data.setPhoneNumber(loginParamBean.getPhone_number());
+            data.setPassword(loginParamBean.getPassword());
             bundle.putSerializable(KEY_RESULT_BEAN, data);
             verifyIntent.putExtras(bundle);
             verifyIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
@@ -203,8 +206,8 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
                 finish();
                 registerIntent = new Intent(PasswordActivity.this, RegistrationActivity.class);
                 startActivity(registerIntent);
-                if (appManager.getActivityList().containsKey(Screen.MOBILE_NO_ACTIVITY)) {
-                    Objects.requireNonNull(appManager.getActivityList().get(Screen.MOBILE_NO_ACTIVITY)).finish();
+                if (screenHelper.getActivityList().containsKey(Screen.MOBILE_NO_ACTIVITY)) {
+                    Objects.requireNonNull(screenHelper.getActivityList().get(Screen.MOBILE_NO_ACTIVITY)).finish();
                 }
                 finish();
                 break;
@@ -221,6 +224,8 @@ public class PasswordActivity extends BaseActivity implements AppManager.DataMes
             binding.edPassword.setError(getResString(R.string.validation_password));
             binding.edPassword.requestFocus();
         } else {
+            singletonFactory.setLoginParamBean(loginParamBean);
+            this.loginParamBean = singletonFactory.getLoginParamBean();
             callApi(1);
         }
     }

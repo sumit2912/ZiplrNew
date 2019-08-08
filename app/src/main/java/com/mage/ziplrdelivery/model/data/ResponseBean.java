@@ -1,4 +1,4 @@
-package com.mage.ziplrdelivery.data_model;
+package com.mage.ziplrdelivery.model.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -24,8 +24,11 @@ import com.mage.ziplrdelivery.api.ApiController;
 import com.mage.ziplrdelivery.common.AlertDialogManager;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.listener.ResponseListener;
+import com.mage.ziplrdelivery.model.SingletonFactory;
+import com.mage.ziplrdelivery.prefmanager.PrefManager;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.api.ApiConst;
 
 import java.util.Objects;
 
@@ -45,6 +48,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected boolean VALUE_FP_CLICK = false;
     protected boolean isInternet = false;
     protected AppManager appManager;
+    protected PrefManager prefManager;
+    protected ScreenHelper screenHelper;
+    protected SingletonFactory singletonFactory;
     protected Context mContext;
     protected boolean disableClick;
     protected Intent dataIntent;
@@ -66,8 +72,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         mBinding = DataBindingUtil.setContentView((Activity) mContext, getLayoutId());
         getViewBinding(mBinding);
         appManager = AppManager.getInstance(mContext);
-        appManager.addActivity((AppCompatActivity) getContext());
-        appManager.addDataMessageListener(getContext().getClass().getSimpleName(), addDataMessageListener());
+        prefManager = appManager.getPrefManager();
+        screenHelper = appManager.getScreenHelper();
+        singletonFactory = SingletonFactory.getInstance();
+        screenHelper.addActivity((AppCompatActivity) getContext());
+        screenHelper.addDataMessageListener(getContext().getClass().getSimpleName(), addDataMessageListener());
         localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter("isInternet"));
         new Utils.InternetCheck(BaseActivity.this).execute();
@@ -101,7 +110,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected abstract <S> S getViewBinding(S s);
 
-    protected abstract AppManager.DataMessageListener addDataMessageListener();
+    protected abstract ScreenHelper.DataMessageListener addDataMessageListener();
 
     protected abstract void initUi();
 

@@ -11,19 +11,20 @@ import android.view.View;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.common.Data;
+import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.common.MyTimerTask;
-import com.mage.ziplrdelivery.common.Screen;
-import com.mage.ziplrdelivery.data_model.Result;
+import com.mage.ziplrdelivery.screen.Screen;
+import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityVerificationBinding;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.api.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
 
 import java.util.Objects;
 import java.util.Timer;
 
-public class VerificationActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener, MyTimerTask.TaskListener {
+public class VerificationActivity extends BaseActivity implements ScreenHelper.DataMessageListener, CustomTextWatcher.TextWatcherListener, MyTimerTask.TaskListener {
 
     private static final String TAG = Screen.VERIFICATION_ACTIVITY;
     private ActivityVerificationBinding binding;
@@ -71,7 +72,7 @@ public class VerificationActivity extends BaseActivity implements AppManager.Dat
     }
 
     @Override
-    protected AppManager.DataMessageListener addDataMessageListener() {
+    protected ScreenHelper.DataMessageListener addDataMessageListener() {
         return VerificationActivity.this;
     }
 

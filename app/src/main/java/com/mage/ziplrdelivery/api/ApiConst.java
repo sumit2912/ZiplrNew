@@ -1,4 +1,4 @@
-package com.mage.ziplrdelivery.utils.constant;
+package com.mage.ziplrdelivery.api;
 
 import java.util.ArrayList;
 import java.util.List;

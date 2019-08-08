@@ -11,16 +11,16 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.mage.ziplrdelivery.R;
-import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.common.Screen;
+import com.mage.ziplrdelivery.screen.Data;
+import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.databinding.ActivityChangePasswordBinding;
-import com.mage.ziplrdelivery.param_model.LoginParamBean;
+import com.mage.ziplrdelivery.model.param.LoginParamBean;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.api.ApiConst;
 
-public class ChangePasswordActivity extends BaseActivity implements AppManager.DataMessageListener, CustomTextWatcher.TextWatcherListener {
+public class ChangePasswordActivity extends BaseActivity implements ScreenHelper.DataMessageListener, CustomTextWatcher.TextWatcherListener {
 
     private static final String TAG = Screen.CHANGE_PASSWORD_ACTIVITY;
     private ActivityChangePasswordBinding binding;
@@ -31,7 +31,7 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loginParamBean = LoginParamBean.getInstance();
+        loginParamBean = singletonFactory.getLoginParamBean();
         initUi();
     }
 
@@ -52,7 +52,7 @@ public class ChangePasswordActivity extends BaseActivity implements AppManager.D
     }
 
     @Override
-    protected AppManager.DataMessageListener addDataMessageListener() {
+    protected ScreenHelper.DataMessageListener addDataMessageListener() {
         return ChangePasswordActivity.this;
     }
 

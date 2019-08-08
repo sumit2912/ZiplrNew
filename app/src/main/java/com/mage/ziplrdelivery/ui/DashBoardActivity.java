@@ -6,15 +6,16 @@ import android.view.View;
 
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.common.AppManager;
-import com.mage.ziplrdelivery.common.Data;
-import com.mage.ziplrdelivery.common.Screen;
-import com.mage.ziplrdelivery.data_model.Result;
+import com.mage.ziplrdelivery.screen.Data;
+import com.mage.ziplrdelivery.screen.Screen;
+import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityDashBoardBinding;
-import com.mage.ziplrdelivery.param_model.LoginParamBean;
+import com.mage.ziplrdelivery.model.param.LoginParamBean;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
-import com.mage.ziplrdelivery.utils.constant.ApiConst;
+import com.mage.ziplrdelivery.api.ApiConst;
 
-public class DashBoardActivity extends BaseActivity implements AppManager.DataMessageListener {
+public class DashBoardActivity extends BaseActivity implements ScreenHelper.DataMessageListener {
 
     private static final String TAG = Screen.DASH_BOARD_ACTIVITY;
     private ActivityDashBoardBinding binding;
@@ -22,7 +23,7 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoginParamBean.getInstance().resetAll();
+        singletonFactory.getLoginParamBean().resetAll();
         initUi();
     }
 
@@ -43,7 +44,7 @@ public class DashBoardActivity extends BaseActivity implements AppManager.DataMe
     }
 
     @Override
-    protected AppManager.DataMessageListener addDataMessageListener() {
+    protected ScreenHelper.DataMessageListener addDataMessageListener() {
         return DashBoardActivity.this;
     }
 

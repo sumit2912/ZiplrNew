@@ -1,4 +1,4 @@
-package com.mage.ziplrdelivery.utils.constant;
+package com.mage.ziplrdelivery.utils;
 
 public class Const {
 

@@ -1,4 +1,4 @@
-package com.mage.ziplrdelivery.data_model;
+package com.mage.ziplrdelivery.model.data;
 
 public class CmsPage {
 
