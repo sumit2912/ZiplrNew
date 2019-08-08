@@ -68,7 +68,12 @@ public class ScreenHelper {
     }
 
     public void removeActivity(Activity activity) {
-        activityList.remove(activity.getClass().getSimpleName());
+        String screen = activity.getClass().getSimpleName();
+        dataMessageListenerList.remove(screen);
+        String viewModelKey = viewModelDestroyerList.get(screen);
+        viewModelDestroyerList.remove(screen);
+        viewModelList.remove(viewModelKey);
+        activityList.remove(screen);
     }
 
     public void removeDataMessageListener(String screen) {

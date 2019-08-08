@@ -17,7 +17,6 @@ import com.mage.ziplrdelivery.databinding.ActivityChangePasswordBinding;
 import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
-import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.api.ApiConst;
 
 public class ChangePasswordActivity extends BaseActivity implements ScreenHelper.DataMessageListener, CustomTextWatcher.TextWatcherListener {

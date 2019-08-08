@@ -91,4 +91,26 @@
         <item name="android:textSize">@dimen/_12sdp</item>
         <item name="android:singleLine">true</item>
     </style>
+
+    <style name="Profile_Name_Black_Bold" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textSize">@dimen/_16sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="custom_font">bold</item>
+    </style>
+
+    <style name="Profile_Email_Grey_Regular">
+        <item name="android:textColor">@color/text_grey</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="custom_font">regular</item>
+    </style>
+
+    <style name="ViewLine_Grey">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_marginLeft">@dimen/_15sdp</item>
+        <item name="android:layout_marginRight">@dimen/_15sdp</item>
+        <item name="android:background">@color/hint_color</item>
+    </style>
 </resources>

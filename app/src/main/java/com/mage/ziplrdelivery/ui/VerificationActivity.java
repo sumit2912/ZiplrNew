@@ -18,7 +18,6 @@ import com.mage.ziplrdelivery.databinding.ActivityVerificationBinding;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.uc.CustomTextWatcher;
 import com.mage.ziplrdelivery.api.ApiConst;
-import com.mage.ziplrdelivery.utils.Utils;
 
 import java.util.Objects;
 import java.util.Timer;

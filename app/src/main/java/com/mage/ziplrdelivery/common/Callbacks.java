@@ -48,7 +48,5 @@ public class Callbacks implements Application.ActivityLifecycleCallbacks {
     public void onActivityDestroyed(@NonNull Activity activity) {
         Utils.print("Callbacks", activity.getClass().getSimpleName() + " Destroyed");
         appManager.getScreenHelper().removeActivity(activity);
-        appManager.getScreenHelper().removeDataMessageListener(activity.getClass().getSimpleName());
-        appManager.getScreenHelper().getViewModelList().values().contains(activity.getClass().getSimpleName());
     }
 }

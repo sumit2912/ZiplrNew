@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.DashBoardViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.MobileNoViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.PasswordViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.RegistrationViewModel;
@@ -41,6 +42,12 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
                 viewModelDestroyerHashMap.put(ViewModelIdentifier.DES_PASSWORD_VIEW_MODEL, ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL);
             }
             return (T) viewModelHashMap.get(ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL);
+        }else if (modelClass.isAssignableFrom(DashBoardViewModel.class)) { //DashBoardViewModel======================================================
+            if (!viewModelHashMap.containsKey(ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL)) {
+                viewModelHashMap.put(ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL, new DashBoardViewModel());
+                viewModelDestroyerHashMap.put(ViewModelIdentifier.DES_DASH_BOARD_VIEW_MODEL, ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL);
+            }
+            return (T) viewModelHashMap.get(ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL);
         }
         return super.create(modelClass);
     }

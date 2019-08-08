@@ -17,7 +17,6 @@ import com.mage.ziplrdelivery.databinding.ActivityRegistrationBinding;
 import com.mage.ziplrdelivery.model.param.RegistrationParamBean;
 import com.mage.ziplrdelivery.api.ApiConst;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
-import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.RegistrationViewModel;
 
 import java.util.Objects;

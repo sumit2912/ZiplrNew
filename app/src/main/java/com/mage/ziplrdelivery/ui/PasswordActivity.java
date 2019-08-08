@@ -18,7 +18,6 @@ import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
 import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
-import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.api.ApiConst;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.PasswordViewModel;
 

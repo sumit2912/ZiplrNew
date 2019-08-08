@@ -3,34 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.DashBoardActivity">
-
+    <data>
+        <variable
+            name="DashBoardViewModel"
+            type="com.mage.ziplrdelivery.viewmodelfactory.viewmodel.DashBoardViewModel" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainCL"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.mage.ziplrdelivery.uc.CustomTextView
-            android:id="@+id/tvTemp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="center"
-            android:textSize="@dimen/_12sdp"
-            app:custom_font="semibold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/rlInternet"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.mage.ziplrdelivery.uc.ProgressMaterialButton
-            android:id="@+id/btLogout"
-            style="@style/ProgressMaterialButton_SemiBold_Orange"
-            android:layout_width="@dimen/def_bt_width"
-            android:layout_height="@dimen/def_bt_height"
-            app:bt_text="Logout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginBottom="@dimen/_10sdp"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clMap"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <include
+                    android:id="@+id/mapView"
+                    layout="@layout/layout_map_view"
+                    tools:showIn="@layout/activity_dash_board" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clNavigation"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <include
+                    android:id="@+id/navigationView"
+                    layout="@layout/layout_navigation_view"
+                    tools:showIn="@layout/activity_dash_board" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:id="@+id/rlInternet"
@@ -39,7 +62,8 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clContainer">
 
             <include layout="@layout/layout_no_internet_available" />
         </RelativeLayout>
