@@ -32,7 +32,7 @@ public class ApiResponseHelper {
                     responseBean.getAuthToke().getTokenType() + " " + MyApplication.getAppManager().getPrefManager().getString(PrefConst.PREF_ACCESS_TOKEN));
         }
 
-        if(responseBean.getResult() != null){
+        if(responseBean.getResult() != null && responseBean.getResult().getName() != null){
             Result result = responseBean.getResult();
             Utils.print(TAG,"UserId = "+result.getId());
             Utils.print(TAG,"Name = "+result.getName());
@@ -43,9 +43,6 @@ public class ApiResponseHelper {
             Utils.print(TAG,"Profile picture = "+result.getAvatarUrl());
             if (result.getOtp() != null) {
                 Utils.print(TAG, "OTP = " + result.getOtp());
-            }
-            if(result.getUserProfile() != null){
-
             }
         }else {
             Utils.print(TAG,"Result = {}");
