@@ -143,9 +143,11 @@ public class VerificationActivity extends BaseActivity implements ScreenHelper.D
             enableScreen(true);
             showProgressBar(false);
             if (VALUE_FROM_ACTIVITY.equals(Screen.REGISTRATION_ACTIVITY) && !VALUE_FP_CLICK) {
-                Result data = apiController.getResultData();
+                Result data = appManager.getApiResponseHelper().getResponseBean().getResult();
                 if (data != null) {
                     utils.storeLoginData(appManager, data);
+                    singletonFactory.getDashBoardBean().setProfileName(data.getName());
+                    singletonFactory.getDashBoardBean().setProfileEmail(data.getEmail());
                 }
                 if (dashBoardIntent == null)
                     dashBoardIntent = new Intent(VerificationActivity.this, DashBoardActivity.class);

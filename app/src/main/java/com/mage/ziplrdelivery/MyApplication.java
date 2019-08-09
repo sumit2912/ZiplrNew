@@ -11,10 +11,22 @@ import com.mage.ziplrdelivery.receiver.NetworkChangeReceiver;
 
 public class MyApplication extends Application {
 
-    private NetworkChangeReceiver networkChangeReceiver;
-    private Callbacks callbacks;
     private static AppManager appManager;
     private static Context context;
+    private NetworkChangeReceiver networkChangeReceiver;
+    private Callbacks callbacks;
+
+    public static Context getAppContext() {
+        return context;
+    }
+
+    public static AppManager getAppManager() {
+        return appManager;
+    }
+
+    public static void setAppManager(AppManager am) {
+        appManager = am;
+    }
 
     @Override
     public void onCreate() {
@@ -31,14 +43,6 @@ public class MyApplication extends Application {
         networkChangeReceiver = new NetworkChangeReceiver();
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         registerActivityLifecycleCallbacks(callbacks);
-    }
-
-    public static Context getAppContext() {
-        return context;
-    }
-
-    public static AppManager getAppManager(){
-        return appManager;
     }
 
     @Override

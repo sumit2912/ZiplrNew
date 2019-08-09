@@ -121,8 +121,8 @@ public class RegistrationActivity extends BaseActivity implements ScreenHelper.D
                 verificationIntent = new Intent(RegistrationActivity.this, VerificationActivity.class);
             verificationIntent.putExtra(KEY_FROM_ACTIVITY, TAG);
             Bundle bundle = new Bundle();
-            apiController.getResultData().setPassword(registrationParamBean.getPassword());
-            bundle.putSerializable(KEY_RESULT_BEAN, apiController.getResultData());
+            appManager.getApiResponseHelper().getResponseBean().getResult().setPassword(registrationParamBean.getPassword());
+            bundle.putSerializable(KEY_RESULT_BEAN, appManager.getApiResponseHelper().getResponseBean().getResult());
             verificationIntent.putExtras(bundle);
             startActivity(verificationIntent);
             finish();

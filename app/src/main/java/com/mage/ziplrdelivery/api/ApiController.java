@@ -30,30 +30,26 @@ public class ApiController {
     private ResponseListener responseListener;
     private String method, msg;
     private int status;
-    private Result result;
     private boolean enable0status = true;
     private JsonObject jsonObject;
     private Single<Response<ResponseBean>> observable;
     private Utils utils;
+    private ApiResponseHelper apiResponseHelper;
 
     public ApiController(Context caller, ResponseListener responseListener) {
         this.caller = caller;
         this.responseListener = responseListener;
         utils = MyApplication.getAppManager().getUtils();
+        apiResponseHelper = MyApplication.getAppManager().getApiResponseHelper();
     }
 
     private void init() {
         method = null;
         msg = null;
         status = -1;
-        result = null;
         enable0status = true;
         jsonObject = new JsonObject();
         observable = null;
-    }
-
-    public Result getResultData() {
-        return this.result;
     }
 
     public void getApiSignUp(RegistrationParamBean registrationParamBean) {
@@ -128,25 +124,12 @@ public class ApiController {
                     @Override
                     public void onSuccess(Response<ResponseBean> response) {
                         if (response.isSuccessful()) {
-                            Utils.print(TAG, "ResponseBean Success");
-                            ResponseBean responseBean = response.body();
+                            apiResponseHelper.setResponseBean(response.body());
+                            ResponseBean responseBean = apiResponseHelper.getResponseBean();
                             status = responseBean.getStatus();
                             msg = responseBean.getMessage();
-                            result = responseBean.getResult();
-                            if (result.getOtp() != null) {
-                                Utils.print(TAG, "OTP = " + result.getOtp());
-                            }
-                            if (responseBean.getAuthToke() != null) {
-                                MyApplication.getAppManager().getPrefManager().setString(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
-                                Utils.print(TAG, "Generated Access Token   ::::  " +
-                                        responseBean.getAuthToke().getTokenType() + " " + MyApplication.getAppManager().getPrefManager().getString(PrefConst.PREF_ACCESS_TOKEN));
-                            }
-                            if(result.getUserProfile() != null){
-
-                            }
-                            Utils.print("status = " + status + "    msg = " + msg);
                         } else {
-                            msg = "We are upgrading our server";
+                            msg = "Server is under maintenance...";
                         }
                         doCallBack();
                     }
@@ -164,7 +147,7 @@ public class ApiController {
                                 Utils.print(this.getClass().getSimpleName(), elements[i].toString());
                             }
                         } catch (Exception exception) {
-                            utils.print(this.getClass().getSimpleName(), exception);
+                            Utils.print(this.getClass().getSimpleName(), exception);
                         }
                     }
                 });

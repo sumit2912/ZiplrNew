@@ -19,6 +19,7 @@ import com.mage.ziplrdelivery.databinding.ActivityPasswordBinding;
 import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.PasswordViewModel;
 
 import java.util.Objects;
@@ -141,8 +142,10 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
         super.onResponse(tag,result,status,msg);
         if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
-            Result data = apiController.getResultData();
+            Result data = appManager.getApiResponseHelper().getResponseBean().getResult();
             if (data != null) {
+                singletonFactory.getDashBoardBean().setProfileName(data.getName());
+                singletonFactory.getDashBoardBean().setProfileEmail(data.getEmail());
                 utils.storeLoginData(appManager, data);
             }
             if (dashBoardIntent == null)

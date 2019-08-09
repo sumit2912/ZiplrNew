@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.DashBoardViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.MobileNoViewModel;
+import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.NavigationMenuViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.PasswordViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.RegistrationViewModel;
 
@@ -41,13 +42,19 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
                 viewModelHashMap.put(ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL, new PasswordViewModel());
                 viewModelDestroyerHashMap.put(ViewModelIdentifier.DES_PASSWORD_VIEW_MODEL, ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL);
             }
-            return (T) viewModelHashMap.get(ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL);
+            return (T) viewModelHashMap.get(ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL);//PasswordViewModel=========================================
         }else if (modelClass.isAssignableFrom(DashBoardViewModel.class)) { //DashBoardViewModel======================================================
             if (!viewModelHashMap.containsKey(ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL)) {
                 viewModelHashMap.put(ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL, new DashBoardViewModel());
                 viewModelDestroyerHashMap.put(ViewModelIdentifier.DES_DASH_BOARD_VIEW_MODEL, ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL);
             }
-            return (T) viewModelHashMap.get(ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL);
+            return (T) viewModelHashMap.get(ViewModelIdentifier.KEY_DASH_BOARD_VIEW_MODEL); //DashBoardViewModel=====================================
+        }else if (modelClass.isAssignableFrom(NavigationMenuViewModel.class)) { //NavigationMenuViewModel============================================
+            if (!viewModelHashMap.containsKey(ViewModelIdentifier.KEY_NAVIGATION_MENU_VIEW_MODEL)) {
+                viewModelHashMap.put(ViewModelIdentifier.KEY_NAVIGATION_MENU_VIEW_MODEL, new NavigationMenuViewModel());
+                viewModelDestroyerHashMap.put(ViewModelIdentifier.DES_NAVIGATION_MENU_VIEW_MODEL, ViewModelIdentifier.KEY_NAVIGATION_MENU_VIEW_MODEL);
+            }
+            return (T) viewModelHashMap.get(ViewModelIdentifier.KEY_NAVIGATION_MENU_VIEW_MODEL);//NavigationMenuViewModel============================
         }
         return super.create(modelClass);
     }

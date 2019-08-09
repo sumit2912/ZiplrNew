@@ -1,13 +1,15 @@
 package com.mage.ziplrdelivery.model;
 
+import com.mage.ziplrdelivery.model.data.DashBoardBean;
 import com.mage.ziplrdelivery.model.param.LoginParamBean;
 
 public class SingletonFactory {
     private static SingletonFactory singletonFactory;
     private LoginParamBean loginParamBean;
+    private DashBoardBean dashBoardBean;
 
-    public static SingletonFactory getInstance(){
-        if(singletonFactory == null){
+    public static SingletonFactory getInstance() {
+        if (singletonFactory == null) {
             singletonFactory = new SingletonFactory();
         }
         return singletonFactory;
@@ -22,5 +24,16 @@ public class SingletonFactory {
 
     public void setLoginParamBean(LoginParamBean loginParamBean) {
         this.loginParamBean = loginParamBean;
+    }
+
+    public DashBoardBean getDashBoardBean() {
+        if (dashBoardBean == null) {
+            dashBoardBean = new DashBoardBean();
+        }
+        return this.dashBoardBean;
+    }
+
+    public void setDashBoardBean(DashBoardBean dashBoardBean) {
+        this.dashBoardBean = dashBoardBean;
     }
 }

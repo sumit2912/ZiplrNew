@@ -4,30 +4,45 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.lifecycle.Observer;
+
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.databinding.LayoutMapViewBinding;
 import com.mage.ziplrdelivery.databinding.LayoutNavigationViewBinding;
+import com.mage.ziplrdelivery.model.data.DashBoardBean;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.screen.Screen;
 import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityDashBoardBinding;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.utils.Utils;
+import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.DashBoardViewModel;
+import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.NavigationMenuViewModel;
 
 import java.util.Objects;
 
-public class DashBoardActivity extends BaseActivity implements ScreenHelper.DataMessageListener {
+public class DashBoardActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<DashBoardBean> {
 
     private static final String TAG = Screen.DASH_BOARD_ACTIVITY;
     private ActivityDashBoardBinding binding;
     private LayoutMapViewBinding mapBinding;
     private LayoutNavigationViewBinding navBinding;
-
+    private DashBoardViewModel dashBoardViewModel;
+    private NavigationMenuViewModel navigationMenuViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        singletonFactory.getLoginParamBean().resetAll();
+        dashBoardViewModel = viewModelFactory.create(DashBoardViewModel.class);
+        navigationMenuViewModel = viewModelFactory.create(NavigationMenuViewModel.class);
+        binding.setLifecycleOwner(this);
+        binding.setDashBoardViewModel(dashBoardViewModel);
+        navBinding.setLifecycleOwner(this);
+        navBinding.setNavigationMenuViewModel(navigationMenuViewModel);
+        dashBoardViewModel.getDashBoardMutableLiveData().observe(this,this);
+        navigationMenuViewModel.getNavigationMenuMutableLiveData().observe(this,this);
         initUi();
+        singletonFactory.getLoginParamBean().resetAll();
     }
 
     @Override
@@ -130,5 +145,11 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     @Override
     public void onPositiveClicked(String type) {
 
+    }
+
+    @Override
+    public void onChanged(DashBoardBean dashBoardBean) {
+        Utils.print(TAG,"Profile Name = "+dashBoardBean.getProfileName());
+        Utils.print(TAG,"Profile Email = "+dashBoardBean.getProfileEmail());
     }
 }

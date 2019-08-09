@@ -29,7 +29,7 @@ import java.net.Socket;
 
 
 public class Utils {
-
+    private static final String TAG = "Utils";
     public static boolean DO_SOP = true;
 
     public static void print(String mesg) {
@@ -137,6 +137,7 @@ public class Utils {
         PrefManager prefManager = (mContext == null) ? MyApplication.getAppManager().getPrefManager() : new AppManager(mContext).getPrefManager();
         print("Clearing Token = " + prefManager.getString(PrefConst.PREF_ACCESS_TOKEN));
         prefManager.clearAll();
+        MyApplication.setAppManager(null);
         mContext.startActivity(new Intent(mContext, LoginMainActivity.class));
         ((Activity) mContext).finishAffinity();
     }
