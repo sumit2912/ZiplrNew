@@ -3,11 +3,18 @@ package com.mage.ziplrdelivery;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 
+import com.mage.ziplrdelivery.api.ApiResponseHelper;
 import com.mage.ziplrdelivery.common.AppManager;
 import com.mage.ziplrdelivery.common.Callbacks;
+import com.mage.ziplrdelivery.model.SingletonFactory;
+import com.mage.ziplrdelivery.prefmanager.PrefConst;
+import com.mage.ziplrdelivery.prefmanager.PrefManager;
 import com.mage.ziplrdelivery.receiver.NetworkChangeReceiver;
+import com.mage.ziplrdelivery.screen.ScreenHelper;
+import com.mage.ziplrdelivery.utils.Utils;
 
 public class MyApplication extends Application {
 
@@ -15,10 +22,12 @@ public class MyApplication extends Application {
     private static Context context;
     private NetworkChangeReceiver networkChangeReceiver;
     private Callbacks callbacks;
-
-    public static Context getAppContext() {
-        return context;
-    }
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private PrefManager prefManager;
+    private ScreenHelper screenHelper;
+    private Utils utils;
+    private ApiResponseHelper apiResponseHelper;
 
     public static AppManager getAppManager() {
         return appManager;
@@ -31,24 +40,46 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (context == null) {
-            context = getApplicationContext();
-        }
-
-        if (appManager == null) {
-            appManager = AppManager.getInstance(getApplicationContext());
-        }
-
         callbacks = new Callbacks();
         networkChangeReceiver = new NetworkChangeReceiver();
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         registerActivityLifecycleCallbacks(callbacks);
+        initBasic();
+    }
+
+    private void initBasic() {
+        if (appManager == null) {
+            appManager = AppManager.getInstance(getApplicationContext());
+        }
+        if (sharedPreferences == null) {
+            sharedPreferences = getApplicationContext().getSharedPreferences(PrefConst.PREF_FILE, MODE_PRIVATE);
+        }
+        if(editor == null){
+            editor = sharedPreferences.edit();
+        }
+        if(prefManager == null){
+            prefManager = new PrefManager(sharedPreferences,editor);
+        }
+        appManager.setPrefManager(prefManager);
+        if(screenHelper == null){
+            screenHelper = new ScreenHelper();
+        }
+        appManager.setScreenHelper(screenHelper);
+        if(utils == null){
+            utils = new Utils(appManager,prefManager);
+        }
+        appManager.setUtils(utils);
+        if(apiResponseHelper == null){
+            apiResponseHelper = new ApiResponseHelper();
+        }
+        appManager.setApiResponseHelper(apiResponseHelper);
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
         appManager.getPrefManager().clearAll();
+        SingletonFactory.getInstance().setSingletonFactory(null);
         unregisterReceiver(networkChangeReceiver);
     }
 }

@@ -7,6 +7,9 @@ public class DashBoardBean {
     private String profileEmail;
     private List<NavMenuBean> navMenuList;
 
+    public DashBoardBean() {
+    }
+
     public DashBoardBean(String profileName, String profileEmail, List<NavMenuBean> navMenuList) {
         this.profileName = profileName;
         this.profileEmail = profileEmail;

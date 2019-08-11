@@ -8,6 +8,10 @@ public class SingletonFactory {
     private LoginParamBean loginParamBean;
     private DashBoardBean dashBoardBean;
 
+    public void setSingletonFactory(SingletonFactory sf) {
+        singletonFactory = sf;
+    }
+
     public static SingletonFactory getInstance() {
         if (singletonFactory == null) {
             singletonFactory = new SingletonFactory();

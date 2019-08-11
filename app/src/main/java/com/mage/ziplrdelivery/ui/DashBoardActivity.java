@@ -73,7 +73,7 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
         binding.nonClickable.setOnClickListener(null);
         navBinding.ivNavClose.setOnClickListener(this);
         mapBinding.btLogout.setOnClickListener(this);
-        Result data = utils.getLoginData(appManager);
+        Result data = utils.getLoginData();
         if (data != null) {
             mapBinding.tvTemp.setText("User_Id = " + data.getId() + "\nName = " + data.getName() + "\nEmail = " + data.getEmail() + "\nMobile No = "
                     + data.getCountryCode() + data.getPhoneNumber() + "\nImage_Url = " + data.getAvatarUrl());

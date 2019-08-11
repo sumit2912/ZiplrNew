@@ -13,8 +13,6 @@ import com.mage.ziplrdelivery.utils.Utils;
 public class AppManager {
     private static AppManager appManager;
     private Context context;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
     private PrefManager prefManager;
     private ScreenHelper screenHelper;
     private Utils utils;
@@ -22,12 +20,6 @@ public class AppManager {
 
     public AppManager(Context mContext) {
         this.context = mContext;
-        sharedPreferences = context.getSharedPreferences(PrefConst.PREF_FILE, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        prefManager = new PrefManager(sharedPreferences, editor);
-        screenHelper = new ScreenHelper();
-        utils = new Utils();
-        apiResponseHelper = new ApiResponseHelper();
     }
 
     public static AppManager getInstance(Context mContext) {
@@ -37,16 +29,36 @@ public class AppManager {
         return appManager;
     }
 
+    public Context getApplicationContext() {
+        return this.context;
+    }
+
+    public void setPrefManager(PrefManager prefManager) {
+        this.prefManager = prefManager;
+    }
+
     public PrefManager getPrefManager() {
         return this.prefManager;
+    }
+
+    public void setScreenHelper(ScreenHelper screenHelper) {
+        this.screenHelper = screenHelper;
     }
 
     public ScreenHelper getScreenHelper() {
         return this.screenHelper;
     }
 
+    public void setUtils(Utils utils) {
+        this.utils = utils;
+    }
+
     public Utils getUtils() {
         return utils;
+    }
+
+    public void setApiResponseHelper(ApiResponseHelper apiResponseHelper) {
+        this.apiResponseHelper = apiResponseHelper;
     }
 
     public ApiResponseHelper getApiResponseHelper() {

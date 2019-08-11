@@ -31,6 +31,13 @@ import java.net.Socket;
 public class Utils {
     private static final String TAG = "Utils";
     public static boolean DO_SOP = true;
+    private AppManager appManager;
+    private PrefManager prefManager;
+
+    public Utils(AppManager appManager, PrefManager prefManager) {
+        this.appManager = appManager;
+        this.prefManager = prefManager;
+    }
 
     public static void print(String mesg) {
         if (DO_SOP) {
@@ -88,7 +95,7 @@ public class Utils {
 
     public void showSessionDialog(final Context context) {
         toast(context, context.getResources().getString(R.string.session_expired_please_login_again), false);
-        MyApplication.getAppManager().getPrefManager().clearAll();
+        prefManager.clearAll();
         Intent i = new Intent(context, LoginMainActivity.class);
         ((Activity) context).finishAffinity();
         context.startActivity(i);
@@ -111,30 +118,27 @@ public class Utils {
         return outValue.getFloat();
     }
 
-    public void storeLoginData(AppManager appManager, Result data) {
-        PrefManager pm = appManager.getPrefManager();
-        pm.setLong(PrefConst.PREF_USER_ID, data.getId());
-        pm.setString(PrefConst.PREF_USER_NAME, data.getName());
-        pm.setString(PrefConst.PREF_USER_EMAIL, data.getEmail());
-        pm.setString(PrefConst.PREF_USER_AVATAR_URL, data.getAvatarUrl());
-        pm.setString(PrefConst.PREF_USER_PHONE_NUMBER, data.getPhoneNumber());
-        pm.setString(PrefConst.PREF_USER_COUNTRY_CODE, data.getCountryCode());
+    public void storeLoginData(Result data) {
+        prefManager.setLong(PrefConst.PREF_USER_ID, data.getId());
+        prefManager.setString(PrefConst.PREF_USER_NAME, data.getName());
+        prefManager.setString(PrefConst.PREF_USER_EMAIL, data.getEmail());
+        prefManager.setString(PrefConst.PREF_USER_AVATAR_URL, data.getAvatarUrl());
+        prefManager.setString(PrefConst.PREF_USER_PHONE_NUMBER, data.getPhoneNumber());
+        prefManager.setString(PrefConst.PREF_USER_COUNTRY_CODE, data.getCountryCode());
     }
 
-    public Result getLoginData(AppManager appManager) {
-        PrefManager pm = appManager.getPrefManager();
+    public Result getLoginData() {
         Result result = new Result();
-        result.setId(pm.getLong(PrefConst.PREF_USER_ID));
-        result.setName(pm.getString(PrefConst.PREF_USER_NAME));
-        result.setEmail(pm.getString(PrefConst.PREF_USER_EMAIL));
-        result.setAvatarUrl(pm.getString(PrefConst.PREF_USER_AVATAR_URL));
-        result.setPhoneNumber(pm.getString(PrefConst.PREF_USER_PHONE_NUMBER));
-        result.setCountryCode(pm.getString(PrefConst.PREF_USER_COUNTRY_CODE));
+        result.setId(prefManager.getLong(PrefConst.PREF_USER_ID));
+        result.setName(prefManager.getString(PrefConst.PREF_USER_NAME));
+        result.setEmail(prefManager.getString(PrefConst.PREF_USER_EMAIL));
+        result.setAvatarUrl(prefManager.getString(PrefConst.PREF_USER_AVATAR_URL));
+        result.setPhoneNumber(prefManager.getString(PrefConst.PREF_USER_PHONE_NUMBER));
+        result.setCountryCode(prefManager.getString(PrefConst.PREF_USER_COUNTRY_CODE));
         return result;
     }
 
     public void logoutFromApp(Context mContext) {
-        PrefManager prefManager = (mContext == null) ? MyApplication.getAppManager().getPrefManager() : new AppManager(mContext).getPrefManager();
         print("Clearing Token = " + prefManager.getString(PrefConst.PREF_ACCESS_TOKEN));
         prefManager.clearAll();
         MyApplication.setAppManager(null);

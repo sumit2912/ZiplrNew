@@ -20,6 +20,7 @@ import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.api.ApiConst;
 import com.mage.ziplrdelivery.utils.Utils;
+import com.mage.ziplrdelivery.viewmodelfactory.ViewModelIdentifier;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.PasswordViewModel;
 
 import java.util.Objects;
@@ -37,7 +38,10 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginParamBean = singletonFactory.getLoginParamBean();
-        screenHelper.getViewModelList().remove(PasswordViewModel.class.getSimpleName());
+        loginParamBean.setPassword(null);
+        singletonFactory.setLoginParamBean(loginParamBean);
+        screenHelper.getViewModelList().remove(ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL);
+        screenHelper.getViewModelDestroyerList().remove(ViewModelIdentifier.DES_PASSWORD_VIEW_MODEL);
         passwordViewModel = viewModelFactory.create(PasswordViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setPasswordViewModel(passwordViewModel);
@@ -122,6 +126,7 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
                 utils.hideKeyBoardFromView(mContext);
                 enableScreen(false);
                 binding.btSubmit.showProgressBar(true, PROGRESS_TAG_0);
+                singletonFactory.setLoginParamBean(loginParamBean);
                 apiController.getApiLogin();
             } else if (tag == 2) {
                 enableScreen(false);
@@ -146,7 +151,7 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
             if (data != null) {
                 singletonFactory.getDashBoardBean().setProfileName(data.getName());
                 singletonFactory.getDashBoardBean().setProfileEmail(data.getEmail());
-                utils.storeLoginData(appManager, data);
+                utils.storeLoginData(data);
             }
             if (dashBoardIntent == null)
                 dashBoardIntent = new Intent(PasswordActivity.this, DashBoardActivity.class);

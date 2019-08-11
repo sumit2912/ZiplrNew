@@ -19,6 +19,7 @@ import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.viewmodelfactory.ViewModelIdentifier;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.MobileNoViewModel;
 
 public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<LoginParamBean> {
@@ -34,7 +35,12 @@ public class MobileNoActivity extends BaseActivity implements ScreenHelper.DataM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginParamBean = singletonFactory.getLoginParamBean();
-        screenHelper.getViewModelList().clear();
+        loginParamBean.resetAll();
+        singletonFactory.setLoginParamBean(loginParamBean);
+        screenHelper.getViewModelList().remove(ViewModelIdentifier.KEY_MOBILE_NO_VIEW_MODEL);
+        screenHelper.getViewModelList().remove(ViewModelIdentifier.KEY_PASSWORD_VIEW_MODEL);
+        screenHelper.getViewModelDestroyerList().remove(ViewModelIdentifier.DES_MOBILE_NO_VIEW_MODEL);
+        screenHelper.getViewModelDestroyerList().remove(ViewModelIdentifier.DES_PASSWORD_VIEW_MODEL);
         mobileNoViewModel = viewModelFactory.create(MobileNoViewModel.class);
         binding.setLifecycleOwner(this);
         binding.setMobileNoViewModel(mobileNoViewModel);

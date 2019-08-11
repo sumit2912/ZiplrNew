@@ -13,7 +13,8 @@ import java.util.List;
 public class NavigationMenuViewModel extends ViewModel {
     public MutableLiveData<String> ProfName = new MutableLiveData<>();
     public MutableLiveData<String> ProfEmail = new MutableLiveData<>();
-
+    public MutableLiveData<String> NavMenuItemName = new MutableLiveData<>();
+    public MutableLiveData<Integer> NavMenuItemDrawable = new MutableLiveData<>();
 
     private MutableLiveData<DashBoardBean> navigationMenuMutableLiveData;
 

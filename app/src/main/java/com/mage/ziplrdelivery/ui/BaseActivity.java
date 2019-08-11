@@ -52,6 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected AppManager appManager;
     protected PrefManager prefManager;
     protected ScreenHelper screenHelper;
+    protected ApiResponseHelper apiResponseHelper;
     protected ViewModelFactory viewModelFactory;
     protected Utils utils;
     protected SingletonFactory singletonFactory;
@@ -80,6 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         screenHelper = appManager.getScreenHelper();
         viewModelFactory = screenHelper.getViewModelFactory();
         utils = appManager.getUtils();
+        apiResponseHelper = appManager.getApiResponseHelper();
         singletonFactory = SingletonFactory.getInstance();
         screenHelper.addActivity((AppCompatActivity) getContext());
         screenHelper.addDataMessageListener(getContext().getClass().getSimpleName(), addDataMessageListener());
