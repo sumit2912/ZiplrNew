@@ -185,7 +185,7 @@ public class ApiController {
                         Utils.print("responseListener >2 = " + status);
                     }
                 } catch (Exception e) {
-                    utils.print(this.getClass().getSimpleName() + " ::doCallBack:: Exception :: method = " + method, e);
+                    Utils.print(this.getClass().getSimpleName() + " ::doCallBack:: Exception :: method = " + method, e);
                 }
             }
         });

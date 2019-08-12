@@ -130,7 +130,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onNetChange(boolean isInternet) {
-        utils.print("isInternet = "+isInternet);
+        Utils.print("isInternet = "+isInternet);
         this.isInternet = isInternet;
         onInternetChange(isInternet);
     }
@@ -157,6 +157,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onResponse(String tag, ApiConst.API_RESULT result, int status, String msg) {
-        utils.print(((AppCompatActivity)getContext()).getClass().getSimpleName(), "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
+        Utils.print(((AppCompatActivity)getContext()).getClass().getSimpleName(), "tag = " + tag + " result = " + result + " status = " + status + " msg = " + msg);
     }
 }

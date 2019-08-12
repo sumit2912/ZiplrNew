@@ -30,7 +30,12 @@ public class MyApplication extends Application {
     private ApiResponseHelper apiResponseHelper;
 
     public static AppManager getAppManager() {
+        if(appManager == null){appManager = AppManager.getInstance(getAppContext());}
         return appManager;
+    }
+
+    public static Context getAppContext(){
+        return context;
     }
 
     public static void setAppManager(AppManager am) {
@@ -40,11 +45,12 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if(context == null){context = getApplicationContext();}
+        initBasic();
         callbacks = new Callbacks();
         networkChangeReceiver = new NetworkChangeReceiver();
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         registerActivityLifecycleCallbacks(callbacks);
-        initBasic();
     }
 
     private void initBasic() {

@@ -253,4 +253,13 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
             }
         }, animDuration - 50);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.clNavigation.getVisibility() == View.VISIBLE) {
+            navigationOpen(false);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
