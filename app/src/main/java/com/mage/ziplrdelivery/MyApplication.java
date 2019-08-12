@@ -70,7 +70,7 @@ public class MyApplication extends Application {
         }
         appManager.setUtils(utils);
         if(apiResponseHelper == null){
-            apiResponseHelper = new ApiResponseHelper();
+            apiResponseHelper = new ApiResponseHelper(prefManager);
         }
         appManager.setApiResponseHelper(apiResponseHelper);
     }

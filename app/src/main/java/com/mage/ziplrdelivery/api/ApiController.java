@@ -12,6 +12,7 @@ import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.listener.ResponseListener;
 import com.mage.ziplrdelivery.model.param.LoginParamBean;
 import com.mage.ziplrdelivery.model.param.RegistrationParamBean;
+import com.mage.ziplrdelivery.prefmanager.PrefManager;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.prefmanager.PrefConst;
 
@@ -33,11 +34,13 @@ public class ApiController {
     private boolean enable0status = true;
     private JsonObject jsonObject;
     private Single<Response<ResponseBean>> observable;
+    private PrefManager prefManager;
     private Utils utils;
     private ApiResponseHelper apiResponseHelper;
 
-    public ApiController(Context caller, Utils utils, ApiResponseHelper apiResponseHelper, ResponseListener responseListener) {
+    public ApiController(Context caller, PrefManager prefManager, Utils utils, ApiResponseHelper apiResponseHelper, ResponseListener responseListener) {
         this.caller = caller;
+        this.prefManager = prefManager;
         this.responseListener = responseListener;
         this.utils = utils;
         this.apiResponseHelper = apiResponseHelper;

@@ -89,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter("isInternet"));
         new Utils.InternetCheck(BaseActivity.this).execute();
         dataIntent = getIntent();
-        apiController = new ApiController(mContext, utils,apiResponseHelper,this);
+        apiController = new ApiController(mContext, prefManager,utils,apiResponseHelper,this);
         adManager = new AlertDialogManager(mContext, "", "", this);
         ConstraintLayout cl = mBinding.getRoot().findViewById(R.id.mainCL);
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_progress_bar, cl, true);

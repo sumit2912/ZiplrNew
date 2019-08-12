@@ -4,13 +4,16 @@ import com.mage.ziplrdelivery.MyApplication;
 import com.mage.ziplrdelivery.model.data.ResponseBean;
 import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.prefmanager.PrefConst;
+import com.mage.ziplrdelivery.prefmanager.PrefManager;
 import com.mage.ziplrdelivery.utils.Utils;
 
 public class ApiResponseHelper {
     private static final String TAG = "ApiResponseHelper";
+    private PrefManager prefManager;
     private ResponseBean responseBean;
 
-    public ApiResponseHelper(){
+    public ApiResponseHelper(PrefManager prefManager){
+        this.prefManager = prefManager;
         responseBean = new ResponseBean();
     }
 
@@ -27,9 +30,9 @@ public class ApiResponseHelper {
         Utils.print(TAG, "ResponseBean Success");
         Utils.print(TAG,"status = " + responseBean.getStatus() + "    msg = " + responseBean.getMessage());
         if (responseBean.getAuthToke() != null) {
-            MyApplication.getAppManager().getPrefManager().setString(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
+           prefManager.setString(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
             Utils.print(TAG, "Generated Access Token   ::::  " +
-                    responseBean.getAuthToke().getTokenType() + " " + MyApplication.getAppManager().getPrefManager().getString(PrefConst.PREF_ACCESS_TOKEN));
+                    responseBean.getAuthToke().getTokenType() + " " + prefManager.getString(PrefConst.PREF_ACCESS_TOKEN));
         }
 
         if(responseBean.getResult() != null && responseBean.getResult().getName() != null){
