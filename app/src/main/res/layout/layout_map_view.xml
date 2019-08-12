@@ -4,27 +4,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.mage.ziplrdelivery.uc.CustomTextView
-            android:id="@+id/tvTemp"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:textSize="@dimen/_12sdp"
-            app:custom_font="semibold"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivNav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:padding="@dimen/_10sdp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.mage.ziplrdelivery.uc.ProgressMaterialButton
-            android:id="@+id/btLogout"
-            style="@style/ProgressMaterialButton_SemiBold_Orange"
-            android:layout_width="@dimen/def_bt_width"
-            android:layout_height="@dimen/def_bt_height"
-            android:layout_marginBottom="@dimen/_10sdp"
-            app:bt_text="Logout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icn_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

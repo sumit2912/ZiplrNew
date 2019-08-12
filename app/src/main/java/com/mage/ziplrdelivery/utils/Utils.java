@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -175,4 +178,19 @@ public class Utils {
             void onNetChange(boolean isInternet);
         }
     }
+
+    public ScaleAnimation getScaleAnimation(float fromX, float fromY, float toX, float toY, float pivotX, float pivotY,long animDuration){
+        ScaleAnimation scaleAnim = new ScaleAnimation(
+                fromX, toX,
+                fromY, toY,
+                Animation.RELATIVE_TO_PARENT, pivotX,
+                Animation.RELATIVE_TO_PARENT, pivotY);
+        scaleAnim.setDuration(animDuration);
+        scaleAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+        scaleAnim.setFillAfter(true);
+        scaleAnim.setFillBefore(true);
+        scaleAnim.setFillEnabled(true);
+        return scaleAnim;
+    }
+
 }

@@ -149,8 +149,6 @@ public class PasswordActivity extends BaseActivity implements ScreenHelper.DataM
         if (tag == ApiConst.LOGIN && result == ApiConst.API_RESULT.SUCCESS && status == 1) {
             Result data = appManager.getApiResponseHelper().getResponseBean().getResult();
             if (data != null) {
-                singletonFactory.getDashBoardBean().setProfileName(data.getName());
-                singletonFactory.getDashBoardBean().setProfileEmail(data.getEmail());
                 utils.storeLoginData(data);
             }
             if (dashBoardIntent == null)

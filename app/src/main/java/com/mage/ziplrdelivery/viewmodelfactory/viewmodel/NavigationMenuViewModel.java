@@ -5,30 +5,23 @@ import androidx.lifecycle.ViewModel;
 
 import com.mage.ziplrdelivery.model.SingletonFactory;
 import com.mage.ziplrdelivery.model.data.DashBoardBean;
-import com.mage.ziplrdelivery.model.data.NavMenuBean;
 import com.mage.ziplrdelivery.utils.Utils;
-
-import java.util.List;
 
 public class NavigationMenuViewModel extends ViewModel {
     public MutableLiveData<String> ProfName = new MutableLiveData<>();
     public MutableLiveData<String> ProfEmail = new MutableLiveData<>();
-    public MutableLiveData<String> NavMenuItemName = new MutableLiveData<>();
-    public MutableLiveData<Integer> NavMenuItemDrawable = new MutableLiveData<>();
 
     private MutableLiveData<DashBoardBean> navigationMenuMutableLiveData;
 
     public MutableLiveData<DashBoardBean> getNavigationMenuMutableLiveData() {
         if (navigationMenuMutableLiveData == null) {
             navigationMenuMutableLiveData = new MutableLiveData<>();
-            try {
-                navigationMenuMutableLiveData.setValue(SingletonFactory.getInstance().getDashBoardBean());
-                ProfName.setValue(navigationMenuMutableLiveData.getValue().getProfileName());
-                ProfEmail.setValue(navigationMenuMutableLiveData.getValue().getProfileEmail());
-            } catch (Exception e) {
-                Utils.print("NavigationViewModel", e);
-            }
         }
         return navigationMenuMutableLiveData;
+    }
+
+    public static class NavMenu{
+        public MutableLiveData<String> ItemName = new MutableLiveData<>();
+        public MutableLiveData<Integer> ItemDrawable = new MutableLiveData<>();
     }
 }

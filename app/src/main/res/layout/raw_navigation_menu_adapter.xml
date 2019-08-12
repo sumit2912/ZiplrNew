@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/clRawNavMenuItem">
-
-    <data>
-
-        <variable
-            name="NavMenuBean"
-            type="com.mage.ziplrdelivery.adapter.NavigationMenuAdapter.NavigationMenuHolder" />
-    </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMenuItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_10sdp">
@@ -26,15 +19,13 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/tvMenu"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_home_orange" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.mage.ziplrdelivery.uc.CustomTextView
             android:id="@+id/tvMenu"
             style="@style/Nav_Menu_Item_SemiBold_TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@={}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

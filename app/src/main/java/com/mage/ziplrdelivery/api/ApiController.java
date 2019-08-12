@@ -36,11 +36,11 @@ public class ApiController {
     private Utils utils;
     private ApiResponseHelper apiResponseHelper;
 
-    public ApiController(Context caller, ResponseListener responseListener) {
+    public ApiController(Context caller, Utils utils, ApiResponseHelper apiResponseHelper, ResponseListener responseListener) {
         this.caller = caller;
         this.responseListener = responseListener;
-        utils = MyApplication.getAppManager().getUtils();
-        apiResponseHelper = MyApplication.getAppManager().getApiResponseHelper();
+        this.utils = utils;
+        this.apiResponseHelper = apiResponseHelper;
     }
 
     private void init() {
