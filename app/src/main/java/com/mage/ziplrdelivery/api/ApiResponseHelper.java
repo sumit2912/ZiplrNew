@@ -12,7 +12,7 @@ public class ApiResponseHelper {
     private PrefManager prefManager;
     private ResponseBean responseBean;
 
-    public ApiResponseHelper(PrefManager prefManager){
+    public ApiResponseHelper(PrefManager prefManager) {
         this.prefManager = prefManager;
         responseBean = new ResponseBean();
     }
@@ -28,27 +28,27 @@ public class ApiResponseHelper {
 
     private void printLogs(ResponseBean responseBean) {
         Utils.print(TAG, "ResponseBean Success");
-        Utils.print(TAG,"status = " + responseBean.getStatus() + "    msg = " + responseBean.getMessage());
+        Utils.print(TAG, "status = " + responseBean.getStatus() + "    msg = " + responseBean.getMessage());
         if (responseBean.getAuthToke() != null) {
-           prefManager.setString(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
+            prefManager.setString(PrefConst.PREF_ACCESS_TOKEN, responseBean.getAuthToke().getAccessToken());
             Utils.print(TAG, "Generated Access Token   ::::  " +
                     responseBean.getAuthToke().getTokenType() + " " + prefManager.getString(PrefConst.PREF_ACCESS_TOKEN));
         }
 
-        if(responseBean.getResult() != null && responseBean.getResult().getName() != null){
+        if (responseBean.getResult() != null && responseBean.getResult().getName() != null) {
             Result result = responseBean.getResult();
-            Utils.print(TAG,"UserId = "+result.getId());
-            Utils.print(TAG,"Name = "+result.getName());
-            Utils.print(TAG,"Email = "+result.getEmail());
-            Utils.print(TAG,"Country code = "+result.getCountryCode());
-            Utils.print(TAG,"Phone No = "+result.getPhoneNumber());
-            Utils.print(TAG,"Password = "+result.getPassword());
-            Utils.print(TAG,"Profile picture = "+result.getAvatarUrl());
-            if (result.getOtp() != null) {
-                Utils.print(TAG, "OTP = " + result.getOtp());
-            }
-        }else {
-            Utils.print(TAG,"Result = {}");
+            Utils.print(TAG, "UserId = " + result.getId());
+            Utils.print(TAG, "Name = " + result.getName());
+            Utils.print(TAG, "Email = " + result.getEmail());
+            Utils.print(TAG, "Country code = " + result.getCountryCode());
+            Utils.print(TAG, "Phone No = " + result.getPhoneNumber());
+            Utils.print(TAG, "Password = " + result.getPassword());
+            Utils.print(TAG, "Profile picture = " + result.getAvatarUrl());
+        } else if (responseBean.getResult() != null) {
+            Result result = responseBean.getResult();
+            Utils.print(TAG, "OTP = " + result.getOtp());
+        } else {
+            Utils.print(TAG, "Result = {}");
         }
     }
 }
