@@ -13,9 +13,8 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mage.ziplrdelivery.databinding.RawNavigationMenuAdapterBinding;
+import com.mage.ziplrdelivery.databinding.RawNavigationMenuAdapterItemBinding;
 import com.mage.ziplrdelivery.uc.CustomTextView;
-import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.NavigationMenuViewModel;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class NavigationMenuAdapter extends RecyclerView.Adapter<NavigationMenuAd
     @Override
     public NavigationMenuHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        RawNavigationMenuAdapterBinding binding = RawNavigationMenuAdapterBinding.inflate(inflater, parent, false);
+        RawNavigationMenuAdapterItemBinding binding = RawNavigationMenuAdapterItemBinding.inflate(inflater, parent, false);
         return new NavigationMenuHolder(binding.getRoot(), binding);
     }
 
@@ -71,12 +70,12 @@ public class NavigationMenuAdapter extends RecyclerView.Adapter<NavigationMenuAd
 
     public class NavigationMenuHolder extends RecyclerView.ViewHolder implements LifecycleOwner {
         public LifecycleRegistry lifecycleRegistry = new LifecycleRegistry((LifecycleOwner) context);
-        public RawNavigationMenuAdapterBinding binding;
+        public RawNavigationMenuAdapterItemBinding binding;
         public ConstraintLayout clMenuItem;
         public AppCompatImageView ivMenu;
         public CustomTextView tvMenu;
 
-        public NavigationMenuHolder(@NonNull View itemView, RawNavigationMenuAdapterBinding binding) {
+        public NavigationMenuHolder(@NonNull View itemView, RawNavigationMenuAdapterItemBinding binding) {
             super(itemView);
             this.binding = binding;
             lifecycleRegistry.markState(Lifecycle.State.INITIALIZED);

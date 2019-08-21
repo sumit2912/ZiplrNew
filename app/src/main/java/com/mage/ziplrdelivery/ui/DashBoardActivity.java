@@ -1,6 +1,7 @@
 package com.mage.ziplrdelivery.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
@@ -44,6 +45,7 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     private ScaleAnimation scaleAnimation;
     private long animDuration = 250;
     private int navItemPos = -1;
+    private Intent settingsIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +161,15 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
 
                         break;
                     case 3:
-
+                        navigationOpen(false);
+                        handler.postDelayed(() -> {
+                            if (!disableClick) {
+                                disableClick = true;
+                                if (settingsIntent == null)
+                                    settingsIntent = new Intent(DashBoardActivity.this, SettingsActivity.class);
+                                startActivity(settingsIntent);
+                            }
+                        }, animDuration);
                         break;
                     case 4:
                         callApi(1);

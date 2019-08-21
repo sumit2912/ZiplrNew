@@ -18,6 +18,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.CMSActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.DashBoardActivity"
             android:configChanges="orientation|screenLayout|smallestScreenSize|screenSize"
             android:screenOrientation="portrait" />

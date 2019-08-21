@@ -6,7 +6,7 @@
     <color name="white">#ffffff</color>
     <color name="text_black">#202020</color>
     <color name="text_grey">#858585</color>
-    <color name="hint_color">#cccbcb</color>
+    <color name="hint_color">#ffcccbcb</color>
     <color name="view_line">#bbbbbb</color>
     <color name="lighter_orange">#FEF0E2</color>
 </resources>
