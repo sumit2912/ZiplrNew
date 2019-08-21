@@ -101,13 +101,16 @@ public class SettingsActivity extends BaseActivity implements ScreenHelper.DataM
                 onBackPressed();
                 break;
             case R.id.clMenuItem:
-                pos = Integer.parseInt(String.valueOf(view.getTag()));
-                if (pos != -1) {
-                    if(cmsIntent == null)
-                        cmsIntent = new Intent(SettingsActivity.this,CMSActivity.class);
-                    VALUE_FROM_ACTIVITY = "Pos = "+pos;
-                    cmsIntent.putExtra(KEY_FROM_ACTIVITY,VALUE_FROM_ACTIVITY);
-                    startActivity(cmsIntent);
+                if (!disableClick) {
+                    disableClick = true;
+                    pos = Integer.parseInt(String.valueOf(view.getTag()));
+                    if (pos != -1) {
+                        if (cmsIntent == null)
+                            cmsIntent = new Intent(SettingsActivity.this, CMSActivity.class);
+                        VALUE_FROM_ACTIVITY = "Pos = " + pos;
+                        cmsIntent.putExtra(KEY_FROM_ACTIVITY, VALUE_FROM_ACTIVITY);
+                        startActivity(cmsIntent);
+                    }
                 }
                 break;
         }

@@ -2,7 +2,9 @@ package com.mage.ziplrdelivery.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
 
@@ -10,6 +12,11 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.material.card.MaterialCardView;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.adapter.NavigationMenuAdapter;
 import com.mage.ziplrdelivery.databinding.LayoutMapViewBinding;
@@ -29,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class DashBoardActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<DashBoardBean> {
+public class DashBoardActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<DashBoardBean>, OnMapReadyCallback, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener {
 
     private static final String TAG = Screen.DASH_BOARD_ACTIVITY;
     private ActivityDashBoardBinding binding;
@@ -46,6 +53,8 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     private long animDuration = 250;
     private int navItemPos = -1;
     private Intent settingsIntent;
+    private GoogleMap mMap;
+    private MaterialCardView mcvLocToFrom, mcvCurLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +105,12 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
         binding.nonClickable.setOnClickListener(null);
         mapBinding.ivNav.setOnClickListener(this);
         navBinding.ivNavClose.setOnClickListener(this);
+
+        //MapView
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        mcvCurLocation = mapBinding.mcvLocToFrom;
+        mcvCurLocation = mapBinding.mcvCurLocation;
 
         //Navigation Menu
         rvNavMenuList = navBinding.rvNavMenuList;
@@ -156,7 +171,6 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
                     case 1:
 
                         break;
-
                     case 2:
 
                         break;
@@ -271,5 +285,40 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        try {
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
+            if (!success) {
+                Log.i("Map:Style", "Style parsing failed.");
+            } else {
+                Log.i("Map:Style", "Style Applied.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.i("Map:Style", "Can't find style. Error: ");
+        }
+
+        mMap = googleMap;
+
+        if (mMap != null) {
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.setBuildingsEnabled(true);
+            mMap.setOnCameraMoveListener(this);
+            mMap.setOnCameraIdleListener(this);
+            mMap.getUiSettings().setRotateGesturesEnabled(false);
+            mMap.getUiSettings().setTiltGesturesEnabled(false);
+        }
+    }
+
+    @Override
+    public void onCameraMove() {
+
+    }
+
+    @Override
+    public void onCameraIdle() {
+
     }
 }
