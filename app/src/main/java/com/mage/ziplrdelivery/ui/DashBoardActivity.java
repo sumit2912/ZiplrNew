@@ -28,6 +28,7 @@ import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityDashBoardBinding;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.api.ApiConst;
+import com.mage.ziplrdelivery.uc.CustomAutoCT;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.DashBoardViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.NavigationMenuViewModel;
@@ -55,6 +56,7 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     private Intent settingsIntent;
     private GoogleMap mMap;
     private MaterialCardView mcvLocToFrom, mcvCurLocation;
+    private CustomAutoCT actFrom, actTo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,8 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
         mapFragment.getMapAsync(this);
         mcvCurLocation = mapBinding.mcvLocToFrom;
         mcvCurLocation = mapBinding.mcvCurLocation;
+        actFrom = mapBinding.actFrom;
+        actTo = mapBinding.actTo;
 
         //Navigation Menu
         rvNavMenuList = navBinding.rvNavMenuList;

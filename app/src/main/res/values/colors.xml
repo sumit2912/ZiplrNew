@@ -9,4 +9,6 @@
     <color name="hint_color">#ffcccbcb</color>
     <color name="view_line">#bbbbbb</color>
     <color name="lighter_orange">#FEF0E2</color>
+    <color name="ligher_silver">#CFCECE</color>
+    <color name="lighter_grey">#C5C2C2</color>
 </resources>
