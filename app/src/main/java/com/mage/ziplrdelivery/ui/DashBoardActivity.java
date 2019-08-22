@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.ScaleAnimation;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +56,7 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     private int navItemPos = -1;
     private Intent settingsIntent;
     private GoogleMap mMap;
+    private ConstraintLayout clLocation;
     private MaterialCardView mcvLocToFrom, mcvCurLocation;
     private CustomAutoCT actFrom, actTo;
 
@@ -107,16 +109,23 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
         binding.nonClickable.setOnClickListener(null);
         mapBinding.ivNav.setOnClickListener(this);
         navBinding.ivNavClose.setOnClickListener(this);
-
         //MapView
+        initMapView();
+        //Navigation Menu
+        initNavigationView();
+    }
+
+    private void initMapView() {
+        clLocation = mapBinding.clLocation;
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mcvCurLocation = mapBinding.mcvLocToFrom;
         mcvCurLocation = mapBinding.mcvCurLocation;
         actFrom = mapBinding.actFrom;
         actTo = mapBinding.actTo;
+    }
 
-        //Navigation Menu
+    private void initNavigationView() {
         rvNavMenuList = navBinding.rvNavMenuList;
         llManager = new LinearLayoutManager(mContext);
         rvNavMenuList.setLayoutManager(llManager);
@@ -124,7 +133,6 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
         navMenuList = populateNavMenu();
         menuAdapter = new NavigationMenuAdapter(mContext, this, navMenuList);
         rvNavMenuList.setAdapter(menuAdapter);
-
     }
 
     private List<NavigationMenuViewModel.NavMenu> populateNavMenu() {
