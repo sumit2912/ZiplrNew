@@ -3,8 +3,10 @@ package com.mage.ziplrdelivery.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -147,6 +149,13 @@ public class Utils {
         MyApplication.setAppManager(null);
         mContext.startActivity(new Intent(mContext, LoginMainActivity.class));
         ((Activity) mContext).finishAffinity();
+    }
+
+    public int getScreenWidth(AppCompatActivity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.x;
     }
 
     public static class InternetCheck extends AsyncTask<Void, Void, Boolean> {

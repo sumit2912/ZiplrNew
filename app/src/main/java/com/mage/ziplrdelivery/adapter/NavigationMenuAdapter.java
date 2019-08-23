@@ -41,10 +41,10 @@ public class NavigationMenuAdapter extends RecyclerView.Adapter<NavigationMenuAd
 
     @Override
     public void onBindViewHolder(@NonNull NavigationMenuHolder holder, int position) {
-        holder.binding.clMenuItem.setTag(position);
-        holder.binding.clMenuItem.setOnClickListener(onClickListener);
-        holder.binding.ivMenu.setImageResource(navMenuList.get(position).ItemDrawable.getValue());
-        holder.binding.tvMenu.setText(navMenuList.get(position).ItemName.getValue());
+        holder.clMenuItem.setTag(position);
+        holder.clMenuItem.setOnClickListener(onClickListener);
+        holder.ivMenu.setImageResource(navMenuList.get(position).ItemDrawable.getValue());
+        holder.tvMenu.setText(navMenuList.get(position).ItemName.getValue());
     }
 
     @Override

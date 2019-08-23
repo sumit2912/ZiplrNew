@@ -11,6 +11,7 @@ import android.view.animation.ScaleAnimation;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -20,27 +21,32 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.card.MaterialCardView;
 import com.mage.ziplrdelivery.R;
 import com.mage.ziplrdelivery.adapter.NavigationMenuAdapter;
+import com.mage.ziplrdelivery.adapter.ParcelAdapter;
 import com.mage.ziplrdelivery.databinding.LayoutMapViewBinding;
 import com.mage.ziplrdelivery.databinding.LayoutNavigationViewBinding;
 import com.mage.ziplrdelivery.model.data.DashBoardBean;
+import com.mage.ziplrdelivery.model.param.ParcelBean;
 import com.mage.ziplrdelivery.screen.Data;
 import com.mage.ziplrdelivery.screen.Screen;
-import com.mage.ziplrdelivery.model.data.Result;
 import com.mage.ziplrdelivery.databinding.ActivityDashBoardBinding;
 import com.mage.ziplrdelivery.screen.ScreenHelper;
 import com.mage.ziplrdelivery.api.ApiConst;
 import com.mage.ziplrdelivery.uc.CustomAutoCT;
+import com.mage.ziplrdelivery.uc.CustomTextWatcher;
+import com.mage.ziplrdelivery.uc.ProgressMaterialButton;
+import com.mage.ziplrdelivery.uc.SliderLayoutManager;
 import com.mage.ziplrdelivery.utils.Utils;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.DashBoardViewModel;
 import com.mage.ziplrdelivery.viewmodelfactory.viewmodel.NavigationMenuViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class DashBoardActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<DashBoardBean>, OnMapReadyCallback, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener {
+public class DashBoardActivity extends BaseActivity implements ScreenHelper.DataMessageListener, Observer<DashBoardBean>, OnMapReadyCallback, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener, ParcelAdapter.ParcelClickListener, SliderLayoutManager.OnItemSelectedListener, CustomTextWatcher.TextWatcherListener {
 
     private static final String TAG = Screen.DASH_BOARD_ACTIVITY;
+    private static final int ACT_FROM_TAG = 0;
+    private static final int ACT_TO_TAG = 1;
     private ActivityDashBoardBinding binding;
     private LayoutMapViewBinding mapBinding;
     private LayoutNavigationViewBinding navBinding;
@@ -56,10 +62,15 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     private int navItemPos = -1;
     private Intent settingsIntent;
     private GoogleMap mMap;
-    private ConstraintLayout clLocation;
+    private ConstraintLayout clLocation, clParcel;
     private MaterialCardView mcvLocToFrom, mcvCurLocation;
     private CustomAutoCT actFrom, actTo;
-
+    private SliderLayoutManager llManager2;
+    private ParcelAdapter parcelAdapter;
+    private RecyclerView rvParcel;
+    private ProgressMaterialButton btSubmitParcel;
+    List<ParcelBean> parcelList;
+    private String actFromText="",actToText="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,12 +128,55 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
 
     private void initMapView() {
         clLocation = mapBinding.clLocation;
+        clParcel = mapBinding.clParcel;
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mcvCurLocation = mapBinding.mcvLocToFrom;
         mcvCurLocation = mapBinding.mcvCurLocation;
         actFrom = mapBinding.actFrom;
         actTo = mapBinding.actTo;
+        actFrom.addTextChangedListener(new CustomTextWatcher(ACT_FROM_TAG,this));
+        actTo.addTextChangedListener(new CustomTextWatcher(ACT_TO_TAG,this));
+        rvParcel = mapBinding.rvParcel;
+        llManager2 = new SliderLayoutManager(mContext, rvParcel, this);
+        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
+        pagerSnapHelper.attachToRecyclerView(rvParcel);
+        rvParcel.setLayoutManager(llManager2);
+        parcelList = getParcelList();
+        parcelAdapter = new ParcelAdapter(parcelList, this);
+        rvParcel.setAdapter(parcelAdapter);
+        btSubmitParcel = mapBinding.btSubmitParcel;
+    }
+
+    private List<ParcelBean> getParcelList() {
+        List<ParcelBean> list = new ArrayList<>();
+        ParcelBean bean = new ParcelBean();
+        bean.setIndex(0);
+        bean.setParcelType("Small");
+        bean.setDrawable(R.drawable.icn_small);
+        bean.setParcelQuantity(1);
+        bean.setParcelWeightRange("1 - 10kg");
+        bean.setParcelPriceRange("£1 - £10");
+        list.add(bean);
+
+        bean = new ParcelBean();
+        bean.setIndex(1);
+        bean.setParcelType("Medium");
+        bean.setDrawable(R.drawable.icn_medium);
+        bean.setParcelQuantity(0);
+        bean.setParcelWeightRange("10 - 20kg");
+        bean.setParcelPriceRange("£8 - £15");
+        list.add(bean);
+
+        bean = new ParcelBean();
+        bean.setIndex(2);
+        bean.setParcelType("Large");
+        bean.setDrawable(R.drawable.icn_large);
+        bean.setParcelQuantity(5);
+        bean.setParcelWeightRange("20 - 30kg");
+        bean.setParcelPriceRange("£16 - £22");
+        list.add(bean);
+        return list;
     }
 
     private void initNavigationView() {
@@ -270,11 +324,11 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
             mapBinding.ivNav.setEnabled(false);
             binding.clMap.setVisibility(View.GONE);
             binding.clNavigation.setVisibility(View.VISIBLE);
-            scaleAnimation = utils.getScaleAnimation(1f, 0f, 1f, 1f, 0f, 0f, 250);
+            scaleAnimation = utils.getScaleAnimation(1f, 0f, 1f, 1f, 0f, 0f, animDuration);
             scaleAnimation.setDuration(animDuration);
             binding.clNavigation.startAnimation(scaleAnimation);
         } else {
-            scaleAnimation = utils.getScaleAnimation(1f, 1f, 1f, 0f, 0f, 0f, 250);
+            scaleAnimation = utils.getScaleAnimation(1f, 1f, 1f, 0f, 0f, 0f, animDuration);
             scaleAnimation.setDuration(animDuration);
             binding.clNavigation.startAnimation(scaleAnimation);
         }
@@ -332,5 +386,67 @@ public class DashBoardActivity extends BaseActivity implements ScreenHelper.Data
     @Override
     public void onCameraIdle() {
 
+    }
+
+    @Override
+    public void onParcelClicked(int pos, View view) {
+        Utils.print(TAG,"Pos = "+pos);
+        int q = parcelAdapter.getParcelList().get(pos).getParcelQuantity();
+        switch (view.getId()){
+            case R.id.ivMinus:
+                if(q>0) {
+                    parcelAdapter.getParcelList().get(pos).setParcelQuantity(q-1);
+                    //parcelAdapter.notifyItemChanged(pos);
+                }
+                Utils.print(TAG,"ivMinus = "+getParcelList().get(pos).getParcelQuantity());
+                break;
+            case R.id.ivPlus:
+                parcelAdapter.getParcelList().get(pos).setParcelQuantity(q+1);
+                //parcelAdapter.notifyItemChanged(pos);
+                Utils.print(TAG, "ivPlus = " + getParcelList().get(pos).getParcelQuantity());
+                break;
+        }
+    }
+
+    @Override
+    public void onItemSelected(int selectedPos) {
+        String text = parcelList.get(selectedPos).getParcelPriceRange();
+        Utils.print(TAG,"text = "+text);
+        btSubmitParcel.setButtonText(text);
+    }
+
+    @Override
+    public void onTextChanged(int edTag, String text) {
+        switch (edTag){
+            case ACT_FROM_TAG:
+                actFromText = text;
+                break;
+            case ACT_TO_TAG:
+                actToText = text;
+                break;
+        }
+
+        if(!actFromText.isEmpty() && !actToText.isEmpty() && actFromText.length() >4 && actToText.length()>4){
+            goToParcelScreen();
+        }
+    }
+
+    private void goToParcelScreen() {
+        ScaleAnimation scaleAnimation = utils.getScaleAnimation(1f,1f,1f,0f,1f,1f,animDuration);
+        scaleAnimation.setDuration(animDuration);
+        clParcel.startAnimation(scaleAnimation);
+        utils.hideKeyBoardFromView(mContext);
+        handler.postDelayed(() -> {
+            clLocation.setVisibility(View.GONE);
+            clLocation.clearAnimation();
+            clParcel.setVisibility(View.VISIBLE);
+            btSubmitParcel.setButtonText(parcelList.get(0).getParcelPriceRange());
+            ScaleAnimation scaleAnim = utils.getScaleAnimation(1f,0f,1f,1f,1f,1f,animDuration);
+            scaleAnim.setDuration(animDuration);
+            clParcel.startAnimation(scaleAnim);
+            handler.postDelayed(() -> {
+                clParcel.clearAnimation();
+            }, animDuration - 10);
+        }, animDuration - 10);
     }
 }

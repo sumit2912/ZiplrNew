@@ -33,9 +33,9 @@ public class SettingsMenuAdapter extends RecyclerView.Adapter<SettingsMenuAdapte
 
     @Override
     public void onBindViewHolder(@NonNull SettingsMenuHolder holder, int position) {
-        holder.binding.tvSettingItem.setText(settingMenuList.get(position));
-        holder.binding.clMenuItem.setTag(position);
-        holder.binding.clMenuItem.setOnClickListener(onClickListener);
+        holder.tvSettingItem.setText(settingMenuList.get(position));
+        holder.clMenuItem.setTag(position);
+        holder.clMenuItem.setOnClickListener(onClickListener);
     }
 
     @Override

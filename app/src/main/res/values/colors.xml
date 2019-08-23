@@ -11,4 +11,6 @@
     <color name="lighter_orange">#FEF0E2</color>
     <color name="ligher_silver">#CFCECE</color>
     <color name="lighter_grey">#C5C2C2</color>
+    <color name="weight_color">#636262</color>
+    <color name="light_cream">#FEF0E2</color>
 </resources>
